@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class AuthController extends Controller
 {
@@ -30,12 +31,14 @@ class AuthController extends Controller
 
         $verification_code = Str::random(6);
 
-        $user = User::create([
+        $user_data = [
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'verification_token' => $verification_code,
-        ]);
+        ];
+
+        Cache::put('user_registration_' . $verification_code, $user_data, now()->addMinutes(30));
 
         Mail::send([], [], function($message) use ($request, $verification_code) {
             $message->from('dennykun76@gmail.com', config('app.name'));
@@ -53,15 +56,18 @@ class AuthController extends Controller
             'verification_code' => 'required|string',
         ]);
 
-        $user = User::where('verification_token', $request->verification_code)->first();
+        $user_data = Cache::get('user_registration_' . $request->verification_code);
 
-        if (!$user) {
-            return redirect('/login')->with('error', 'Invalid verification code.');
+        if (!$user_data) {
+            return view('verifyEmail')->with('error', 'Invalid or expired verification code.');
         }
 
+        $user = User::create($user_data);
         $user->email_verified_at = now();
         $user->verification_token = null;
         $user->save();
+
+        Cache::forget('user_registration_' . $request->verification_code);
 
         return redirect('/')->with('message', 'Email verified successfully. You can now login.');
     }
