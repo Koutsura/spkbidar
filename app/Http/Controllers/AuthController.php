@@ -29,6 +29,11 @@ class AuthController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
+        // Check if the email is already registered
+        if (User::where('email', $request->email)->exists()) {
+            return back()->with('error', 'Email is already registered.');
+        }
+
         $verification_code = Str::random(6);
 
         $user_data = [
