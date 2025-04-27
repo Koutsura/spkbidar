@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -11,6 +12,11 @@ use Illuminate\Support\Facades\Cache;
 
 class AuthController extends Controller
 {
+    public function index()
+    {
+        return view('dashboard');
+    }
+
     public function showLoginForm()
     {
         return view('login');
@@ -78,23 +84,39 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
+{
+    // Validasi input
+    $request->validate([
+        'email' => 'required|string|email',
+        'password' => 'required|string',
+    ]);
+
+    // Cek apakah user ada berdasarkan email
+    $user = User::where('email', $request->email)->first();
+
+    // Jika user tidak ditemukan atau password salah
+    if (!$user || !Hash::check($request->password, $user->password)) {
+        return back()->with('error', 'Invalid credentials.');
+    }
+
+    // Cek apakah email sudah diverifikasi
+    if (!$user->email_verified_at) {
+        return back()->with('error', 'Please verify your email first.');
+    }
+
+    // Login user
+    Auth::login($user);
+
+    // Redirect ke dashboard atau halaman yang diinginkan setelah login
+    return redirect()->route('dashboard');
+}
+    public function logout(Request $request)
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
+        Auth::logout();                                 // logout user
+        $request->session()->invalidate();               // invalidate session
+        $request->session()->regenerateToken();          // regen CSRF token
 
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return back()->with('error', 'Invalid credentials.');
-        }
-
-        if (!$user->email_verified_at) {
-            return back()->with('error', 'Please verify your email first.');
-        }
-
-        // ...existing code...
-        // Logic for logging in the user
+        return redirect('/')
+            ->with('status', 'You have been logged out.');
     }
 }
