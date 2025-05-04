@@ -1,54 +1,135 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Logged In</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f4; }
-        header { background: #333; color: #fff; padding: 1rem; }
-        header h1 { margin: 0; }
-        nav ul { list-style: none; padding: 0; display: flex; gap: 1rem; }
-        nav ul li { display: inline; }
-        nav ul li a, nav form button { color: #fff; text-decoration: none; background: none; border: none; cursor: pointer; }
-        main { padding: 2rem; background: #fff; margin: 2rem; border-radius: 8px; }
-        footer { text-align: center; padding: 1rem; background: #eee; }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Welcome, {{ Auth::user()->name }}</h1>
-        <nav>
-            <ul>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Settings</a></li>
-                <li>
-                    <form action="{{ route('logout') }}" method="POST" style="display:inline;">
-                        @csrf
-                        <button type="submit">Logout</button>
-                    </form>
-                </li>
-            </ul>
-        </nav>
-    </header>
+@extends('layouts.app')
 
-    <main>
-        <section>
-            <h2>Your Dashboard</h2>
-            <p>Welcome back, {{ Auth::user()->name }}! Here you can manage your account, settings, and more.</p>
-        </section>
-        <section>
-            <h3>Recent Activities</h3>
-            <ul>
-                <li>Activity 1</li>
-                <li>Activity 2</li>
-                <li>Activity 3</li>
-            </ul>
-        </section>
-    </main>
+@section('title', 'Dashboard')
 
-    <footer>
-        <p>&copy; 2025 Our Website. All rights reserved.</p>
-    </footer>
-</body>
-</html>
+@push('style')
+    <!-- CSS Libraries -->
+@endpush
+
+@section('content')
+@if (auth()->user()->role == 'mahasiswa')
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Dashboard</h1>
+        </div>
+
+        <div class="section-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Batch 1</h5>
+                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 1.</p>
+                            <a href="peserta" class="btn btn-primary">Lihat Selengkapnya</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Batch 2</h5>
+                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 2.</p>
+                            <a href="#" class="btn btn-primary">Lihat Selengkapnya</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Batch 3</h5>
+                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 3.</p>
+                            <a href="#" class="btn btn-primary">Lihat Selengkapnya</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Batch 4</h5>
+                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 4.</p>
+                            <a href="#" class="btn btn-primary">Lihat Selengkapnya</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Batch 5</h5>
+                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 5.</p>
+                            <a href="#" class="btn btn-primary">Lihat Selengkapnya</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Batch 6</h5>
+                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 6.</p>
+                            <a href="#" class="btn btn-primary">Lihat Selengkapnya</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Batch 7</h5>
+                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 7.</p>
+                            <a href="#" class="btn btn-primary">Lihat Selengkapnya</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Batch 8</h5>
+                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 8.</p>
+                            <a href="#" class="btn btn-primary">Lihat Selengkapnya</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Batch 9</h5>
+                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 9.</p>
+                            <a href="#" class="btn btn-primary">Lihat Selengkapnya</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        @if (auth()->user()->role == 'superadmin')
+
+            <div class="main-content">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">{{ __('Dashboard') }}</div>
+
+                            <div class="card-body">
+                                @if (session('status'))
+                                    <div class="alert alert-success" role="alert">
+                                        {{ session('status') }}
+                                    </div>
+                                @endif
+
+                                {{ __('You are logged in!') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+    </section>
+</div>
+@endsection
+
+
+@push('scripts')
+    <!-- JS Libraries -->
+
+    <!-- Page Specific JS File -->
+@endpush
