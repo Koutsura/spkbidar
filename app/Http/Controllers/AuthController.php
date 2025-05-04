@@ -64,26 +64,31 @@ class AuthController extends Controller
     }
 
     public function verifyEmail(Request $request)
-    {
-        $request->validate([
-            'verification_code' => 'required|string',
-        ]);
+{
+    $request->validate([
+        'verification_code' => 'required|string',
+    ]);
 
-        $user_data = Cache::get('user_registration_' . $request->verification_code);
+    $user_data = Cache::get('user_registration_' . $request->verification_code);
 
-        if (!$user_data) {
-            return view('verifyEmail')->with('error', 'Invalid or expired verification code.');
-        }
-
-        $user = User::create($user_data);
-        $user->email_verified_at = now();
-        $user->verification_token = null;
-        $user->save();
-
-        Cache::forget('user_registration_' . $request->verification_code);
-
-        return redirect('/')->with('message', 'Email verified successfully. You can now login.');
+    if (!$user_data) {
+        return view('verifyEmail')->with('error', 'Invalid or expired verification code.');
     }
+
+    $user = User::create($user_data);
+    $user->email_verified_at = now();
+    $user->verification_token = null;
+    $user->save();
+
+    // Hapus dari cache
+    Cache::forget('user_registration_' . $request->verification_code);
+
+    // Login otomatis dan set remember me
+    Auth::login($user, true); // true artinya remember me diaktifkan
+
+    return redirect('/dashboard')->with('message', 'Email verified and logged in successfully.');
+}
+
 
     public function login(Request $request)
 {
