@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
@@ -85,38 +87,70 @@ class AuthController extends Controller
 
     public function login(Request $request)
 {
-    // Validasi input
-    $request->validate([
-        'email' => 'required|string|email',
-        'password' => 'required|string',
+    $credentials = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required'
     ]);
 
-    // Cek apakah user ada berdasarkan email
-    $user = User::where('email', $request->email)->first();
+    // Pastikan remember me dikirim sebagai boolean
+    $remember = $request->boolean('remember');
 
-    // Jika user tidak ditemukan atau password salah
-    if (!$user || !Hash::check($request->password, $user->password)) {
-        return back()->with('error', 'Invalid credentials.');
+    if (Auth::attempt($credentials, $remember)) {
+        $request->session()->regenerate();
+
+        $user = Auth::user();
+
+        // Generate remember token JIKA remember me dicentang
+        if ($remember) {
+            $token = Str::random(60);
+            $user->forceFill([
+                'remember_token' => hash('sha256', $token),
+            ])->save();
+
+            // Buat cookie yang bertahan 30 hari
+            $cookie = Cookie::make(
+                Auth::getRecallerName(),
+                $user->id.'|'.$token.'|'.$user->getAuthPassword(),
+                60 * 24 * 30, // 30 hari
+                null,
+                null,
+                false, // Https only? Sesuaikan dengan env
+                true // HttpOnly
+            );
+
+            return redirect()->intended('dashboard')
+                   ->withCookie($cookie);
+        }
+
+        return redirect()->intended('dashboard');
     }
 
-    // Cek apakah email sudah diverifikasi
-    if (!$user->email_verified_at) {
-        return back()->with('error', 'Please verify your email first.');
-    }
-
-    // Login user
-    Auth::login($user);
-
-    // Redirect ke dashboard atau halaman yang diinginkan setelah login
-    return redirect()->route('dashboard');
+    return back()->withErrors(['email' => 'Invalid credentials']);
 }
-    public function logout(Request $request)
-    {
-        Auth::logout();                                 // logout user
-        $request->session()->invalidate();               // invalidate session
-        $request->session()->regenerateToken();          // regen CSRF token
 
-        return redirect('/')
-            ->with('status', 'You have been logged out.');
+public function logout(Request $request)
+{
+    // Hapus remember_token di database
+    if (Auth::check()) {
+        $user = Auth::user();
+        $user->setRememberToken(null);
+        $user->save();
     }
+
+    // Logout user
+    Auth::logout();
+
+    // Invalidate session
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    // Hapus cookie remember_me (recaller)
+    $rememberMeCookie = Cookie::forget(Auth::getRecallerName()); // biasanya "remember_web_*"
+
+    // Redirect ke halaman utama
+    return redirect('/')
+        ->with('status', 'Anda telah logout')
+        ->withCookie($rememberMeCookie);
+}
+
 }

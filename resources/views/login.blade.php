@@ -25,9 +25,8 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
         </div>
-        <label>
-        <input type="checkbox" name="remember"> Remember Me
-    </label>
+        <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+<label for="remember">Remember Me</label>
 
         <button type="submit">Login</button>
     </form>
