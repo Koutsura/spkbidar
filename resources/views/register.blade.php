@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Website UKM Bina Darma" />
+  <meta name="keywords" content="UKM,Universitas Bina Darma,Unit Kegiatan Mahasiswa,website,organisasi" />
+  <meta name="author" content="Universitas Bina Darma, M. Denny Tri Lisandi" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
   <title>Register</title>
   <style>
