@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="description" content="Website UKM Bina Darma" />
+    <meta name="keywords" content="UKM,Universitas Bina Darma,Unit Kegiatan Mahasiswa,website,organisasi" />
+    <meta name="author" content="Universitas Bina Darma, M. Denny Tri Lisandi" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <title>Forgot Password</title>
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
 </head>
@@ -14,7 +17,6 @@
                     <div class="card-body">
                         <h3 class="card-title text-center mb-4">Forgot Password</h3>
 
-                        {{-- Alert --}}
                         @if(session('status'))
                             <div class="alert alert-success">{{ session('status') }}</div>
                         @endif
@@ -27,7 +29,7 @@
                             </div>
                         @endif
 
-                        {{-- Form kirim kode --}}
+                        <!-- Forgot Password Form (Step 1) -->
                         <form id="sendCodeForm" method="POST" action="{{ url('/forgot-password') }}"
                               class="{{ session('step') === 'code' ? 'd-none' : '' }}">
                             @csrf
@@ -46,11 +48,10 @@
                             <button type="submit" class="btn btn-primary w-100">Send Verification Code</button>
                         </form>
 
-                        {{-- Form verifikasi kode --}}
+                        <!-- Verification Code Form (Step 2) -->
                         <form id="verifyForm" method="POST" action="{{ url('/verify-code') }}"
                               class="{{ session('step') === 'code' ? '' : 'd-none' }}">
                             @csrf
-
                             <p class="mb-3">
                                 We've sent a 6-digit verification code to <strong>{{ session('email') }}</strong>
                             </p>
@@ -76,7 +77,7 @@
                             <button type="submit" class="btn btn-success w-100">Verify Code</button>
                         </form>
 
-                        {{-- Resend --}}
+                        <!-- Resend Code (if step is code) -->
                         @if(session('step') === 'code')
                             <form method="POST" action="/resend-code" class="mt-3">
                                 @csrf

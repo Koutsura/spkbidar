@@ -17,115 +17,99 @@ class ForgotPasswordController extends Controller
     // Show the form for forgot password
     public function showForgotPasswordForm()
     {
-        // Handle email session data properly
-        return view('auth.forgot-password')->with('email', session('email'));
+        // Force user to input email first
+        session()->forget(['step', 'email']);
+        return view('auth.forgot-password');
     }
 
     // Send reset password link
     public function sendResetLinkEmail(Request $request)
-{
-    // Validate the email input
-    $request->validate([
-        'email' => 'required|email'
-    ]);
+    {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
 
-    // Store email in session
-    session(['email' => $request->email]);
+        $email = $request->email;
+        session(['email' => $email, 'step' => 'code']);
 
-    // Rate limiting
-    $throttleKey = 'reset-password:' . $request->ip();
-    if (RateLimiter::tooManyAttempts($throttleKey, 3)) {
-        $seconds = RateLimiter::availableIn($throttleKey);
-        return back()->withErrors(['email' => "Please wait {$seconds} seconds before trying again."]);
-    }
+        // Rate limiting
+        $throttleKey = 'reset-password:' . $request->ip();
+        if (RateLimiter::tooManyAttempts($throttleKey, 3)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+            return back()->withErrors(['email' => "Please wait {$seconds} seconds before trying again."]);
+        }
 
-    RateLimiter::hit($throttleKey);
+        RateLimiter::hit($throttleKey);
 
-    // Generate verification code
-    $verificationCode = Str::random(6);
+        // Generate verification code
+        $verificationCode = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
-    // Store or update the reset token
-    DB::table('password_resets')->updateOrInsert(
-        ['email' => $request->email],
-        [
-            'token' => $verificationCode,
-            'created_at' => now(),
-        ]
-    );
-
-    try {
-        // Send email with verification code
-        Mail::send(
-            'auth.emails.verification-code',
-            ['code' => $verificationCode],
-            function ($msg) use ($request) {
-                $msg->to($request->email)
-                    ->subject('Your Password Reset Verification Code');
-            }
+        // Store or update the reset token
+        DB::table('password_resets')->updateOrInsert(
+            ['email' => $email],
+            [
+                'token' => $verificationCode,
+                'created_at' => now(),
+            ]
         );
-    } catch (\Exception $e) {
-        return back()->withErrors(['email' => 'Failed to send verification email. Please try again.']);
+
+        try {
+            // Send email with verification code
+            Mail::send('auth.emails.verification-code', ['code' => $verificationCode], function ($msg) use ($email) {
+                $msg->to($email)->subject('Your Password Reset Verification Code');
+            });
+        } catch (\Exception $e) {
+            return back()->withErrors(['email' => 'Failed to send verification email. Please try again.']);
+        }
+
+        // Redirect to the same page for the verification code
+        return redirect()->route('verify-code')->with('status', 'Verification code sent to your email.');
     }
 
-    return back()
-        ->with('status', 'Verification code sent to your email.')
-        ->with('step', 'code');
-}
-
-public function resendCode(Request $request)
-{
-    // Validasi email
-    $request->validate([
-        'email' => 'required|email|exists:users,email',
-    ]);
-
-    $email = $request->email;
-
-    // Simpan email & langkah ke sesi
-    session([
-        'email' => $email,
-        'step' => 'code',
-    ]);
-
-    // Generate kode verifikasi numerik 6 digit
-    $verificationCode = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-
-    // Simpan kode ke tabel password_resets
-    DB::table('password_resets')->updateOrInsert(
-        ['email' => $email],
-        [
-            'token' => $verificationCode,
-            'created_at' => now(),
-        ]
-    );
-
-    try {
-        // Kirim email dengan kode verifikasi
-        Mail::send('auth.emails.verification-code', ['code' => $verificationCode], function ($msg) use ($email) {
-            $msg->to($email)->subject('Resend: Your Password Reset Verification Code');
-        });
-    } catch (\Exception $e) {
-        return back()->withErrors(['email' => 'Failed to resend verification email. Please try again.']);
+    public function showVerifyCodeForm()
+    {
+        // Retrieve the email from the session to display on the verification form
+        return view('auth.forgot-password')->with('email', session('email'));
     }
 
-    return back()->with('status', 'Verification code has been resent to your email.');
-}
+    public function resendCode(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
 
+        $email = $request->email;
+        session(['email' => $email, 'step' => 'code']);
 
+        $verificationCode = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
-    // Verify the verification code
+        DB::table('password_resets')->updateOrInsert(
+            ['email' => $email],
+            [
+                'token' => $verificationCode,
+                'created_at' => now(),
+            ]
+        );
+
+        try {
+            Mail::send('auth.emails.verification-code', ['code' => $verificationCode], function ($msg) use ($email) {
+                $msg->to($email)->subject('Resend: Your Password Reset Verification Code');
+            });
+        } catch (\Exception $e) {
+            return back()->withErrors(['email' => 'Failed to resend verification email. Please try again.']);
+        }
+
+        return back()->with('status', 'Verification code has been resent to your email.');
+    }
+
     public function verifyCode(Request $request)
     {
-        // Validate input
         $request->validate([
             'email' => 'required|email',
             'verification_code' => 'required|size:6'
         ]);
 
-        // Check if the verification code exists
-        $reset = DB::table('password_resets')
-            ->where('email', $request->email)
-            ->first();
+        $reset = DB::table('password_resets')->where('email', $request->email)->first();
 
         if (!$reset || $reset->token !== $request->verification_code) {
             return back()
@@ -134,7 +118,6 @@ public function resendCode(Request $request)
                 ->with('email', $request->email);
         }
 
-        // Check for expiration
         if (now()->diffInMinutes($reset->created_at) > $this->expirationMinutes) {
             return back()
                 ->withErrors(['verification_code' => 'Verification code has expired.'])
@@ -142,10 +125,9 @@ public function resendCode(Request $request)
                 ->with('email', $request->email);
         }
 
-        // Generate a new token for password reset
+        // Generate a new token for resetting the password
         $newToken = Str::random(60);
 
-        // Update password reset token
         DB::table('password_resets')
             ->where('email', $request->email)
             ->update([
@@ -153,11 +135,9 @@ public function resendCode(Request $request)
                 'created_at' => now(),
             ]);
 
-        return redirect()
-            ->route('reset-password', ['token' => $newToken]);
+        return redirect()->route('reset-password', ['token' => $newToken]);
     }
 
-    // Show the reset password form
     public function showResetPasswordForm($token)
     {
         $reset = DB::table('password_resets')
@@ -166,23 +146,19 @@ public function resendCode(Request $request)
             ->first();
 
         if (!$reset) {
-            return redirect('/forgot-password')
-                ->withErrors(['token' => 'Invalid or expired token. Please request a new verification code.']);
+            return redirect('/forgot-password')->withErrors(['token' => 'Invalid or expired token. Please request a new verification code.']);
         }
 
         return view('auth.reset-password', ['token' => $token]);
     }
 
-    // Reset the password
     public function resetPassword(Request $request)
     {
-        // Validate the password reset form
         $request->validate([
             'token' => 'required',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        // Retrieve the reset data
         $reset = DB::table('password_resets')
             ->where('token', $request->token)
             ->where('created_at', '>', now()->subMinutes($this->expirationMinutes))
@@ -192,17 +168,12 @@ public function resendCode(Request $request)
             return back()->withErrors(['token' => 'Invalid or expired token. Please request a new verification code.']);
         }
 
-        // Find the user and update their password
         $user = User::where('email', $reset->email)->first();
         $user->password = Hash::make($request->password);
         $user->save();
 
-        // Delete the reset record
-        DB::table('password_resets')
-            ->where('email', $reset->email)
-            ->delete();
+        DB::table('password_resets')->where('email', $reset->email)->delete();
 
-        return redirect('/login')
-            ->with('status', 'Your password has been reset successfully. You can now login with your new password.');
+        return redirect('/login')->with('status', 'Your password has been reset successfully. You can now login with your new password.');
     }
 }

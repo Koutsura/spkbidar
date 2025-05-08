@@ -23,13 +23,15 @@ Route::middleware('guest')->group(function () {
          ->name('verification.send');
          Route::post('/resend-code', [AuthController::class, 'resendCode'])->name('resend.code');
 
-    // Password reset
     Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotPasswordForm'])->name('forgot-password');
-Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
-Route::post('/verify-code', [ForgotPasswordController::class, 'verifyCode']);
-Route::post('/resend-code', [ForgotPasswordController::class, 'resendCode']);
-Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset-password');
-Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('reset-password.post');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+    Route::get('/verify-code', [ForgotPasswordController::class, 'showVerifyCodeForm'])->name('verify-code');
+    Route::post('/verify-code', [ForgotPasswordController::class, 'verifyCode']);
+    Route::post('/resend-code', [ForgotPasswordController::class, 'resendCode']);
+    Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset-password');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('reset-password.post');
+
+
 
 });
 
