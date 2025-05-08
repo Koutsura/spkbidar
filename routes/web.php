@@ -21,6 +21,9 @@ Route::middleware('guest')->group(function () {
          ->name('verification.verify');
     Route::post('/verify-email', [AuthController::class, 'verifyEmail'])
          ->name('verification.send');
+         Route::post('/resend-code', [AuthController::class, 'resendCode'])->name('resend.code');
+
+
 
     // Password reset
     Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotPasswordForm'])

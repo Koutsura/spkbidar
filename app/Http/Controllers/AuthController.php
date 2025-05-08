@@ -11,6 +11,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Log;
+
 
 class AuthController extends Controller
 {
@@ -42,6 +44,7 @@ class AuthController extends Controller
             return back()->with('error', 'Email is already registered.');
         }
 
+        // Generate a verification code
         $verification_code = Str::random(6);
 
         $user_data = [
@@ -51,8 +54,16 @@ class AuthController extends Controller
             'verification_token' => $verification_code,
         ];
 
-        Cache::put('user_registration_' . $verification_code, $user_data, now()->addMinutes(30));
+        // Save the user data in cache with email as key
+        Cache::put('user_registration_' . $request->email, $user_data, now()->addMinutes(30));
 
+        // Save email in session to track pending email for verification
+        Session::put('pending_email', $request->email);
+
+        // Debugging: Log to ensure session and email are set correctly
+        Log::info('Pending email stored in session: ' . $request->email);
+
+        // Send verification email
         Mail::send([], [], function($message) use ($request, $verification_code) {
             $message->from('dennykun76@gmail.com', config('app.name'));
             $message->to($request->email);
@@ -63,15 +74,27 @@ class AuthController extends Controller
         return view('verifyEmail')->with('message', 'Please check your email for the verification code.');
     }
 
+
     public function verifyEmail(Request $request)
 {
     $request->validate([
-        'verification_code' => 'required|string',
+        'code' => 'required|array|size:6',
     ]);
 
-    $user_data = Cache::get('user_registration_' . $request->verification_code);
+    // Gabungkan array code menjadi string
+    $verificationCode = implode('', $request->code);
 
-    if (!$user_data) {
+    // Ambil email dari session
+    $email = Session::get('pending_email');
+
+    if (!$email) {
+        return redirect('/register')->with('error', 'Session expired. Please register again.');
+    }
+
+    // Ambil data dari cache menggunakan EMAIL sebagai key
+    $user_data = Cache::get('user_registration_' . $email);
+
+    if (!$user_data || $user_data['verification_token'] !== $verificationCode) {
         return view('verifyEmail')->with('error', 'Invalid or expired verification code.');
     }
 
@@ -80,11 +103,10 @@ class AuthController extends Controller
     $user->verification_token = null;
     $user->save();
 
-    // Hapus dari cache
-    Cache::forget('user_registration_' . $request->verification_code);
+    Cache::forget('user_registration_' . $email);
+    Session::forget('pending_email');
 
-    // Login otomatis dan set remember me
-    Auth::login($user, true); // true artinya remember me diaktifkan
+    Auth::login($user, true);
 
     return redirect('/dashboard')->with('message', 'Email verified and logged in successfully.');
 }
@@ -157,5 +179,44 @@ public function logout(Request $request)
         ->with('status', 'Anda telah logout')
         ->withCookie($rememberMeCookie);
 }
+
+public function resendCode(Request $request)
+{
+    $email = $request->input('pending_email');
+
+    if (!$email) {
+        return response()->json(['error' => 'Email not found. Please register again.'], 400);
+    }
+
+    $cachedUser = Cache::get('user_registration_' . $email);
+
+    if (!$cachedUser) {
+        return response()->json(['error' => 'Verification data not found. Please register again.'], 400);
+    }
+
+    $newCode = Str::random(6);
+    $cachedUser['verification_token'] = $newCode;
+    Cache::put('user_registration_' . $email, $cachedUser, now()->addMinutes(30));
+
+    try {
+        Mail::send([], [], function ($message) use ($email, $newCode) {
+            $message->from('dennykun76@gmail.com', config('app.name'));
+            $message->to($email);
+            $message->subject('Resend Verification Code');
+            $message->text('Your new verification code is: ' . $newCode);
+        });
+
+        Session::put('pending_email', $email);
+        \Log::info('Resent verification code:', ['email' => $email]);
+
+        return response()->json(['message' => 'A new verification code has been sent to your email.']);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Failed to send email. Please try again.'], 500);
+    }
+}
+
+
+
+
 
 }
