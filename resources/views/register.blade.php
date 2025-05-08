@@ -85,6 +85,12 @@
           <input type="password" class="form-control" id="confirmPassword" name="password_confirmation" placeholder="Ulangi kata sandi" required>
         </div>
         <button type="submit" class="btn btn-primary w-100">Daftar</button>
+        <div class="text-center">
+        <a href="/forgot-password" class="d-block mb-2">Lupa Kata sandi?</a>
+        <p class="mb-0">Sudah punya Akun?
+        <a href="/login" class="text-primary">Masuk sekarang</a>
+        </p>
+        </div>
       </form>
     </div>
   </div>

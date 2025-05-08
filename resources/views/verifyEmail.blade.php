@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Website UKM Bina Darma" />
+    <meta name="keywords" content="UKM,Universitas Bina Darma,Unit Kegiatan Mahasiswa,website,organisasi" />
+    <meta name="author" content="Universitas Bina Darma, M. Denny Tri Lisandi" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <title>Email Verification</title>
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
     <style>
@@ -65,9 +68,6 @@
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <a href="#" class="btn btn-outline-primary">◀ Back</a>
-                </div>
                 <div class="card shadow">
                     <div class="card-body p-4 text-center">
                         <h2 class="card-title mb-4">Verification</h2>
