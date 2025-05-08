@@ -23,28 +23,14 @@ Route::middleware('guest')->group(function () {
          ->name('verification.send');
          Route::post('/resend-code', [AuthController::class, 'resendCode'])->name('resend.code');
 
-
-
     // Password reset
-    // 1. Tampilkan form input email
-Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotPasswordForm'])
-->name('forgot-password');
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotPasswordForm'])->name('forgot-password');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+Route::post('/verify-code', [ForgotPasswordController::class, 'verifyCode']);
+Route::post('/resend-code', [ForgotPasswordController::class, 'resendCode']);
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset-password');
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('reset-password.post');
 
-// 2. Kirim kode verifikasi ke email
-Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])
-->name('send-verification-code');
-
-// 3. Verifikasi kode dan redirect ke form reset
-Route::post('/verify-code', [ForgotPasswordController::class, 'verifyCode'])
-->name('verify-code');
-
-// 4. Tampilkan form ganti password
-Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])
-->name('reset-password');
-
-// 5. Simpan password baru
-Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])
-->name('reset-password.post');
 });
 
 // Authenticated routes
