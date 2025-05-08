@@ -44,11 +44,13 @@
       .image-section {
         display: none;
       }
+      .form-container {
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
-    <h1>Reset Password</h1>
 
     @if (session('status'))
         <div>{{ session('status') }}</div>
@@ -70,105 +72,104 @@
         <input type="hidden" name="token" value="{{ $token }}">
 
         <div class="container-fluid form-container">
-  <div class="row w-100 justify-content-center">
-    <!-- Left Image Section -->
-    <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center">
-  <img src="{{ asset('img/register.jpg') }}" alt="Registration Illustration" class="img-fluid w-75">
-</div>
+          <div class="row w-100 justify-content-center">
+            <!-- Left Image Section -->
+            <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center image-section">
+              <img src="{{ asset('img/password.jpg') }}" alt="Registration Illustration" class="img-fluid w-75">
+            </div>
 
-
-    <!-- Right Form Section -->
-    @csrf
-        <div class="form-group">
-          <label for="password">Kata Sandi baru</label>
-          <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan kata sandi" required onkeyup="checkPasswordStrength()">
-          <div class="progress">
-            <div id="strengthBar" class="progress-bar" role="progressbar" style="width: 0%"></div>
+            <!-- Right Form Section -->
+            <div class="col-md-6 form-section">
+                <div class="form-group">
+                  <label for="password">Kata Sandi baru</label>
+                  <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan kata sandi" required onkeyup="checkPasswordStrength()">
+                  <div class="progress">
+                    <div id="strengthBar" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                  </div>
+                  <small id="strengthMessage" class="form-text mt-1"></small>
+                  <div class="invalid-feedback" id="passwordError">Password harus minimal 5 karakter, mengandung huruf besar, dan karakter spesial.</div>
+                </div>
+                <div class="form-group">
+                  <label for="confirmPassword">Konfirmasi Kata Sandi</label>
+                  <input type="password" class="form-control" id="confirmPassword" name="password_confirmation" placeholder="Ulangi kata sandi" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Reset Password</button>
+            </div>
           </div>
-          <small id="strengthMessage" class="form-text mt-1"></small>
-          <div class="invalid-feedback" id="passwordError">Password harus minimal 5 karakter, mengandung huruf besar, dan karakter spesial.</div>
         </div>
-        <div class="form-group">
-          <label for="confirmPassword">Konfirmasi Kata Sandi</label>
-          <input type="password" class="form-control" id="confirmPassword" name="password_confirmation" placeholder="Ulangi kata sandi" required>
-        </div>
-  </div>
-</div>
-
-        <button type="submit">Reset Password</button>
     </form>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script>
-  function checkPasswordStrength() {
-    const password = document.getElementById("password").value;
-    const strengthBar = document.getElementById("strengthBar");
-    const message = document.getElementById("strengthMessage");
-    const error = document.getElementById("passwordError");
+      function checkPasswordStrength() {
+        const password = document.getElementById("password").value;
+        const strengthBar = document.getElementById("strengthBar");
+        const message = document.getElementById("strengthMessage");
+        const error = document.getElementById("passwordError");
 
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasSpecialChar = /[\W_]/.test(password);
-    const isLongEnough = password.length >= 5;
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasSpecialChar = /[\W_]/.test(password);
+        const isLongEnough = password.length >= 5;
 
-    let strength = 0;
-    if (isLongEnough) strength += 1;
-    if (hasUpperCase) strength += 1;
-    if (hasSpecialChar) strength += 1;
+        let strength = 0;
+        if (isLongEnough) strength += 1;
+        if (hasUpperCase) strength += 1;
+        if (hasSpecialChar) strength += 1;
 
-    if (!password) {
-      strengthBar.style.width = "0%";
-      strengthBar.className = "progress-bar";
-      message.textContent = "";
-      error.style.display = "none";
-      return;
-    }
+        if (!password) {
+          strengthBar.style.width = "0%";
+          strengthBar.className = "progress-bar";
+          message.textContent = "";
+          error.style.display = "none";
+          return;
+        }
 
-    switch (strength) {
-      case 1:
-        strengthBar.style.width = "33%";
-        strengthBar.className = "progress-bar bg-danger";
-        message.textContent = "Lemah";
-        message.style.color = "red";
-        error.style.display = "block";
-        break;
-      case 2:
-        strengthBar.style.width = "66%";
-        strengthBar.className = "progress-bar bg-warning";
-        message.textContent = "Sedang";
-        message.style.color = "orange";
-        error.style.display = "block";
-        break;
-      case 3:
-        strengthBar.style.width = "100%";
-        strengthBar.className = "progress-bar bg-success";
-        message.textContent = "Kuat";
-        message.style.color = "green";
-        error.style.display = "none";
-        break;
-    }
-  }
+        switch (strength) {
+          case 1:
+            strengthBar.style.width = "33%";
+            strengthBar.className = "progress-bar bg-danger";
+            message.textContent = "Lemah";
+            message.style.color = "red";
+            error.style.display = "block";
+            break;
+          case 2:
+            strengthBar.style.width = "66%";
+            strengthBar.className = "progress-bar bg-warning";
+            message.textContent = "Sedang";
+            message.style.color = "orange";
+            error.style.display = "block";
+            break;
+          case 3:
+            strengthBar.style.width = "100%";
+            strengthBar.className = "progress-bar bg-success";
+            message.textContent = "Kuat";
+            message.style.color = "green";
+            error.style.display = "none";
+            break;
+        }
+      }
 
-  document.getElementById("registerForm").addEventListener("submit", function(e) {
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-    const error = document.getElementById("passwordError");
+      document.getElementById("registerForm").addEventListener("submit", function(e) {
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+        const error = document.getElementById("passwordError");
 
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasSpecialChar = /[\W_]/.test(password);
-    const isLongEnough = password.length >= 5;
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasSpecialChar = /[\W_]/.test(password);
+        const isLongEnough = password.length >= 5;
 
-    if (!hasUpperCase || !hasSpecialChar || !isLongEnough) {
-      e.preventDefault();
-      error.style.display = "block";
-      document.getElementById("password").focus();
-      return false;
-    }
+        if (!hasUpperCase || !hasSpecialChar || !isLongEnough) {
+          e.preventDefault();
+          error.style.display = "block";
+          document.getElementById("password").focus();
+          return false;
+        }
 
-    if (password !== confirmPassword) {
-      e.preventDefault();
-      alert("Konfirmasi kata sandi tidak cocok.");
-      return false;
-    }
-  });
-</script>
+        if (password !== confirmPassword) {
+          e.preventDefault();
+          alert("Konfirmasi kata sandi tidak cocok.");
+          return false;
+        }
+      });
+    </script>
 </body>
 </html>
