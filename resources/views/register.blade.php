@@ -51,9 +51,10 @@
 <div class="container-fluid form-container">
   <div class="row w-100 justify-content-center">
     <!-- Left Image Section -->
-    <div class="col-md-6 image-section d-flex align-items-center justify-content-center">
-      <img src="{{ asset('img/register.jpg') }}" alt="Registration Illustration" class="img-fluid w-75">
-    </div>
+    <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center">
+  <img src="{{ asset('img/register.jpg') }}" alt="Registration Illustration" class="img-fluid w-75">
+</div>
+
 
     <!-- Right Form Section -->
     <div class="col-lg-5 col-md-6 form-section">
