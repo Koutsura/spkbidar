@@ -18,9 +18,11 @@
                 <div class="dropdown-title">
                     Selamat Datang, {{ auth()->check() ? substr(auth()->user()->name, 0, 10) : 'Tamu' }}
                 </div>
-             
+                <a class="dropdown-item has-icon edit-profile" href="/" data-id="{{ \Auth::id() }}">
+                    <i class="fa fa-user"></i> Edit Profile
+                </a>
                 <div class="dropdown-divider"></div>
-                <a href="{{ route('logout') }}" class="dropdown-item has-icon text-danger"
+                <a href="{{ url('logout') }}" class="dropdown-item has-icon text-danger"
                    onclick="event.preventDefault(); localStorage.clear();  document.getElementById('logout-form').submit();">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
