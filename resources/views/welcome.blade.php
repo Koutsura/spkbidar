@@ -31,67 +31,73 @@
     </div>
 
     <!-- Fitur Deskripsi -->
-    <div class="row text-center mt-5 feature-section">
-      <div class="col-md-4 mb-4">
-        <h3>Kreativitas</h3>
-        <p>Temukan UKM yang menyalurkan ide dan karya unikmu.</p>
-      </div>
-      <div class="col-md-4 mb-4">
-        <h3>Teknologi</h3>
-        <p>Dukung bakatmu di bidang digital dan pemrograman.</p>
-      </div>
-      <div class="col-md-4 mb-4">
-        <h3>Religi</h3>
-        <p>Gabung dengan komunitas yang mendukung nilai spiritual.</p>
-      </div>
+    <div class="container">
+  <div class="row text-center mt-5 feature-section">
+    <div class="col-sm-4 mb-4">
+      <h3>Kreativitas</h3>
+      <p>Temukan UKM yang menyalurkan ide dan karya unikmu.</p>
     </div>
+    <div class="col-sm-4 mb-4">
+      <h3>Teknologi</h3>
+      <p>Dukung bakatmu di bidang digital dan pemrograman.</p>
+    </div>
+    <div class="col-sm-4 mb-4">
+      <h3>Religi</h3>
+      <p>Gabung dengan komunitas yang mendukung nilai spiritual.</p>
+    </div>
+  </div>
+</div>
+
+
 
 <!-- Fitur Deskripsi -->
 <div class="row text-center mt-5 feature-section">
   <!-- Gambar kanan, Deskripsi kiri -->
-  <div class="col-md-12 mb-4 d-flex flex-row-reverse align-items-center">
-    <div class="border p-3 me-4" style="flex: 1 1 0; max-width: 400px;"> <!-- Tambah me-4 (margin-right) -->
+  <div class="col-md-12 mb-4 d-flex flex-md-row-reverse align-items-center">
+    <div class="border p-3 me-4" style="flex: 1 1 0; max-width: 400px;">
       <img src="{{ asset('img/busunda.png') }}" alt="Prof. Dr. Sunda Ariana, M.Pd., M.M." class="img-fluid mb-3" style="max-height: 250px; object-fit: cover;">
     </div>
-    <div class="ms-4" style="flex: 2 1 0; padding-right: 2rem;"> <!-- Tambah padding-right -->
+    <div class="ms-4" style="flex: 2 1 0; padding-right: 2rem;">
       <h3>Prof. Dr. Sunda Ariana, M.Pd., M.M.</h3>
       <p style="text-align: justify;">Saya Prof. Dr. Sunda Ariana, M.Pd., M.M. selaku Rektor Universitas Bina Darma menyampaikan ucapan selamat datang kepada seluruh civitas akademika dan menekankan komitmen universitas dalam memberikan pendidikan berkualitas, mengembangkan potensi mahasiswa, dan membangun karakter yang tangguh. Universitas Bina Darma berupaya terus berkembang dan berinovasi untuk menciptakan lingkungan belajar yang inspiratif, mendukung pengembangan soft skills, dan mempersiapkan lulusan yang kompeten secara profesional serta memiliki integritas sosial. Seluruh civitas akademika diundang untuk bersama-sama berkontribusi dalam membangun atmosfer akademik yang dinamis dan harmonis, dengan harapan agar Allah senantiasa memberikan petunjuk dan kesuksesan dalam perjalanan pendidikan universitas.</p>
     </div>
   </div>
 
   <!-- Gambar kiri, Deskripsi kanan -->
-  <div class="col-md-12 mb-4 d-flex align-items-center">
-    <div class="border p-3 ms-4" style="flex: 1 1 0; max-width: 400px;"> <!-- Tambah ms-4 (margin-left) -->
+  <div class="col-md-12 mb-4 d-flex flex-md-row align-items-center">
+    <div class="border p-3 ms-4" style="flex: 1 1 0; max-width: 400px;">
       <img src="{{ asset('img/buyanti.png') }}" alt="Dr. Yanti Pasmawati, S.T., M.T." class="img-fluid mb-3" style="max-height: 250px; object-fit: cover;">
     </div>
-    <div class="ms-4" style="flex: 2 1 0; padding-left: 2rem;"> <!-- Tambah padding-left -->
+    <div class="ms-4" style="flex: 2 1 0; padding-left: 2rem;">
       <h3>Dr. Yanti Pasmawati, S.T., M.T.</h3>
       <p style="text-align: justify;">Saya Dr. Yanti Pasmawati, S.T., M.T. selaku Wakil Rektor Bidang Kemahasiswaan, Alumni dan Kerjasama Universitas Bina Darma menyampaikan ucapan selamat datang kepada seluruh civitas akademika dan menekankan komitmen universitas dalam memberikan pendidikan berkualitas, mengembangkan potensi mahasiswa, dan membangun karakter yang tangguh. Universitas Bina Darma berupaya terus berkembang dan berinovasi untuk menciptakan lingkungan belajar yang inspiratif, mendukung pengembangan soft skills, dan mempersiapkan lulusan yang kompeten secara profesional serta memiliki integritas sosial. Seluruh civitas akademika diundang untuk bersama-sama berkontribusi dalam membangun atmosfer akademik yang dinamis dan harmonis, dengan harapan agar Allah senantiasa memberikan petunjuk dan kesuksesan dalam perjalanan pendidikan universitas.</p>
     </div>
   </div>
 
   <!-- Gambar kanan, Deskripsi kiri -->
-  <div class="col-md-12 mb-4 d-flex flex-row-reverse align-items-center">
-    <div class="border p-3 me-4" style="flex: 1 1 0; max-width: 400px;"> <!-- Tambah me-4 -->
+  <div class="col-md-12 mb-4 d-flex flex-md-row-reverse align-items-center">
+    <div class="border p-3 me-4" style="flex: 1 1 0; max-width: 400px;">
       <img src="{{ asset('img/pakedi.png') }}" alt="Prof. Dr. Edi Surya Negara, M.Kom." class="img-fluid mb-3" style="max-height: 250px; object-fit: cover;">
     </div>
-    <div class="ms-4" style="flex: 2 1 0; padding-right: 2rem;"> <!-- Tambah padding-right -->
+    <div class="ms-4" style="flex: 2 1 0; padding-right: 2rem;">
       <h3>Prof. Dr. Edi Surya Negara, M.Kom.</h3>
-      <p style="text-align: justify;">Saya Prof. Dr. Edi Surya Negara, M.Kom. selaku Wakil Rektor Bidang Riset, Teknologi, dan Inovasi Universitas Bina Darma menyampaikan ucapan selamat datang kepada seluruh civitas akademika dan menekankan komitmen universitas dalam memberikan pendidikan berkualitas, mengembangkan potensi mahasiswa, dan membangun karakter yang tangguh. Universitas Bina Darma berupaya terus berkembang dan berinovasi untuk menciptakan lingkungan belajar yang inspiratif, mendukung pengembangan soft skills, dan mempersiapkan lulusan yang kompeten secara profesional serta memiliki integritas sosial. Seluruh civitas akademika diundang untuk bersama-sama berkontribusi dalam membangun atmosfer akademik yang dinamis dan harmonis, dengan harapan agar Allah senantiasa memberikan petunjuk dan kesuksesan dalam perjalanan pendidikan universitas.</p>
+      <p style="text-align: justify;">
+      Saya Prof. Dr. Edi Surya Negara, M.Kom. selaku Wakil Rektor Bidang Riset, Teknologi, dan Inovasi Universitas Bina Darma menyampaikan ucapan selamat datang kepada seluruh civitas akademika dan menekankan komitmen universitas dalam memberikan pendidikan berkualitas, mengembangkan potensi mahasiswa, dan membangun karakter yang tangguh. Universitas Bina Darma berupaya terus berkembang dan berinovasi untuk menciptakan lingkungan belajar yang inspiratif, mendukung pengembangan soft skills, dan mempersiapkan lulusan yang kompeten secara profesional serta memiliki integritas sosial. Seluruh civitas akademika diundang untuk bersama-sama berkontribusi dalam membangun atmosfer akademik yang dinamis dan harmonis, dengan harapan agar Allah senantiasa memberikan petunjuk dan kesuksesan dalam perjalanan pendidikan universitas.</p>
     </div>
   </div>
 
   <!-- Gambar kiri, Deskripsi kanan -->
-  <div class="col-md-12 mb-4 d-flex align-items-center">
-    <div class="border p-3 ms-4" style="flex: 1 1 0; max-width: 400px;"> <!-- Tambah ms-4 -->
+  <div class="col-md-12 mb-4 d-flex flex-md-row align-items-center">
+    <div class="border p-3 ms-4" style="flex: 1 1 0; max-width: 400px;">
       <img src="{{ asset('img/paknovri.png') }}" alt="Novri Hadinata, S.Kom., M.Kom." class="img-fluid mb-3" style="max-height: 250px; object-fit: cover;">
     </div>
-    <div class="ms-4" style="flex: 2 1 0; padding-left: 2rem;"> <!-- Tambah padding-left -->
+    <div class="ms-4" style="flex: 2 1 0; padding-left: 2rem;">
       <h3>Novri Hadinata, S.Kom., M.Kom.</h3>
       <p style="text-align: justify;">Saya Novri Hadinata, S.Kom., M.Kom. selaku Ketua Bidang Kemahasiswaan Universitas Bina Darma menyampaikan ucapan selamat datang kepada seluruh civitas akademika dan menekankan komitmen universitas dalam memberikan pendidikan berkualitas, mengembangkan potensi mahasiswa, dan membangun karakter yang tangguh. Universitas Bina Darma berupaya terus berkembang dan berinovasi untuk menciptakan lingkungan belajar yang inspiratif, mendukung pengembangan soft skills, dan mempersiapkan lulusan yang kompeten secara profesional serta memiliki integritas sosial. Seluruh civitas akademika diundang untuk bersama-sama berkontribusi dalam membangun atmosfer akademik yang dinamis dan harmonis, dengan harapan agar Allah senantiasa memberikan petunjuk dan kesuksesan dalam perjalanan pendidikan universitas.</p>
     </div>
   </div>
 </div>
+
 
 
 

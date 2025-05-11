@@ -58,93 +58,120 @@ body {
     font-size: 1rem;
     color: #e0e0e0;
   }
-      .kecil-container {
-        overflow: hidden;
-        width: 100%;
-        height: auto;
-      }
 
-      .kecil {
-        display: flex;
-        gap: 1rem;
-        animation: infinite-scroll 10s linear infinite;
-        align-items: center;
+  .kecil-container {
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+  }
 
-      }
+  .kecil {
+    display: flex;
+    gap: 1rem;
+    animation: infinite-scroll 10s linear infinite;
+    align-items: center;
+  }
 
-      .kecil img {
-        width: 100px;
-        height: auto;
-      }
+  .kecil img {
+    width: 100px;
+    height: auto;
+  }
 
-      @keyframes infinite-scroll {
-          from {
-            transform: translateX(100vw);  /* Mulai di luar viewport (kanan) */
-          }
-          to {
-            transform: translateX(-100%);  /* Berhenti di luar viewport (kiri) */
-          }
-        }
-
-        /* Tablet */
-@media (max-width: 992px) {
-.kecil {
-  animation: infinite-scroll 10s linear infinite;
-}
-.kecil img {
-  width: 90px;
-}
-}
-
-/* Mobile Landscape */
-@media (max-width: 768px) {
-.kecil {
-  animation: infinite-scroll 10s linear infinite;
-  gap: 0.8rem;
-}
-.kecil img {
-  width: 80px;
-}
-}
-
-/* Mobile Portrait */
-@media (max-width: 576px) {
-.kecil {
-  animation: infinite-scroll 10s linear infinite;
-  gap: 0.6rem;
-}
-.kecil img {
-  width: 70px;
-}
-}
-
-
-  @media (max-width: 768px) {
-    .logo-header img {
-      max-height: 50px;
-      margin-right: 10px;
+  @keyframes infinite-scroll {
+    from {
+      transform: translateX(100vw);  /* Mulai di luar viewport (kanan) */
     }
-    .hero h1 {
-      font-size: 1.75rem;
-    }
-    .hero p {
-      font-size: 1rem;
-    }
-    .feature-section h3 {
-      font-size: 1.25rem;
-    }
-    .feature-section p {
-      font-size: 0.9rem;
+    to {
+      transform: translateX(-100%);  /* Berhenti di luar viewport (kiri) */
     }
   }
 
+  /* Tablet */
+  @media (max-width: 992px) {
+    .kecil {
+      animation: infinite-scroll 10s linear infinite;
+    }
+    .kecil img {
+      width: 90px;
+    }
+
+  }
+
+  /* Mobile Landscape */
+  @media (max-width: 768px) {
+    .kecil {
+      animation: infinite-scroll 10s linear infinite;
+      gap: 0.8rem;
+    }
+    .kecil img {
+      width: 80px;
+    }
+
+    .feature-section {
+      flex-direction: column;
+    }
+
+    .feature-section .col-md-12 {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .feature-section img {
+      max-width: 100%;
+      margin-bottom: 15px;
+    }
+
+    .feature-section .ms-4 {
+        margin-left: 0 !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+      }
+
+      .feature-section .me-4 {
+        margin-right: 0 !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+      }
+
+    .feature-section .col-md-12 .d-flex {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .feature-section h3 {
+      font-size: 1.25rem;
+    }
+
+    .feature-section p {
+      font-size: 0.9rem;
+    }
+    @media (max-width: 768px) {
+        .feature-section .col-sm-4 {
+          width: 100% !important;
+        }
+      }
+
+
+  }
+
+  /* Mobile Portrait */
   @media (max-width: 576px) {
+    .kecil {
+      animation: infinite-scroll 10s linear infinite;
+      gap: 0.6rem;
+    }
+    .kecil img {
+      width: 70px;
+    }
+
     .hero {
       padding: 40px 10px;
     }
+
     .feature-section h3 {
       font-size: 1.1rem;
     }
+
     .feature-section p {
       font-size: 0.8rem;
     }
