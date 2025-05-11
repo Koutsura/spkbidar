@@ -48,10 +48,11 @@ class AuthController extends Controller
         $verification_code = Str::random(6);
 
         $user_data = [
-            'name' => $request->name,
+            'name' => strip_tags($request->name),
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'verification_token' => $verification_code,
+            'role' => 'mahasiswa',
         ];
 
         // Save the user data in cache with email as key
