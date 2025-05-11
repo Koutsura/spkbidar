@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8" />
+  <meta name="description" content="Website UKM Bina Darma" />
+  <meta name="keywords" content="UKM,Universitas Bina Darma,Unit Kegiatan Mahasiswa,website,organisasi" />
+  <meta name="author" content="Universitas Bina Darma, M. Denny Tri Lisandi" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet"
         href="{{ asset('css/style.css') }}">
@@ -16,7 +17,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title') &mdash; Digitalisasi KIP Merdeka - LLDIKTI 2</title>
+    <title>@yield('title') &mdash; UKM Universitas Bina Darma</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -26,7 +27,7 @@
     {{--  @vite(['resources/sass/app.scss', 'resources/js/app.js'])  --}}
     @vite(['resources/js/app.js'])
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
 <script src="{{ asset('js/popper.min.js') }}" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -54,7 +55,7 @@
     <script src="{{ asset('js/jquery.nicescroll.min.js') }}"></script>
     <script src="{{ asset('js/moment.min.js') }}"></script>
     <script src="{{ asset('js/stisla.js') }}"></script>
-
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     @stack('scripts')
 
     <!-- Template JS File -->
