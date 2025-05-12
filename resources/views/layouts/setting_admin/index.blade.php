@@ -25,7 +25,7 @@
                         <div class="col-md-6">
                             <form action="{{ route('setting_admin.index') }}" method="GET">
                                 <div class="input-group">
-                                    <input type="text" name="search" class="form-control" placeholder="Cari Berdasarkan ID...">
+                                    <input type="text" name="search" class="form-control" placeholder="Cari Berdasarkan Nama...">
                                     <div class="input-group-append">
                                         <button class="btn btn-primary" style="margin-left:5px;" type="submit">Search</button>
                                     </div>

@@ -9,11 +9,20 @@ use Illuminate\Http\Request;
 class AdminSettingController extends Controller
 {
     // Tampilkan semua mahasiswa
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil semua mahasiswa
+        $search = $request->get('search');
+
+    if ($search) {
+        $users = User::where('role', 'mahasiswa')
+            ->where('name', 'like', "%{$search}%")
+            ->get();
+    } else {
         $users = User::where('role', 'mahasiswa')->get();
-        return view('layouts.setting_admin.index', compact('users'));
+    }
+
+    return view('layouts.setting_admin.index', compact('users'));
+
     }
 
     // Tampilkan halaman edit organisasi mahasiswa
