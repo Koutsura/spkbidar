@@ -38,7 +38,9 @@ class SettingController extends Controller
                 Storage::disk('public')->delete($path);
             }
 
-            $path = $request->file('profile_photo')->store('profile_photos', 'public');
+            // Menyimpan file dengan nama yang sesuai
+            $filename = time() . '.' . $request->file('profile_photo')->getClientOriginalExtension();
+            $path = $request->file('profile_photo')->storeAs('profile_photos', $filename, 'public');
         }
 
         if ($setting) {

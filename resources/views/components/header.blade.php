@@ -8,14 +8,22 @@
             </a>
         </li>
         <li class="nav-item dropdown">
-    <a href="#" id="navbarDropdown" role="button"
-       class="nav-link dropdown-toggle nav-link-lg nav-link-user"
-       data-bs-toggle="dropdown" aria-expanded="false">
-        <img alt="image" src="{{ asset('img/profile.png') }}" class="rounded-circle mr-1">
-        <div class="d-sm-none d-lg-inline-block">
-            Hai, {{ auth()->check() ? substr(auth()->user()->name, 0, 10) : 'Tamu' }}
-        </div>
-    </a>
+   <a href="#" id="navbarDropdown" role="button"
+   class="nav-link dropdown-toggle nav-link-lg nav-link-user"
+   data-bs-toggle="dropdown" aria-expanded="false">
+    <!-- Menampilkan foto profil dari database atau default -->
+    <img alt="image"
+         src="{{ auth()->user()->setting && auth()->user()->setting->profile_photo
+                ? asset('storage/' . auth()->user()->setting->profile_photo)
+                : asset('img/profile.png') }}"
+         class="rounded-circle mr-1" style="width: 35px; height: 35px; object-fit: cover;">
+    <div class="d-sm-none d-lg-inline-block">
+        Hai, {{ auth()->check() ? substr(auth()->user()->name, 0, 10) : 'Tamu' }}
+    </div>
+</a>
+
+
+
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
         <div class="dropdown-title">
             Selamat Datang, {{ auth()->check() ? substr(auth()->user()->name, 0, 10) : 'Tamu' }}
