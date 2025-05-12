@@ -53,24 +53,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/hakakses/delete/{id}', [App\Http\Controllers\HakaksesController::class, 'destroy'])->name('hakakses.delete')->middleware('superadmin');
 
 
-Route::get('/settings', [SettingController::class, 'index'])->name('settings.index'); // menampilkan semua data
-Route::post('/settings', [SettingController::class, 'store'])->name('settings.store'); // menyimpan data baru
+Route::get('/settings', [SettingController::class, 'index'])->name('settings.index')->middleware('mahasiswa'); // menampilkan semua data
+Route::post('/settings', [SettingController::class, 'store'])->name('settings.store')->middleware('mahasiswa'); // menyimpan data baru
 
 // Route untuk menampilkan daftar mahasiswa
-Route::get('/setting-admin', [AdminSettingController::class, 'index'])->name('setting_admin.index');
+Route::get('/setting-admin', [AdminSettingController::class, 'index'])->name('setting_admin.index') ->middleware('superadmin');
 
 // Route untuk menampilkan halaman edit organisasi mahasiswa
-Route::get('/setting-admin/{user}/edit', [AdminSettingController::class, 'edit'])->name('setting_admin.edit');
+Route::get('/setting-admin/{user}/edit', [AdminSettingController::class, 'edit'])->name('setting_admin.edit')->middleware('superadmin');
 
 // Route untuk update organisasi mahasiswa
-Route::post('/setting-admin/{user}/update', [AdminSettingController::class, 'update'])->name('setting_admin.update');
+Route::post('/setting-admin/{user}/update', [AdminSettingController::class, 'update'])->name('setting_admin.update')->middleware('superadmin');
 
 // Mahasiswa Pelatihan
 Route::get('/mahasiswa/pelatihan', [PelatihanMahasiswaController::class, 'index'])
-    ->name('mahasiswa.pelatihan.index');
+    ->name('mahasiswa.pelatihan.index')->middleware('mahasiswa');
 
 // Admin Pelatihan
 Route::get('/admin/pelatihan', [PelatihanAdminController::class, 'index'])
-    ->name('admin.pelatihan.index');
+    ->name('admin.pelatihan.index')->middleware('superadmin');
 
 
