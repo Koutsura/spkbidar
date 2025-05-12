@@ -34,7 +34,7 @@
               @endif
             <li class="menu-header">Profile</li>
             <li class="{{ Request::is('profile/edit') ? 'active' : '' }}">
-                <a class="nav-link" href="/"><i class="fas fa-user"></i> <span>Edit Profile</span></a>
+                <a class="nav-link" href="{{ route('settings.index') }}"><i class="fas fa-user"></i> <span>Edit Profile</span></a>
             </li>
             @if (auth()->user()->role == 'pendaftaran' || auth()->user()->role == 'superadmin')
             <li class="menu-header">Pages</li>

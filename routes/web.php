@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\SettingController;
 
 // Public routes
 Route::middleware('guest')->group(function () {
@@ -47,3 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/hakakses/edit/{id}', [App\Http\Controllers\HakaksesController::class, 'edit'])->name('hakakses.edit')->middleware('superadmin');
     Route::put('/hakakses/update/{id}', [App\Http\Controllers\HakaksesController::class, 'update'])->name('hakakses.update')->middleware('superadmin');
     Route::delete('/hakakses/delete/{id}', [App\Http\Controllers\HakaksesController::class, 'destroy'])->name('hakakses.delete')->middleware('superadmin');
+
+
+Route::get('/settings', [SettingController::class, 'index'])->name('settings.index'); // menampilkan semua data
+Route::post('/settings', [SettingController::class, 'store'])->name('settings.store'); // menyimpan data baru
