@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\AdminSettingController;
+use App\Http\Controllers\PelatihanMahasiswaController;
+use App\Http\Controllers\PelatihanAdminController;
 
 // Public routes
 Route::middleware('guest')->group(function () {
@@ -62,4 +64,13 @@ Route::get('/setting-admin/{user}/edit', [AdminSettingController::class, 'edit']
 
 // Route untuk update organisasi mahasiswa
 Route::post('/setting-admin/{user}/update', [AdminSettingController::class, 'update'])->name('setting_admin.update');
+
+// Mahasiswa Pelatihan
+Route::get('/mahasiswa/pelatihan', [PelatihanMahasiswaController::class, 'index'])
+    ->name('mahasiswa.pelatihan.index');
+
+// Admin Pelatihan
+Route::get('/admin/pelatihan', [PelatihanAdminController::class, 'index'])
+    ->name('admin.pelatihan.index');
+
 
