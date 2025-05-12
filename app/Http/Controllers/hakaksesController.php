@@ -14,7 +14,7 @@ class HakaksesController extends Controller
     {
         $search = $request->get('search');
         if ($search) {
-            $data['hakakses'] = hakakses::where('id', 'like', "%{$search}%")->get();
+            $data['hakakses'] = hakakses::where('name', 'like', "%{$search}%")->get();
         } else {
             $data['hakakses'] = hakakses::all();
         }
