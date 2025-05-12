@@ -14,87 +14,85 @@
             <h1>Dashboard</h1>
         </div>
 
-        <div class="section-body">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Batch 1</h5>
-                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 1.</p>
-                            <a href="peserta" class="btn btn-primary">Lihat Selengkapnya</a>
-                        </div>
+        <h2 class="mb-4">Selamat datang mahasiswa</h2>
+        <div class="row">
+            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <img src="{{ asset('img/bdca.png') }}" class="card-img-top img-fluid" alt="Mahasiswa 1">
+                    <div class="card-body p-2">
+                        <p class="img-caption">Bina Darma Cyber Army</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Batch 2</h5>
-                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 2.</p>
-                            <a href="#" class="btn btn-primary">Lihat Selengkapnya</a>
-                        </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <img src="{{ asset('img/qarib.jpg') }}" class="card-img-top img-fluid" alt="Mahasiswa 2">
+                    <div class="card-body p-2">
+                        <p class="img-caption">LDK ALQORIB</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Batch 3</h5>
-                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 3.</p>
-                            <a href="#" class="btn btn-primary">Lihat Selengkapnya</a>
-                        </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <img src="{{ asset('img/PMKK.jpg') }}" class="card-img-top img-fluid" alt="Mahasiswa 3">
+                    <div class="card-body p-2">
+                        <p class="img-caption">Persekutuan Mahasiswa Kristen & Katolik</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Batch 4</h5>
-                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 4.</p>
-                            <a href="#" class="btn btn-primary">Lihat Selengkapnya</a>
-                        </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <img src="{{ asset('img/kmhdi.png') }}" class="card-img-top img-fluid" alt="Mahasiswa 4">
+                    <div class="card-body p-2">
+                        <p class="img-caption">Kesatuan Mahasiswa Hindu Darma Indonesia</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Batch 5</h5>
-                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 5.</p>
-                            <a href="#" class="btn btn-primary">Lihat Selengkapnya</a>
-                        </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <img src="{{ asset('img/mabidar.jpeg') }}" class="card-img-top img-fluid" alt="Mahasiswa 5">
+                    <div class="card-body p-2">
+                        <p class="img-caption">Kesatuan Mahasiswa Hindu Darma Indonesia</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Batch 6</h5>
-                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 6.</p>
-                            <a href="#" class="btn btn-primary">Lihat Selengkapnya</a>
-                        </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <img src="{{ asset('img/BGK.jpg') }}" class="card-img-top img-fluid" alt="Mahasiswa 6">
+                    <div class="card-body p-2">
+                        <p class="img-caption">Bujang Gadis Kampus</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Batch 7</h5>
-                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 7.</p>
-                            <a href="#" class="btn btn-primary">Lihat Selengkapnya</a>
-                        </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <img src="{{ asset('img/futsal.jpg') }}" class="card-img-top img-fluid" alt="Mahasiswa 7">
+                    <div class="card-body p-2">
+                        <p class="img-caption">Futsal</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Batch 8</h5>
-                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 8.</p>
-                            <a href="#" class="btn btn-primary">Lihat Selengkapnya</a>
-                        </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <img src="{{ asset('img/seni.jpg') }}" class="card-img-top img-fluid" alt="Mahasiswa 8">
+                    <div class="card-body p-2">
+                        <p class="img-caption">Seni</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Batch 9</h5>
-                            <p class="card-text">Deskripsi atau informasi tambahan tentang Batch 9.</p>
-                            <a href="#" class="btn btn-primary">Lihat Selengkapnya</a>
-                        </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <img src="{{ asset('img/pramuka.jpg') }}" class="card-img-top img-fluid" alt="Mahasiswa 9">
+                    <div class="card-body p-2">
+                        <p class="img-caption">Pramuka</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <img src="{{ asset('img/EDS.jpg') }}" class="card-img-top img-fluid" alt="Mahasiswa 10">
+                    <div class="card-body p-2">
+                        <p class="img-caption">EDS South Sumatera English Community</p>
                     </div>
                 </div>
             </div>
@@ -102,26 +100,22 @@
         @endif
 
         @if (auth()->user()->role == 'superadmin')
-
-            <div class="main-content">
-                <div class="row justify-content-center">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header">{{ __('Dashboard') }}</div>
-
-                            <div class="card-body">
-                                @if (session('status'))
-                                    <div class="alert alert-success" role="alert">
-                                        {{ session('status') }}
-                                    </div>
-                                @endif
-
-                                {{ __('You are logged in!') }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Dashboard</h1>
+        </div>
+<h2 class="mb-4 text-center">Selamat datang admin</h2>
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+            <img src="{{ asset('img/UKM.jpg') }}" class="card-img-top img-fluid" alt="Admin">
+            <div class="card-body p-2">
+                <p class="img-caption">Pembina Organisasi Mahasiswa (ORMAWA) Universitas Bina Darma</p>
             </div>
+        </div>
+    </div>
+</div>
             @endif
     </section>
 </div>

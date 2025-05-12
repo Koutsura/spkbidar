@@ -141,7 +141,7 @@
           <p>12.UKM Seni.</p>
           <p>13.UKM Pramuka.</p>
           <p>14.UKM Bina Darma Radio (B-Radio).</p>
-          <p>15.UKM South Sumatera English Community (SSEC).</p>
+          <p>15.UKM EDS South Sumatera English Community (SSEC).</p>
         </div>
       </div>
     </div>
