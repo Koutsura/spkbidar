@@ -23,7 +23,7 @@
             @if (auth()->user()->role == 'superadmin')
             <li class="menu-header">Hak Akses</li>
             <li class="{{ Request::is('hakakses') ? 'active' : '' }}">
-                <a class="nav-link" href="/"><i class="fas fa-user"></i> <span>Edit Role</span></a>
+                <a class="nav-link" href="{{ url('hakakses') }}"><i class="fas fa-user"></i> <span>Edit Role</span></a>
             </li>
             @endif
             <li class="menu-header">Profile</li>
