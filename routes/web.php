@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\AdminSettingController;
 
 // Public routes
 Route::middleware('guest')->group(function () {
@@ -52,3 +53,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::get('/settings', [SettingController::class, 'index'])->name('settings.index'); // menampilkan semua data
 Route::post('/settings', [SettingController::class, 'store'])->name('settings.store'); // menyimpan data baru
+
+// Route untuk menampilkan daftar mahasiswa
+Route::get('/setting-admin', [AdminSettingController::class, 'index'])->name('setting_admin.index');
+
+// Route untuk menampilkan halaman edit organisasi mahasiswa
+Route::get('/setting-admin/{user}/edit', [AdminSettingController::class, 'edit'])->name('setting_admin.edit');
+
+// Route untuk update organisasi mahasiswa
+Route::post('/setting-admin/{user}/update', [AdminSettingController::class, 'update'])->name('setting_admin.update');
+

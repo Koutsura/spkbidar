@@ -32,10 +32,24 @@
                  <a class="nav-link" href="/"><i class="fas fa-newspaper"></i> <span>Rekomendasi UKM</span></a>
              </li>
               @endif
-            <li class="menu-header">Profile</li>
-            <li class="{{ Request::is('profile/edit') ? 'active' : '' }}">
+              @if (auth()->user()->role == 'rekomendasi' || auth()->user()->role == 'mahasiswa')
+            <li class="menu-header">Edit Profile</li>
+            <li class="{{ Request::is('profile') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('settings.index') }}"><i class="fas fa-user"></i> <span>Edit Profile</span></a>
             </li>
+            @endif
+           @if (auth()->user()->role === 'rekomendasi' || auth()->user()->role === 'superadmin')
+           <li class="menu-header">Edit Profile Mahasiswa</li>
+    <li class="{{ request()->routeIs('setting_admin.index') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('setting_admin.index', ['user' => auth()->user()->id]) }}">
+            <i class="fas fa-user"></i>
+            <span>Edit Organisasi mahasiswa</span>
+        </a>
+    </li>
+@endif
+
+
+
             @if (auth()->user()->role == 'pendaftaran' || auth()->user()->role == 'superadmin')
             <li class="menu-header">Pages</li>
             <li class="{{ Request::is('pendaftaran') ? 'active' : '' }}">
