@@ -10,20 +10,27 @@ class AdminSettingController extends Controller
 {
     // Tampilkan semua mahasiswa
     public function index(Request $request)
-    {
-        $search = $request->get('search');
+{
+    $search = $request->get('search');
 
     if ($search) {
         $users = User::where('role', 'mahasiswa')
-            ->where('name', 'like', "%{$search}%")
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhereHas('setting', function ($q) use ($search) {
+                        $q->where('organization_1', 'like', "%{$search}%")
+                          ->orWhere('organization_2', 'like', "%{$search}%")
+                          ->orWhere('organization_3', 'like', "%{$search}%");
+                    });
+            })
             ->get();
     } else {
         $users = User::where('role', 'mahasiswa')->get();
     }
 
     return view('layouts.setting_admin.index', compact('users'));
+}
 
-    }
 
     // Tampilkan halaman edit organisasi mahasiswa
     public function edit(User $user)
