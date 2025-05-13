@@ -10,13 +10,15 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <table class="table table-bordered">
-        <thead>
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
             <tr>
                 <th>Nama</th>
                 <th>NIM</th>
                 <th>Jurusan</th>
-                <th>Organisasi</th>
+                <th>Organisasi 1</th>
+                <th>Organisasi 2</th>
+                <th>Organisasi 3</th>
                 <th>Alamat</th>
                 <th>Deskripsi</th>
                 <th>Berkas</th>
@@ -30,16 +32,14 @@
                 <td>{{ $data->user->name }}</td>
                 <td>{{ $data->setting->nim }}</td>
                 <td>{{ $data->setting->jurusan }}</td>
-                <td>
-                    {{ $data->organization_1 }},
-                    {{ $data->organization_2 }},
-                    {{ $data->organization_3 }}
-                </td>
+                <td>{{ $data->organization_1 }}</td>
+                <td>{{ $data->organization_2 }}</td>
+                <td>{{ $data->organization_3 }}</td>
                 <td>{{ $data->alamat }}</td>
                 <td>{{ $data->deskripsi }}</td>
                 <td>
-                    @if($data->file)
-                        <a href="{{ asset('storage/' . $data->file) }}" target="_blank">Lihat File</a>
+                    @if($data->file || $data->document_path)
+                        <a href="{{ asset('storage/' . ($data->file ?? $data->document_path)) }}" target="_blank">Lihat File</a>
                     @else
                         Tidak ada
                     @endif

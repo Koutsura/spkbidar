@@ -58,21 +58,58 @@
                 <input type="text" readonly class="form-control" value="{{ $setting->phone_number }}">
             </div>
 
-            {{-- Organisasi --}}
-            <div class="mb-3">
-                <label class="form-label">Organisasi 1</label>
-                <input type="text" name="organization_1" class="form-control" value="{{ old('organization_1', $setting->organization_1) }}" required>
-            </div>
+           @php
+    $ukms = [
+        'UKM Bina Darma Cyber Army (BDCA)',
+        'UKM LDK ALQORIB',
+        'UKM Persekutuan Mahasiswa Kristen & Katolik (PMKK)',
+        'UKM Kesatuan Mahasiswa Hindu Darma Indonesia (KMHDI)',
+        'UKM Olahraga',
+        'UKM Mahasiswa Pencinta Alam (MABIDAR)',
+        'UKM Bujang Gadis Kampus (BGK)',
+        'UKM Panduan Suara Mahasiswa (BDSC)',
+        'UKM Binadarma Debat Union (BDCU)',
+        'UKM Bina Darma Programmer (BDPRO)',
+        'UKM Futsal',
+        'UKM Seni',
+        'UKM Pramuka',
+        'UKM Bina Darma Radio (B-Radio)',
+        'UKM EDS South Sumatera English Community (SSEC)',
+        'Inovator Center (DIIB) - Bonus akan mendapatkan Jika jawaban anda sempurna',
+    ];
+@endphp
 
-            <div class="mb-3">
-                <label class="form-label">Organisasi 2</label>
-                <input type="text" name="organization_2" class="form-control" value="{{ old('organization_2', $setting->organization_2) }}">
-            </div>
+{{-- Organisasi --}}
+<div class="mb-3">
+    <label class="form-label">Organisasi 1</label>
+    <select name="organization_1" class="form-select" required>
+        <option value="">-- Pilih Organisasi 1 --</option>
+        @foreach($ukms as $ukm)
+            <option value="{{ $ukm }}" {{ old('organization_1', $setting->organization_1) == $ukm ? 'selected' : '' }}>{{ $ukm }}</option>
+        @endforeach
+    </select>
+</div>
 
-            <div class="mb-3">
-                <label class="form-label">Organisasi 3</label>
-                <input type="text" name="organization_3" class="form-control" value="{{ old('organization_3', $setting->organization_3) }}">
-            </div>
+<div class="mb-3">
+    <label class="form-label">Organisasi 2</label>
+    <select name="organization_2" class="form-select">
+        <option value="">-- Pilih Organisasi 2 (opsional) --</option>
+        @foreach($ukms as $ukm)
+            <option value="{{ $ukm }}" {{ old('organization_2', $setting->organization_2) == $ukm ? 'selected' : '' }}>{{ $ukm }}</option>
+        @endforeach
+    </select>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Organisasi 3</label>
+    <select name="organization_3" class="form-select">
+        <option value="">-- Pilih Organisasi 3 (opsional) --</option>
+        @foreach($ukms as $ukm)
+            <option value="{{ $ukm }}" {{ old('organization_3', $setting->organization_3) == $ukm ? 'selected' : '' }}>{{ $ukm }}</option>
+        @endforeach
+    </select>
+</div>
+
 
             {{-- Alamat --}}
             <div class="mb-3">
