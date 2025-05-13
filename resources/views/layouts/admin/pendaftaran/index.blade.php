@@ -3,9 +3,11 @@
 @section('title', 'Manajemen Pendaftaran')
 
 @section('content')
-<div class="container mt-4">
-    <h3 class="mb-4">Daftar Pendaftaran Mahasiswa (Menunggu Konfirmasi)</h3>
-
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Daftar Pendaftaran Mahasiswa (Menunggu Konfirmasi)</h1>
+        </div>
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -68,6 +70,7 @@
             </tbody>
         </table>
     </div>
+</section>
 </div>
 
 @push('scripts')

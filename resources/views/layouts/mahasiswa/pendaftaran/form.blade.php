@@ -13,9 +13,11 @@
 @endpush
 
 @section('content')
-<div class="container mt-5">
-    <div class="form-section">
-        <h4 class="mb-4">Formulir Pendaftaran Organisasi</h4>
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Formulir Pendaftaran Organisasi</h1>
+        </div>
 
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -137,5 +139,6 @@
             <button type="submit" class="btn btn-primary">Kirim Pendaftaran</button>
         </form>
     </div>
+</section>
 </div>
 @endsection
