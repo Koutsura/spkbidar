@@ -14,29 +14,35 @@ class MahasiswaController extends Controller
      * Tampilkan form pendaftaran.
      */
     public function showForm()
-    {
-        $user = Auth::user();
-        $setting = Setting::where('user_id', $user->id)->first();
+{
+    $user = Auth::user();
+    $setting = Setting::where('user_id', $user->id)->first();
 
-        if (!$setting) {
-            return redirect()->back()->with('error', 'Data profil belum lengkap.');
-        }
-
-        return view('layouts.mahasiswa.pendaftaran.form', compact('user', 'setting'));
+    if (!$setting) {
+        return redirect()->back()->with('error', 'Data profil belum lengkap.');
     }
+
+    $pendaftaran = Pendaftaran::where('user_id', $user->id)
+                               ->where('status', 'pending')
+                               ->first();
+
+    return view('layouts.mahasiswa.pendaftaran.form', compact('user', 'setting', 'pendaftaran'));
+}
+
 
     /**
      * Simpan data pendaftaran.
      */
    public function submitForm(Request $request)
 {
+    // Validasi input
     $request->validate([
         'organization_1' => 'required|string|max:100',
         'organization_2' => 'nullable|string|max:100',
         'organization_3' => 'nullable|string|max:100',
         'alamat' => 'required|string|max:255',
         'deskripsi' => 'required|string|max:500',
-        'file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', // File tidak wajib saat update
     ]);
 
     $user = Auth::user();
@@ -46,19 +52,24 @@ class MahasiswaController extends Controller
         return redirect()->back()->with('error', 'Data setting tidak ditemukan.');
     }
 
-    // Cek apakah sudah pernah mendaftar (pending)
+    // Cek apakah sudah pernah mendaftar (status 'pending')
     $pendaftaran = Pendaftaran::where('user_id', $user->id)
                                ->where('status', 'pending')
                                ->first();
 
-    // Upload file baru
-    $filename = time() . '_' . $request->file('file')->getClientOriginalName();
-    $path = $request->file('file')->storeAs('uploads/pendaftaran', $filename, 'public');
+    // Upload file jika ada, jika tidak biarkan file lama tetap ada
+    $path = null;
+    if ($request->hasFile('file')) {
+        $originalName = preg_replace('/\s+/', '_', strtolower($request->file('file')->getClientOriginalName()));
+        $filename = time() . '_' . $originalName;
+        $path = 'uploads/pendaftaran/' . $filename;
+        $request->file('file')->storeAs('uploads/pendaftaran', $filename, 'public');
+    }
 
     if ($pendaftaran) {
-        // Hapus file lama
-        if ($pendaftaran->file && \Storage::disk('public')->exists($pendaftaran->file)) {
-            \Storage::disk('public')->delete($pendaftaran->file);
+        // Hapus file lama jika ada dan file baru di-upload
+        if ($path && $pendaftaran->file && Storage::disk('public')->exists($pendaftaran->file)) {
+            Storage::disk('public')->delete($pendaftaran->file);
         }
 
         // Update data pendaftaran lama
@@ -68,12 +79,12 @@ class MahasiswaController extends Controller
             'organization_3' => $request->organization_3,
             'alamat' => $request->alamat,
             'deskripsi' => $request->deskripsi,
-            'file' => $path,
+            'file' => $path ?? $pendaftaran->file, // Gunakan file lama jika tidak ada file baru
         ]);
 
         return redirect()->back()->with('success', 'Pendaftaran berhasil diperbarui.');
     } else {
-        // Buat data baru jika belum ada
+        // Jika belum pernah daftar, buat data baru
         Pendaftaran::create([
             'user_id' => $user->id,
             'setting_id' => $setting->id,
@@ -89,5 +100,7 @@ class MahasiswaController extends Controller
         return redirect()->back()->with('success', 'Pendaftaran berhasil dikirim.');
     }
 }
+
+
 
 }
