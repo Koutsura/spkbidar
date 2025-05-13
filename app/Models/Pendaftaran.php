@@ -9,16 +9,17 @@ class Pendaftaran extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'setting_id',
-        'organization_1',
-        'organization_2',
-        'organization_3',
-        'alamat',
-        'deskripsi',
-        'document_path',
-    ];
+   protected $fillable = [
+    'user_id',
+    'setting_id',
+    'organization_1',
+    'organization_2',
+    'organization_3',
+    'alamat',
+    'deskripsi',
+    'upload_file', // Ganti dari document_path ke file
+];
+
 
     public function user()
     {

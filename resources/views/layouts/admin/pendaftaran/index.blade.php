@@ -39,11 +39,14 @@
                     <td>{{ $data->alamat }}</td>
                     <td>{{ $data->deskripsi }}</td>
                     <td>
-                        @if($data->file || $data->document_path)
-                            <a href="{{ asset('storage/' . ($data->file ?? $data->document_path)) }}" target="_blank" class="btn btn-info btn-sm" title="Lihat Berkas"><i class="fas fa-file-pdf"></i> Lihat File</a>
-                        @else
-                            <span class="text-muted">Tidak ada</span>
-                        @endif
+                        @if($data->upload_file)
+    <a href="{{ asset('storage/' . $data->upload_file) }}" target="_blank" class="btn btn-info btn-sm" title="Lihat Berkas">
+        <i class="fas fa-file-pdf"></i> Lihat File
+    </a>
+@else
+    <span class="text-muted">Tidak ada</span>
+@endif
+
                     </td>
                     <td><span class="badge bg-warning text-dark">{{ $data->status }}</span></td>
                     <td>

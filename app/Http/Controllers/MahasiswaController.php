@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Storage;
 
 class MahasiswaController extends Controller
 {
-    /**
-     * Tampilkan form pendaftaran.
-     */
     public function showForm()
     {
         $user = Auth::user();
@@ -29,82 +26,66 @@ class MahasiswaController extends Controller
         return view('layouts.mahasiswa.pendaftaran.form', compact('user', 'setting', 'pendaftaran'));
     }
 
-    /**
-     * Simpan data pendaftaran.
-     */
     public function submitForm(Request $request)
-    {
-        // Validasi inputan
-        $request->validate([
-            'organization_1' => 'required|string|max:100',
-            'organization_2' => 'nullable|string|max:100',
-            'organization_3' => 'nullable|string|max:100',
-            'alamat' => 'required|string|max:255',
-            'deskripsi' => 'required|string|max:500',
-            'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',  // File opsional
-        ]);
+{
+    $request->validate([
+        'organization_1' => 'required|string|max:100',
+        'organization_2' => 'nullable|string|max:100',
+        'organization_3' => 'nullable|string|max:100',
+        'alamat' => 'required|string|max:255',
+        'deskripsi' => 'required|string|max:500',
+        'file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+    ]);
 
-        $user = Auth::user();
-        $setting = Setting::where('user_id', $user->id)->first();
+    $user = Auth::user();
+    $setting = Setting::where('user_id', $user->id)->first();
 
-        if (!$setting) {
-            return redirect()->back()->with('error', 'Data setting tidak ditemukan.');
+    if (!$setting) {
+        return redirect()->back()->with('error', 'Data setting tidak ditemukan.');
+    }
+
+    // Simpan file baru
+    $originalName = preg_replace('/\s+/', '_', strtolower($request->file('file')->getClientOriginalName()));
+    $filename = time() . '_' . $originalName;
+    $path = 'uploads/pendaftaran/' . $filename;
+    $request->file('file')->storeAs('uploads/pendaftaran', $filename, 'public');
+
+    // Cari pendaftaran sebelumnya (tanpa filter status)
+    $pendaftaran = Pendaftaran::where('user_id', $user->id)->first();
+
+    if ($pendaftaran) {
+        // Hapus file lama jika ada
+        if ($pendaftaran->upload_file && Storage::disk('public')->exists($pendaftaran->upload_file)) {
+            Storage::disk('public')->delete($pendaftaran->upload_file);
         }
 
-        // Cek apakah sudah pernah mendaftar (pending)
-        $pendaftaran = Pendaftaran::where('user_id', $user->id)
-                                   ->where('status', 'pending')
-                                   ->first();
-
-        // Menyiapkan data untuk disimpan
-        $data = [
+        $pendaftaran->update([
             'organization_1' => $request->organization_1,
             'organization_2' => $request->organization_2,
             'organization_3' => $request->organization_3,
             'alamat' => $request->alamat,
             'deskripsi' => $request->deskripsi,
-        ];
+            'upload_file' => $path,
+            'status' => 'pending', // update status jadi pending saat daftar ulang
+        ]);
 
-        // Proses upload file jika ada
-        if ($request->hasFile('file')) {
-            // Pastikan file diupload dengan benar
-            $originalName = preg_replace('/\s+/', '_', strtolower($request->file('file')->getClientOriginalName()));
-            $filename = time() . '_' . $originalName;
-            $path = 'uploads/pendaftaran/' . $filename;
+        return redirect()->back()->with('success', 'Pendaftaran berhasil diperbarui.');
+    } else {
+        // Buat data baru
+        Pendaftaran::create([
+            'user_id' => $user->id,
+            'setting_id' => $setting->id,
+            'organization_1' => $request->organization_1,
+            'organization_2' => $request->organization_2,
+            'organization_3' => $request->organization_3,
+            'alamat' => $request->alamat,
+            'deskripsi' => $request->deskripsi,
+            'upload_file' => $path,
+            'status' => 'pending',
+        ]);
 
-            // Upload file ke storage publik
-            $request->file('file')->storeAs('uploads/pendaftaran', $filename, 'public');
-
-            // Menambahkan path file ke data
-            $data['file'] = $path;
-        }
-
-        // Jika sudah ada data pendaftaran yang pending, perbarui data
-        if ($pendaftaran) {
-            // Hapus file lama jika ada dan file baru diupload
-            if ($pendaftaran->file && Storage::disk('public')->exists($pendaftaran->file) && isset($data['file'])) {
-                Storage::disk('public')->delete($pendaftaran->file);
-            }
-
-            // Update data pendaftaran
-            $pendaftaran->update($data);
-
-            return redirect()->back()->with('success', 'Pendaftaran berhasil diperbarui.');
-        } else {
-            // Buat pendaftaran baru jika belum ada
-            Pendaftaran::create([
-                'user_id' => $user->id,
-                'setting_id' => $setting->id,
-                'organization_1' => $request->organization_1,
-                'organization_2' => $request->organization_2,
-                'organization_3' => $request->organization_3,
-                'alamat' => $request->alamat,
-                'deskripsi' => $request->deskripsi,
-                'file' => $data['file'] ?? null,  // Jika file diupload, simpan path-nya
-                'status' => 'pending',
-            ]);
-
-            return redirect()->back()->with('success', 'Pendaftaran berhasil dikirim.');
-        }
+        return redirect()->back()->with('success', 'Pendaftaran berhasil dikirim.');
     }
+}
+
 }
