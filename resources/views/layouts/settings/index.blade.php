@@ -44,9 +44,39 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="jurusan" class="form-label">Jurusan</label>
-                        <input type="text" class="form-control" name="jurusan" id="jurusan" value="{{ old('jurusan', $setting->jurusan ?? '') }}">
-                    </div>
+    <label for="jurusan" class="form-label">Jurusan</label>
+    <select class="form-control" name="jurusan" id="jurusan">
+        @php
+            $jurusanOptions = [
+                'Sistem Informasi',
+                'Teknik Informatika',
+                'Manajemen',
+                'Akuntansi',
+                'Teknik Sipil',
+                'Teknik Elektro',
+                'Teknik Industri',
+                'Psikologi',
+                'Ilmu Komunikasi',
+                'Pendidikan Bahasa Indonesia',
+                'Pendidikan Olahraga',
+                'Sastra Inggris',
+                'Manajemen Informatika',
+                'Pengelolaan Perhotelan',
+                'Administrasi Bisnis',
+                'Teknik Komputer',
+            ];
+            $selectedJurusan = old('jurusan', $setting->jurusan ?? '');
+        @endphp
+
+        <option value="">-- Pilih Jurusan --</option>
+        @foreach($jurusanOptions as $jurusan)
+            <option value="{{ $jurusan }}" {{ $jurusan == $selectedJurusan ? 'selected' : '' }}>
+                {{ $jurusan }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
 
                     <div class="mb-3">
                         <label class="form-label">Organisasi Direkomendasikan</label>

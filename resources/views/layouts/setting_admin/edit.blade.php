@@ -23,35 +23,47 @@
                         <h5>Nama: {{ $user->name }}</h5>
                         <p>Email: {{ $user->email }}</p>
 
-                        <div class="mb-3">
-                            <label for="organization_1" class="form-label">Organisasi 1</label>
-                            <input type="text" id="organization_1" name="organization_1"
-                                   class="form-control @error('organization_1') is-invalid @enderror"
-                                   value="{{ old('organization_1', $setting->organization_1 ?? '') }}">
-                            @error('organization_1')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        @php
+    $ukmOptions = [
+        'UKM Bina Darma Cyber Army (BDCA)',
+        'UKM LDK ALQORIB',
+        'UKM Persekutuan Mahasiswa Kristen & Katolik (PMKK)',
+        'UKM Kesatuan Mahasiswa Hindu Darma Indonesia (KMHDI)',
+        'UKM Olahraga',
+        'UKM Mahasiswa Pencinta Alam (MABIDAR)',
+        'UKM Bujang Gadis Kampus (BGK)',
+        'UKM Panduan Suara Mahasiswa (BDSC)',
+        'UKM Binadarma Debat Union (BDCU)',
+        'UKM Bina Darma Programmer (BDPRO)',
+        'UKM Futsal',
+        'UKM Seni',
+        'UKM Pramuka',
+        'UKM Bina Darma Radio (B-Radio)',
+        'UKM EDS South Sumatera English Community (SSEC)',
+        'Inovator Center (DIIB) - Bonus akan mendapatkan Jika jawaban anda sempurna',
+    ];
+@endphp
 
-                        <div class="mb-3">
-                            <label for="organization_2" class="form-label">Organisasi 2</label>
-                            <input type="text" id="organization_2" name="organization_2"
-                                   class="form-control @error('organization_2') is-invalid @enderror"
-                                   value="{{ old('organization_2', $setting->organization_2 ?? '') }}">
-                            @error('organization_2')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+@for($i = 1; $i <= 3; $i++)
+    @php $fieldName = "organization_$i"; @endphp
+    <div class="mb-3">
+        <label for="{{ $fieldName }}" class="form-label">Organisasi {{ $i }}</label>
+        <select id="{{ $fieldName }}" name="{{ $fieldName }}"
+                class="form-control @error($fieldName) is-invalid @enderror">
+            <option value="">-- Pilih Organisasi --</option>
+            @foreach ($ukmOptions as $option)
+                <option value="{{ $option }}"
+                    {{ old($fieldName, $setting->$fieldName ?? '') == $option ? 'selected' : '' }}>
+                    {{ $option }}
+                </option>
+            @endforeach
+        </select>
+        @error($fieldName)
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+@endfor
 
-                        <div class="mb-3">
-                            <label for="organization_3" class="form-label">Organisasi 3</label>
-                            <input type="text" id="organization_3" name="organization_3"
-                                   class="form-control @error('organization_3') is-invalid @enderror"
-                                   value="{{ old('organization_3', $setting->organization_3 ?? '') }}">
-                            @error('organization_3')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
 
                         <button type="submit" class="btn btn-primary">Simpan Organisasi</button>
                     </div>
