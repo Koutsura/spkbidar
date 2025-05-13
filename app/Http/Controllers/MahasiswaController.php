@@ -19,9 +19,8 @@ class MahasiswaController extends Controller
             return redirect()->back()->with('error', 'Data profil belum lengkap.');
         }
 
-        $pendaftaran = Pendaftaran::where('user_id', $user->id)
-                                   ->where('status', 'pending')
-                                   ->first();
+        $pendaftaran = Pendaftaran::where('user_id', $user->id)->latest()->first();
+
 
         return view('layouts.mahasiswa.pendaftaran.form', compact('user', 'setting', 'pendaftaran'));
     }
@@ -51,7 +50,9 @@ class MahasiswaController extends Controller
     $request->file('file')->storeAs('uploads/pendaftaran', $filename, 'public');
 
     // Cari pendaftaran sebelumnya (tanpa filter status)
-    $pendaftaran = Pendaftaran::where('user_id', $user->id)->first();
+ $pendaftaran = Pendaftaran::where('user_id', $user->id)
+                                   ->where('status', 'pending')
+                                   ->first();
 
     if ($pendaftaran) {
         // Hapus file lama jika ada
