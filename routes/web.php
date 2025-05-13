@@ -7,6 +7,8 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\AdminSettingController;
 use App\Http\Controllers\PelatihanMahasiswaController;
 use App\Http\Controllers\PelatihanAdminController;
+use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\PendaftaranAdminController;
 
 // Public routes
 Route::middleware('guest')->group(function () {
@@ -72,5 +74,22 @@ Route::get('/mahasiswa/pelatihan', [PelatihanMahasiswaController::class, 'index'
 // Admin Pelatihan
 Route::get('/admin/pelatihan', [PelatihanAdminController::class, 'index'])
     ->name('admin.pelatihan.index')->middleware('superadmin');
+
+
+
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/mahasiswa/pendaftaran', [MahasiswaController::class, 'showForm'])
+        ->name('mahasiswa.pendaftaran.form');
+
+    Route::post('/mahasiswa/pendaftaran', [MahasiswaController::class, 'submitForm'])
+        ->name('mahasiswa.pendaftaran.submit');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/pendaftaran', [PendaftaranAdminController::class, 'index'])->name('admin.pendaftaran.index');
+    Route::put('/admin/pendaftaran/{id}/status/{status}', [PendaftaranAdminController::class, 'updateStatus'])->name('admin.pendaftaran.updateStatus');
+});
 
 

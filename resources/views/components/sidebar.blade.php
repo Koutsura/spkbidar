@@ -53,7 +53,7 @@
             @if (auth()->user()->role == 'pendaftaran' || auth()->user()->role == 'superadmin')
             <li class="menu-header">Pages</li>
             <li class="{{ Request::is('pendaftaran') ? 'active' : '' }}">
-                <a class="nav-link" href="/"><i class="fas fa-university"></i> <span>Pendaftaran</span></a>
+                <a class="nav-link" href="{{ route('admin.pendaftaran.index') }}"><i class="fas fa-university"></i> <span>Pendaftaran</span></a>
             </li>
              @endif
              @if (auth()->user()->role == 'pelatihan' || auth()->user()->role == 'superadmin')
@@ -64,11 +64,14 @@
 
 
              @if (auth()->user()->role == 'pendaftaran' || auth()->user()->role == 'mahasiswa')
-             <li class="menu-header">Pages</li>
-            <li class="{{ Request::is('pendaftaran') ? 'active' : '' }}">
-                <a class="nav-link" href="/"><i class="fas fa-university"></i> <span>Pendaftaran</span></a>
-            </li>
-             @endif
+    <li class="menu-header">Pages</li>
+    <li class="{{ Request::routeIs('mahasiswa.pendaftaran.form') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('mahasiswa.pendaftaran.form') }}">
+            <i class="fas fa-university"></i> <span>Pendaftaran</span>
+        </a>
+    </li>
+@endif
+
             @if (auth()->user()->role == 'pelatihan' || auth()->user()->role == 'mahasiswa')
     <li class="{{ Request::is('pelatihan') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('mahasiswa.pelatihan.index') }}"><i class="fas fa-university"></i> <span>Pelatihan</span></a>
