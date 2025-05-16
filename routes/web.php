@@ -9,6 +9,7 @@ use App\Http\Controllers\PelatihanMahasiswaController;
 use App\Http\Controllers\PelatihanAdminController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\PendaftaranAdminController;
+use App\Http\Controllers\SPKController;
 
 // Public routes
 Route::middleware('guest')->group(function () {
@@ -92,4 +93,15 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/admin/pendaftaran/{id}/status/{status}', [PendaftaranAdminController::class, 'updateStatus'])->name('admin.pendaftaran.updateStatus');
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/spk', [SPKController::class, 'index'])->name('spk.index'); // Halaman intro SPK
+
+    // Form soal per index (1 soal per halaman)
+    Route::get('/spk/form/{index?}', [SPKController::class, 'showQuestion'])->name('spk.form');
+    Route::post('/spk/answer/{index}', [SPKController::class, 'storeAnswer'])->name('spk.answer');
+
+    // Hasil & export
+    Route::get('/spk/result', [SPKController::class, 'result'])->name('spk.result');
+    Route::get('/spk/export-pdf', [SPKController::class, 'exportPdf'])->name('spk.export_pdf');
+});
 
