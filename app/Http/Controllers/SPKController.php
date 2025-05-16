@@ -58,63 +58,86 @@ class SPKController extends Controller
     }
 
     public function result()
-    {
-        $user = auth()->user();
-        $answers = Answer::with('question')->where('user_id', $user->id)->get();
+{
+    $user = auth()->user();
+    $answers = Answer::with('question')->where('user_id', $user->id)->get();
 
-        $userScores = $this->calculateUserScores($answers);
-        $alternatives = Alternative::all();
-        $finalScores = $this->calculateFinalScores($userScores, $alternatives);
-        $finalUKM = $this->mergeReligiousUKM($finalScores, $user);
+    $userScores = $this->calculateUserScores($answers);
+    $alternatives = Alternative::all();
+    $finalScores = $this->calculateFinalScores($userScores, $alternatives);
 
-        // ✅ Simpan hasil ke tabel results
-        Result::updateOrCreate(
-            ['user_id' => $user->id],
-            [
-                'recommended_1' => array_key_first($finalUKM['top_ukms']),
-                'recommended_2' => array_keys($finalUKM['top_ukms'])[1] ?? null,
-                'recommended_3' => array_keys($finalUKM['top_ukms'])[2] ?? null,
-                'show_innovator_center' => 0,
-            ]
-        );
+    // Gabungkan UKM keagamaan dan tambah deskripsi agama
+    $finalUKM = $this->mergeReligiousUKM($finalScores, $user);
 
-        return view('layouts.mahasiswa.SPK.result', [
-            'criteriaScores' => $userScores,
-            'finalUKM' => $finalUKM,
-            'user' => $user,
-        ]);
+    // BONUS: Cek kreativitas & teknologi user
+    $bonusThreshold = 4.0;
+    $hasBonus = ($userScores['kreativitas'] >= $bonusThreshold && $userScores['teknologi'] >= $bonusThreshold);
+
+    if ($hasBonus) {
+        // Beri skor bonus untuk UKM Inovator Center supaya muncul di rekomendasi
+        // Misal skor bonus 0.9 agar masuk top
+        $finalUKM['top_ukms']['UKM Inovator Center'] = 0.9;
     }
 
-    protected function calculateUserScores($answers)
-    {
-        $criteria = ['kreativitas', 'fisik', 'musik', 'teknologi', 'religiusitas'];
-        $scores = array_fill_keys($criteria, 0);
-        $counts = array_fill_keys($criteria, 0);
+    // Urutkan ulang top UKM setelah tambah bonus (agar Inovator Center tepat posisi)
+    arsort($finalUKM['top_ukms']);
 
-        foreach ($answers as $answer) {
-            $q = $answer->question;
-            $val = $answer->value;
-            $criteriaKey = strtolower($q->kriteria);
-            $score = $q->is_favorable ? $val : (6 - $val);
+    // Simpan hasil ke tabel results dengan kondisi bonus
+    Result::updateOrCreate(
+        ['user_id' => $user->id],
+        [
+            'recommended_1' => array_key_first($finalUKM['top_ukms']),
+            'recommended_2' => array_keys($finalUKM['top_ukms'])[1] ?? null,
+            'recommended_3' => array_keys($finalUKM['top_ukms'])[2] ?? null,
+            'show_innovator_center' => $hasBonus ? 1 : 0,
+        ]
+    );
 
-            if (in_array($criteriaKey, $criteria)) {
-                $scores[$criteriaKey] += $score;
-                $counts[$criteriaKey]++;
-            }
+    return view('layouts.mahasiswa.SPK.result', [
+        'criteriaScores' => $userScores,
+        'finalUKM' => $finalUKM,
+        'user' => $user,
+    ]);
+}
+
+   protected function calculateUserScores($answers)
+{
+    $criteria = ['kreativitas', 'fisik', 'musik', 'teknologi', 'religiusitas'];
+    $scores = array_fill_keys($criteria, 0);
+    $counts = array_fill_keys($criteria, 0);
+
+    foreach ($answers as $answer) {
+        $q = $answer->question;
+        $val = $answer->value;
+
+        $criteriaKey = strtolower($q->kriteria);
+        $isFavorable = $q->indikator === 'favorable'; // ← PERBAIKAN PENTING DI SINI
+
+        if (!in_array($criteriaKey, $criteria)) {
+            continue;
         }
 
-        foreach ($criteria as $c) {
-            $scores[$c] = $counts[$c] > 0 ? round($scores[$c] / $counts[$c], 2) : 0;
-        }
+        // Skor berdasarkan jenis indikator
+        $score = $isFavorable ? $val : (6 - $val);
 
-        return $scores;
+        $scores[$criteriaKey] += $score;
+        $counts[$criteriaKey]++;
     }
+
+    // Hitung rata-rata skor (1–5)
+    foreach ($criteria as $c) {
+        $scores[$c] = $counts[$c] > 0 ? round($scores[$c] / $counts[$c], 2) : 0;
+    }
+
+    return $scores;
+}
+
+
 
     protected function calculateFinalScores($userScores, $alternatives)
 {
     $criteria = ['kreativitas', 'fisik', 'musik', 'teknologi', 'religiusitas'];
 
-    // Bobot kriteria (pastikan jumlahnya 1)
     $weights = [
         'kreativitas' => 0.2,
         'fisik' => 0.2,
@@ -123,7 +146,7 @@ class SPKController extends Controller
         'religiusitas' => 0.2,
     ];
 
-    // Cari max dari alternatif per kriteria
+    // Cari max nilai alternatif per kriteria untuk normalisasi
     $maxAlternatives = [];
     foreach ($criteria as $c) {
         $maxAlternatives[$c] = $alternatives->max($c);
@@ -135,70 +158,80 @@ class SPKController extends Controller
         $totalScore = 0;
 
         foreach ($criteria as $c) {
-            // Normalisasi nilai user (antara 1-5)
-            $userNorm = $userScores[$c] > 0 ? $userScores[$c] / 5 : 0;
-
-            // Normalisasi nilai alternatif
+            $userNorm = $userScores[$c] > 0 ? $userScores[$c] / 5 : 0; // user max 5
             $altNorm = $maxAlternatives[$c] > 0 ? $alt->$c / $maxAlternatives[$c] : 0;
 
-            // Perhitungan skor akhir: user * alternatif * bobot
             $totalScore += $userNorm * $altNorm * $weights[$c];
         }
 
         $results[$alt->name] = round($totalScore, 4);
     }
 
-    arsort($results);
+    arsort($results); // Urutkan skor tertinggi
+
     return $results;
 }
 
 
 
-    protected function mergeReligiousUKM($finalScores, $user)
-    {
-        $religiousUKMs = [
-            'UKM LDK ALQORIB' => 'islam',
-            'UKM Persekutuan Mahasiswa Kristen & Katolik (PMKK)' => 'kristen',
-            'UKM Kesatuan Mahasiswa Hindu Darma Indonesia (KMHDI)' => 'hindu',
-        ];
 
-        $mergedScores = [];
-        $religiousScores = ['islam' => 0, 'kristen' => 0, 'hindu' => 0];
+    // Potongan yang perlu diganti/ditambahkan:
 
-        foreach ($finalScores as $name => $score) {
-            if (isset($religiousUKMs[$name])) {
-                $religiousScores[$religiousUKMs[$name]] = max($religiousScores[$religiousUKMs[$name]], $score);
-            } else {
-                $mergedScores[$name] = $score;
-            }
+protected function mergeReligiousUKM($finalScores, $user)
+{
+    $religiousUKMs = [
+        'UKM LDK ALQORIB' => 'islam',
+        'UKM Persekutuan Mahasiswa Kristen & Katolik (PMKK)' => 'kristen',
+        'UKM Kesatuan Mahasiswa Hindu Darma Indonesia (KMHDI)' => 'hindu',
+    ];
+
+    $mergedScores = [];
+    $religiousScores = ['islam' => 0, 'kristen' => 0, 'hindu' => 0];
+
+    // Pisahkan UKM keagamaan dan non-keagamaan
+    foreach ($finalScores as $name => $score) {
+        if (isset($religiousUKMs[$name])) {
+            $agama = $religiousUKMs[$name];
+            $religiousScores[$agama] = max($religiousScores[$agama], $score);
+        } else {
+            $mergedScores[$name] = $score;
         }
-
-        $agamaUser = strtolower($user->setting->jurusan ?? '');
-        $description = '';
-        $religiousKey = null;
-
-        if (in_array($agamaUser, ['islam', 'muslim'])) {
-            $religiousKey = 'islam';
-            $description = 'Rekomendasi UKM keagamaan untuk agama Islam: UKM LDK ALQORIB.';
-        } elseif (in_array($agamaUser, ['kristen', 'katolik'])) {
-            $religiousKey = 'kristen';
-            $description = 'Rekomendasi UKM keagamaan untuk agama Kristen dan Katolik: UKM PMKK.';
-        } elseif (in_array($agamaUser, ['hindu'])) {
-            $religiousKey = 'hindu';
-            $description = 'Rekomendasi UKM keagamaan untuk agama Hindu: UKM KMHDI.';
-        }
-
-        if ($religiousKey) {
-            $mergedScores['UKM Keagamaan'] = $religiousScores[$religiousKey];
-        }
-
-        arsort($mergedScores);
-
-        return [
-            'top_ukms' => array_slice($mergedScores, 0, 3, true),
-            'description' => $description,
-        ];
     }
+
+    // Ambil agama user (pastikan 'agama' disimpan di user->setting)
+    $agamaUser = strtolower($user->setting->agama ?? '');
+
+    $description = '';
+    $religiousKey = null;
+
+    if (in_array($agamaUser, ['islam', 'muslim'])) {
+        $religiousKey = 'islam';
+        $description = 'Rekomendasi UKM keagamaan untuk agama Islam: UKM LDK ALQORIB.';
+    } elseif (in_array($agamaUser, ['kristen', 'katolik'])) {
+        $religiousKey = 'kristen';
+        $description = 'Rekomendasi UKM keagamaan untuk agama Kristen/Katolik: UKM PMKK.';
+    } elseif (in_array($agamaUser, ['hindu'])) {
+        $religiousKey = 'hindu';
+        $description = 'Rekomendasi UKM keagamaan untuk agama Hindu: UKM KMHDI.';
+    }
+
+    // Tambahkan skor UKM keagamaan ke hasil akhir jika nilai religiusitas dominan
+    if ($religiousKey) {
+        $dominantCriteria = array_keys($this->calculateUserScores(Answer::where('user_id', $user->id)->get()), max($this->calculateUserScores(Answer::where('user_id', $user->id)->get())))[0];
+
+        if ($dominantCriteria === 'religiusitas') {
+            // Tambahkan UKM keagamaan dengan label khusus
+            $mergedScores["UKM Keagamaan"] = $religiousScores[$religiousKey];
+        }
+    }
+
+    arsort($mergedScores);
+
+    return [
+        'top_ukms' => array_slice($mergedScores, 0, 3, true),
+        'description' => $description,
+    ];
+}
 
     public function exportPdf()
     {

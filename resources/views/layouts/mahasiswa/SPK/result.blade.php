@@ -4,33 +4,66 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>Hasil Skor (UKM)</h1>
+            <h1>Hasil Rekomendasi UKM</h1>
         </div>
-<h1>Hasil Sistem Pendukung Keputusan</h1>
 
-<p>Nama: {{ $user->name }}</p>
-<p>NIM: {{ $user->setting->nim ?? '-' }}</p>
-<p>Jurusan: {{ $user->setting->jurusan ?? '-' }}</p>
+        <div class="section-body">
+            <div class="mb-4">
+                <h4>Data Mahasiswa</h4>
+                <p><strong>Nama:</strong> {{ $user->name }}</p>
+                <p><strong>NIM:</strong> {{ $user->setting->nim ?? '-' }}</p>
+                <p><strong>Jurusan:</strong> {{ $user->setting->jurusan ?? '-' }}</p>
+            </div>
 
-<h3>Skor per Kriteria:</h3>
-<ul>
-    @foreach ($criteriaScores as $criteria => $score)
-    <li>{{ $criteria }}: {{ $score }}</li>
-    @endforeach
-</ul>
+            <div class="mb-4">
+                <h4>Skor per Kriteria</h4>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Kriteria</th>
+                            <th>Skor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($criteriaScores as $criteria => $score)
+                        <tr>
+                            <td>{{ ucfirst($criteria) }}</td>
+                            <td>{{ number_format($score, 2) }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
-<h3>Rekomendasi UKM Terbaik:</h3>
-<ol>
-    @foreach ($finalUKM['top_ukms'] as $ukm => $score)
-    <li>{{ $ukm }} (Skor: {{ number_format($score, 2) }})</li>
-    @endforeach
-</ol>
+            <div class="mb-4">
+                <h4>3 Rekomendasi UKM Terbaik</h4>
+                <ol class="list-group list-group-numbered">
+                    @foreach ($finalUKM['top_ukms'] as $ukm => $score)
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>
+                            {{ $ukm }}
+                            @if (stripos($ukm, 'Inovator Center') !== false)
+                            <span class="badge badge-success ml-2">⭐ Direkomendasikan khusus!</span>
+                            @endif
+                        </span>
+                        <span><strong>{{ number_format($score, 2) }}</strong></span>
+                    </li>
+                    @endforeach
+                </ol>
+            </div>
 
-@if ($finalUKM['description'])
-<p><strong>Catatan:</strong> {{ $finalUKM['description'] }}</p>
-@endif
+            @if ($finalUKM['description'])
+            <div class="alert alert-info mt-4">
+                <strong>Catatan:</strong> {{ $finalUKM['description'] }}
+            </div>
+            @endif
 
-<a href="{{ route('spk.export_pdf') }}" target="_blank">Download Hasil PDF</a>
-</section>
+            <div class="mt-4">
+                <a href="{{ route('spk.export_pdf') }}" target="_blank" class="btn btn-primary">
+                    <i class="fas fa-file-download"></i> Download Hasil PDF
+                </a>
+            </div>
+        </div>
+    </section>
 </div>
 @endsection
