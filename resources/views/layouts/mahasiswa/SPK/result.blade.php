@@ -3,9 +3,12 @@
 @section('title', 'Hasil Rekomendasi UKM')
 
 @section('content')
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Hasil Rekomendasi UKM</h1>
+        </div>
 <div class="container">
-    <h2 class="mb-4">Hasil Rekomendasi UKM</h2>
-
     <div class="card mb-4">
         <div class="card-header">Nilai Per Kriteria</div>
         <div class="card-body">
@@ -55,5 +58,7 @@
     <div class="text-center">
         <a href="{{ route('spk.export_pdf') }}" class="btn btn-danger">Export PDF</a>
     </div>
+</div>
+</section>
 </div>
 @endsection

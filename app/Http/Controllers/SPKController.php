@@ -66,7 +66,7 @@ class SPKController extends Controller
     $userScores = $this->calculateUserScores($answers);
 
     // Ambil alternatif UKM, kecuali UKM Inovator Center
-    $alternatives = Alternative::where('name', '!=', 'UKM Inovator Center')->get();
+    $alternatives = Alternative::where('name', '!=', 'Inovator Center (DIIB)')->get();
 
     // Hitung skor akhir dengan SAW
     $finalScores = $this->calculateFinalScores($userScores, $alternatives);
@@ -76,7 +76,7 @@ class SPKController extends Controller
     $showBonus = ($userScores['kreativitas'] >= $bonusThreshold && $userScores['teknologi'] >= $bonusThreshold);
 
     // Pastikan tidak ada UKM Inovator Center dalam skor utama
-    unset($finalScores['UKM Inovator Center']);
+    unset($finalScores['Inovator Center (DIIB)']);
 
     // Gabungkan UKM keagamaan (jika ada)
     $finalUKM = $this->mergeReligiousUKM($finalScores, $user);
@@ -99,7 +99,7 @@ class SPKController extends Controller
         'criteriaScores' => $userScores,
         'finalUKM' => $finalUKM,
         'showBonus' => $showBonus,
-        'bonusUKM' => 'UKM Inovator Center',
+        'bonusUKM' => 'Inovator Center (DIIB)',
         'bonusScore' => 0.9,
         'user' => $user,
     ]);

@@ -18,14 +18,28 @@
                         {{ $question->question }}
                     </label>
 
-                    <select name="value" class="form-select" required>
-                        <option value="" disabled selected>-- Pilih Jawaban --</option>
-                        <option value="5">Sangat Setuju</option>
-                        <option value="4">Setuju</option>
-                        <option value="3">Netral</option>
-                        <option value="2">Tidak Setuju</option>
-                        <option value="1">Sangat Tidak Setuju</option>
-                    </select>
+                    <div class="mt-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="value" id="option5" value="5" required>
+                            <label class="form-check-label" for="option5">Sangat Setuju</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="value" id="option4" value="4">
+                            <label class="form-check-label" for="option4">Setuju</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="value" id="option3" value="3">
+                            <label class="form-check-label" for="option3">Netral</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="value" id="option2" value="2">
+                            <label class="form-check-label" for="option2">Tidak Setuju</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="value" id="option1" value="1">
+                            <label class="form-check-label" for="option1">Sangat Tidak Setuju</label>
+                        </div>
+                    </div>
 
                     @error('value')
                         <div class="text-danger mt-2">{{ $message }}</div>
