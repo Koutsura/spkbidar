@@ -57,48 +57,56 @@ class SPKController extends Controller
         return redirect()->route('spk.form', ['index' => $index + 1]);
     }
 
-    public function result()
+   public function result()
 {
     $user = auth()->user();
     $answers = Answer::with('question')->where('user_id', $user->id)->get();
 
+    // Hitung skor user berdasarkan jawaban
     $userScores = $this->calculateUserScores($answers);
-    $alternatives = Alternative::all();
+
+    // Ambil alternatif UKM, kecuali UKM Inovator Center
+    $alternatives = Alternative::where('name', '!=', 'UKM Inovator Center')->get();
+
+    // Hitung skor akhir dengan SAW
     $finalScores = $this->calculateFinalScores($userScores, $alternatives);
 
-    // Gabungkan UKM keagamaan dan tambah deskripsi agama
+    // BONUS: Deteksi apakah layak tampilkan UKM Inovator Center
+    $bonusThreshold = 4.0;
+    $showBonus = ($userScores['kreativitas'] >= $bonusThreshold && $userScores['teknologi'] >= $bonusThreshold);
+
+    // Pastikan tidak ada UKM Inovator Center dalam skor utama
+    unset($finalScores['UKM Inovator Center']);
+
+    // Gabungkan UKM keagamaan (jika ada)
     $finalUKM = $this->mergeReligiousUKM($finalScores, $user);
 
-    // BONUS: Cek kreativitas & teknologi user
-    $bonusThreshold = 4.0;
-    $hasBonus = ($userScores['kreativitas'] >= $bonusThreshold && $userScores['teknologi'] >= $bonusThreshold);
+    // Ambil 3 UKM teratas dari hasil yang sudah digabung
+    $topUKMKeys = array_keys($finalUKM['top_ukms']);
 
-    if ($hasBonus) {
-        // Beri skor bonus untuk UKM Inovator Center supaya muncul di rekomendasi
-        // Misal skor bonus 0.9 agar masuk top
-        $finalUKM['top_ukms']['UKM Inovator Center'] = 0.9;
-    }
-
-    // Urutkan ulang top UKM setelah tambah bonus (agar Inovator Center tepat posisi)
-    arsort($finalUKM['top_ukms']);
-
-    // Simpan hasil ke tabel results dengan kondisi bonus
+    // Simpan ke database
     Result::updateOrCreate(
         ['user_id' => $user->id],
         [
-            'recommended_1' => array_key_first($finalUKM['top_ukms']),
-            'recommended_2' => array_keys($finalUKM['top_ukms'])[1] ?? null,
-            'recommended_3' => array_keys($finalUKM['top_ukms'])[2] ?? null,
-            'show_innovator_center' => $hasBonus ? 1 : 0,
+            'recommended_1' => $topUKMKeys[0] ?? null,
+            'recommended_2' => $topUKMKeys[1] ?? null,
+            'recommended_3' => $topUKMKeys[2] ?? null,
+            'show_innovator_center' => $showBonus ? 1 : 0,
         ]
     );
 
     return view('layouts.mahasiswa.SPK.result', [
         'criteriaScores' => $userScores,
         'finalUKM' => $finalUKM,
+        'showBonus' => $showBonus,
+        'bonusUKM' => 'UKM Inovator Center',
+        'bonusScore' => 0.9,
         'user' => $user,
     ]);
 }
+
+
+
 
    protected function calculateUserScores($answers)
 {
