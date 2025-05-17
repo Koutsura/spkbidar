@@ -27,11 +27,21 @@
             </li>
             @endif
             @if (auth()->user()->role == 'rekomendasi' || auth()->user()->role == 'mahasiswa')
-             <li class="menu-header">Tes Rekomendasi UKM</li>
-             <li class="{{ Request::is('rekomendasi') ? 'active' : '' }}">
-                 <a class="nav-link" href="{{ route('spk.index') }}"><i class="fas fa-newspaper"></i> <span>Rekomendasi UKM</span></a>
-             </li>
-              @endif
+    <li class="menu-header">Tes Rekomendasi UKM</li>
+
+    @php
+        $sudahTes = \App\Models\Result::where('user_id', auth()->id())->exists();
+        $link = $sudahTes ? route('spk.result') : route('spk.index');
+    @endphp
+
+    <li class="{{ Request::is('rekomendasi') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ $link }}">
+            <i class="fas fa-newspaper"></i>
+            <span>{{ $sudahTes ? 'Lihat Hasil Rekomendasi' : 'Rekomendasi UKM' }}</span>
+        </a>
+    </li>
+@endif
+
               @if (auth()->user()->role == 'rekomendasi' || auth()->user()->role == 'mahasiswa')
             <li class="menu-header">Edit Profile</li>
             <li class="{{ Request::is('profile') ? 'active' : '' }}">

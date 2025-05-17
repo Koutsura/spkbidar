@@ -18,45 +18,57 @@ class SPKController extends Controller
     }
 
     public function showQuestion($index = 1)
-    {
-        $user = auth()->user();
-        $questions = Question::orderBy('id')->get();
-        $total = $questions->count();
-        $question = $questions[$index - 1] ?? null;
+{
+    $user = auth()->user();
 
-        if (!$question) {
-            return redirect()->route('spk.result');
-        }
-
-        return view('layouts.mahasiswa.SPK.question', compact('question', 'index', 'total', 'user'));
+    // ⛔ CEK JIKA SUDAH PERNAH TES
+    if (Result::where('user_id', $user->id)->exists()) {
+        return redirect()->route('spk.result')->with('error', 'Kamu sudah mengikuti tes rekomendasi UKM.');
     }
 
-    public function storeAnswer(Request $request, $index)
-    {
-        $request->validate([
-            'value' => 'required|integer|min:1|max:5',
-        ]);
+    $questions = Question::orderBy('id')->get();
+    $total = $questions->count();
+    $question = $questions[$index - 1] ?? null;
 
-        $user = auth()->user();
-        $questions = Question::orderBy('id')->get();
-        $question = $questions[$index - 1] ?? null;
-
-        if (!$question) {
-            return redirect()->route('spk.result');
-        }
-
-        Answer::updateOrCreate(
-            ['user_id' => $user->id, 'question_id' => $question->id],
-            ['value' => $request->value]
-        );
-
-        if ($index >= $questions->count()) {
-            return redirect()->route('spk.result');
-        }
-
-        return redirect()->route('spk.form', ['index' => $index + 1]);
+    if (!$question) {
+        return redirect()->route('spk.result');
     }
 
+    return view('layouts.mahasiswa.SPK.question', compact('question', 'index', 'total', 'user'));
+}
+
+
+   public function storeAnswer(Request $request, $index)
+{
+    $request->validate([
+        'value' => 'required|integer|min:1|max:5',
+    ]);
+
+    $user = auth()->user();
+
+    // ⛔ CEK JIKA SUDAH PERNAH TES
+    if (Result::where('user_id', $user->id)->exists()) {
+        return redirect()->route('spk.result')->with('error', 'Kamu sudah mengikuti tes rekomendasi UKM.');
+    }
+
+    $questions = Question::orderBy('id')->get();
+    $question = $questions[$index - 1] ?? null;
+
+    if (!$question) {
+        return redirect()->route('spk.result');
+    }
+
+    Answer::updateOrCreate(
+        ['user_id' => $user->id, 'question_id' => $question->id],
+        ['value' => $request->value]
+    );
+
+    if ($index >= $questions->count()) {
+        return redirect()->route('spk.result');
+    }
+
+    return redirect()->route('spk.form', ['index' => $index + 1]);
+}
    public function result()
 {
     $user = auth()->user();
@@ -242,15 +254,28 @@ protected function mergeReligiousUKM($finalScores, $user)
 }
 
     public function exportPdf()
-    {
-        $user = auth()->user();
-        $answers = Answer::with('question')->where('user_id', $user->id)->get();
-        $userScores = $this->calculateUserScores($answers);
-        $alternatives = Alternative::all();
-        $finalScores = $this->calculateFinalScores($userScores, $alternatives);
-        $finalUKM = $this->mergeReligiousUKM($finalScores, $user);
+{
+    $user = auth()->user();
+    $answers = Answer::with('question')->where('user_id', $user->id)->get();
 
-        $pdf = PDF::loadView('layouts.mahasiswa.SPK.pdf', compact('user', 'userScores', 'finalUKM'));
-        return $pdf->download('hasil_spk_' . $user->id . '.pdf');
-    }
+    // Skor per kriteria
+    $criteriaScores = $this->calculateUserScores($answers);
+
+    // Alternatif dan perhitungan final, exclude Inovator Center
+    $alternatives = Alternative::where('name', '!=', 'Inovator Center (DIIB)')->get();
+
+    $finalScores = $this->calculateFinalScores($criteriaScores, $alternatives);
+    $finalUKM = $this->mergeReligiousUKM($finalScores, $user);
+
+    // Kirim variabel sesuai view
+    $pdf = PDF::loadView('layouts.mahasiswa.SPK.pdf', [
+        'user' => $user,
+        'criteriaScores' => $criteriaScores,
+        'finalUKM' => $finalUKM,
+    ]);
+
+    return $pdf->download('hasil_spk_' . $user->name . '.pdf');
+}
+
+
 }
