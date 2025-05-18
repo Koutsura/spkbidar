@@ -23,19 +23,29 @@
         </div>
     </div>
 
-    <div class="card mb-4">
-        <div class="card-header">3 Rekomendasi UKM Teratas</div>
-        <div class="card-body">
-            <ul class="list-group">
-                @foreach($finalUKM['top_ukms'] as $ukm => $score)
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
+   <div class="card mb-4">
+    <div class="card-header">3 Rekomendasi UKM Teratas</div>
+    <div class="card-body">
+        <ul class="list-group">
+            @foreach($finalUKM as $ukm => $score)
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
                         {{ $ukm }}
                         <span class="badge badge-success badge-pill">{{ number_format($score, 2) }}</span>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
+                    </div>
+
+                    {{-- Tambahan deskripsi jika UKM Keagamaan --}}
+                    @if($ukm === 'UKM Keagamaan')
+                        <div class="mt-2 text-muted small">
+                            Islam: <strong>UKM LDK ALQORIB</strong>, Kristen: <strong>UKM Persekutuan Mahasiswa Kristen & Katolik (PMKK)</strong>, Hindu: <strong>UKM Kesatuan Mahasiswa Hindu Darma Indonesia (KMHDI)</strong>
+                        </div>
+                    @endif
+                </li>
+            @endforeach
+        </ul>
     </div>
+</div>
+
 
     {{-- Rekomendasi Bonus --}}
     @if ($showBonus)
