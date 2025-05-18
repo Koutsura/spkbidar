@@ -43,7 +43,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($finalUKM['top_ukms'] as $ukm => $score)
+            @foreach ($finalUKM as $ukm => $score)
             <tr>
                 <td>{{ $ukm }}</td>
                 <td>{{ number_format($score, 2) }}</td>
@@ -52,9 +52,6 @@
         </tbody>
     </table>
 
-    @if ($finalUKM['description'])
-    <p><strong>Catatan:</strong> {{ $finalUKM['description'] }}</p>
-    @endif
 
 </body>
 </html>
