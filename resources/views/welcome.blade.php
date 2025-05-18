@@ -10,6 +10,7 @@
   <!-- Bootstrap CSS -->
   <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/hawal.css') }}" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
 <body>
@@ -34,19 +35,23 @@
     <div class="container">
   <div class="row text-center mt-5 feature-section">
     <div class="col-sm-4 mb-4">
+      <i class="fas fa-paint-brush fa-3x mb-3 text-primary"></i>
       <h3>Kreativitas</h3>
       <p>Temukan UKM yang menyalurkan ide dan karya unikmu.</p>
     </div>
     <div class="col-sm-4 mb-4">
+      <i class="fas fa-laptop-code fa-3x mb-3 text-success"></i>
       <h3>Teknologi</h3>
       <p>Dukung bakatmu di bidang digital dan pemrograman.</p>
     </div>
     <div class="col-sm-4 mb-4">
+      <i class="fas fa-praying-hands fa-3x mb-3 text-warning"></i>
       <h3>Religi</h3>
       <p>Gabung dengan komunitas yang mendukung nilai spiritual.</p>
     </div>
   </div>
 </div>
+
 
 
 
@@ -122,28 +127,33 @@
         Organisasi Unit Kegiatan Mahasiswa (UKM) yang ada di Universitas Bina Darma
       </h3>
       <div class="row">
-        <div class="col-4" style="text-align: justify;">
-          <p>1.UKM Bina Darma Cyber Army (BDCA).</p>
-          <p>2.UKM LDK ALQORIB.</p>
-          <p>3.UKM Persekutuan Mahasiswa Kristen & Katolik (PMKK).</p>
-          <p>4.UKM Kesatuan Mahasiswa Hindu Darma Indonesia (KMHDI).</p>
-          <p>5.UKM Olahraga.</p>
-        </div>
-        <div class="col-4" style="text-align: justify;">
-          <p>6.UKM Mahasiswa Pencinta Alam (MABIDAR).</p>
-          <p>7.UKM Bujang Gadis Kampus (BGK).</p>
-          <p>8.UKM Panduan Suara Mahasiswa (BDSC).</p>
-          <p>9.UKM Binadarma Debat Union (BDCU).</p>
-          <p>10.UKM Bina Darma Programmer (BDPRO).</p>
-        </div>
-        <div class="col-4" style="text-align: justify;">
-          <p>11.UKM Futsal.</p>
-          <p>12.UKM Seni.</p>
-          <p>13.UKM Pramuka.</p>
-          <p>14.UKM Bina Darma Radio (B-Radio).</p>
-          <p>15.UKM EDS South Sumatera English Community (SSEC).</p>
-        </div>
-      </div>
+  <div class="col-md-4" style="text-align: justify;">
+    <p>1. UKM Bina Darma Cyber Army (BDCA).</p>
+    <p>2. UKM LDK ALQORIB.</p>
+    <p>3. UKM Persekutuan Mahasiswa Kristen & Katolik (PMKK).</p>
+    <p>4. UKM Kesatuan Mahasiswa Hindu Darma Indonesia (KMHDI).</p>
+    <p>5. UKM Panjat Tebing.</p>
+    <p>6. UKM Mahasiswa Pencinta Alam (MABIDAR).</p>
+  </div>
+
+  <div class="col-md-4" style="text-align: justify;">
+    <p>7. UKM Bujang Gadis Kampus (BGK).</p>
+    <p>8. UKM Panduan Suara Mahasiswa (BDSC).</p>
+    <p>9. UKM Binadarma Debat Union (BDCU).</p>
+    <p>10. UKM Bina Darma Programmer (BDPRO).</p>
+    <p>11. UKM Futsal.</p>
+    <p>12. UKM Seni.</p>
+  </div>
+
+  <div class="col-md-4" style="text-align: justify;">
+    <p>13. UKM Pramuka.</p>
+    <p>14. UKM Bina Darma Radio (B‑Radio).</p>
+    <p>15. UKM EDS South Sumatera English Community (SSEC).</p>
+    <p>16. UKM Pencak Silat.</p>
+    <p>17. UKM Basket Club.</p>
+  </div>
+</div>
+
     </div>
   </div>
 </div>
