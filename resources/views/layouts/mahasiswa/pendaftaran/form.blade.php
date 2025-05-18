@@ -66,7 +66,7 @@
         'UKM LDK ALQORIB',
         'UKM Persekutuan Mahasiswa Kristen & Katolik (PMKK)',
         'UKM Kesatuan Mahasiswa Hindu Darma Indonesia (KMHDI)',
-        'UKM Olahraga',
+        'UKM Panjat Tebing',
         'UKM Mahasiswa Pencinta Alam (MABIDAR)',
         'UKM Bujang Gadis Kampus (BGK)',
         'UKM Panduan Suara Mahasiswa (BDSC)',
@@ -77,7 +77,9 @@
         'UKM Pramuka',
         'UKM Bina Darma Radio (B-Radio)',
         'UKM EDS South Sumatera English Community (SSEC)',
-        'Inovator Center (DIIB) - Bonus akan mendapatkan Jika jawaban anda sempurna',
+        'Inovator Center (DIIB)',
+        'UKM Pencak Silat',
+        'UKM Basket Club',
     ];
 @endphp
 
