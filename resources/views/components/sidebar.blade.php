@@ -73,18 +73,32 @@
 @endif
 
 
-             @if (auth()->user()->role == 'pendaftaran' || auth()->user()->role == 'mahasiswa')
+            @if (auth()->user()->role == 'pendaftaran' || auth()->user()->role == 'mahasiswa')
     <li class="menu-header">Pages</li>
     <li class="{{ Request::routeIs('mahasiswa.pendaftaran.form') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('mahasiswa.pendaftaran.form') }}">
-            <i class="fas fa-university"></i> <span>Pendaftaran</span>
-        </a>
+        @if ($sudahTes)
+            <a class="nav-link" href="{{ route('mahasiswa.pendaftaran.form') }}">
+                <i class="fas fa-university"></i> <span>Pendaftaran</span>
+            </a>
+        @else
+            <a class="nav-link disabled text-muted" href="#" onclick="return false;">
+                <i class="fas fa-university"></i> <span>Pendaftaran (Terkunci)</span>
+            </a>
+        @endif
     </li>
 @endif
 
-            @if (auth()->user()->role == 'pelatihan' || auth()->user()->role == 'mahasiswa')
+@if (auth()->user()->role == 'pelatihan' || auth()->user()->role == 'mahasiswa')
     <li class="{{ Request::is('pelatihan') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('mahasiswa.pelatihan.index') }}"><i class="fas fa-university"></i> <span>Pelatihan</span></a>
+        @if ($sudahTes)
+            <a class="nav-link" href="{{ route('mahasiswa.pelatihan.index') }}">
+                <i class="fas fa-university"></i> <span>Pelatihan</span>
+            </a>
+        @else
+            <a class="nav-link disabled text-muted" href="#" onclick="return false;">
+                <i class="fas fa-university"></i> <span>Pelatihan (Terkunci)</span>
+            </a>
+        @endif
     </li>
 @endif
 
