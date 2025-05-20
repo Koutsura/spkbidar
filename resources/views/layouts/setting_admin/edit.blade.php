@@ -43,6 +43,9 @@
         'Inovator Center (DIIB)',
         'UKM Pencak Silat',
         'UKM Basket Club',
+        'UKM BTV',
+        'UKM Data Science',
+        'UKM Multimedia',
     ];
 @endphp
 

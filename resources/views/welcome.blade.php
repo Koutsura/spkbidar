@@ -143,14 +143,17 @@
     <p>10. UKM Bina Darma Programmer (BDPRO).</p>
     <p>11. UKM Futsal.</p>
     <p>12. UKM Seni.</p>
+    <p>13. UKM BTV.</p>
   </div>
 
   <div class="col-md-4" style="text-align: justify;">
-    <p>13. UKM Pramuka.</p>
-    <p>14. UKM Bina Darma Radio (B‑Radio).</p>
-    <p>15. UKM EDS South Sumatera English Community (SSEC).</p>
-    <p>16. UKM Pencak Silat.</p>
-    <p>17. UKM Basket Club.</p>
+    <p>14. UKM Pramuka.</p>
+    <p>15. UKM Bina Darma Radio (B‑Radio).</p>
+    <p>16. UKM EDS South Sumatera English Community (SSEC).</p>
+    <p>17. UKM Pencak Silat.</p>
+    <p>18. UKM Basket Club.</p>
+    <p>19. UKM Data Science.</p>
+    <p>20. UKM Multimedia.</p>
   </div>
 </div>
 
