@@ -27,8 +27,8 @@
         <tbody>
             @foreach ($criteriaScores as $criteria => $score)
             <tr>
-                <td>{{ $criteria }}</td>
-                <td>{{ $score }}</td>
+                <td>{{ ucfirst($criteria) }}</td>
+                <td>{{ number_format($score, 2) }}</td>
             </tr>
             @endforeach
         </tbody>
@@ -52,6 +52,23 @@
         </tbody>
     </table>
 
+    @if ($showBonus && $bonusUKM && $bonusScore)
+    <h3>Rekomendasi Bonus</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Bonus</th>
+                <th>Skor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ $bonusUKM }}</td>
+                <td>{{ number_format($bonusScore, 2) }}</td>
+            </tr>
+        </tbody>
+    </table>
+    @endif
 
 </body>
 </html>
