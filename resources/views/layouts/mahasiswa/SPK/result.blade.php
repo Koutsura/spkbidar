@@ -65,9 +65,12 @@
     </div>
     @endif
 
-    <div class="text-center">
-        <a href="{{ route('spk.export_pdf') }}" class="btn btn-danger">Export PDF</a>
-    </div>
+    <div class="text-center my-4">
+    <a href="{{ route('spk.export_pdf') }}" class="btn btn-danger btn-lg shadow-sm px-4 py-2">
+        <i class="bi bi-file-earmark-pdf-fill me-2"></i> Export Hasil ke PDF
+    </a>
+</div>
+
 </div>
 </section>
 </div>

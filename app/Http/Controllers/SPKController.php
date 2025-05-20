@@ -222,20 +222,50 @@ class SPKController extends Controller
     }
 
     public function exportPdf()
-    {
-        $user = auth()->user();
-        $answers = Answer::with('question')->where('user_id', $user->id)->get();
+{
+    $user = auth()->user();
+    $answers = Answer::with('question')->where('user_id', $user->id)->get();
 
-        $criteriaScores = $this->calculateUserScores($answers);
-        $alternatives = Alternative::where('name', '!=', 'Inovator Center (DIIB)')->get();
-        $finalScores = $this->calculateFinalScores($criteriaScores, $alternatives);
+    // Hitung skor kriteria pengguna
+    $criteriaScores = $this->calculateUserScores($answers);
 
-        $pdf = PDF::loadView('layouts.mahasiswa.SPK.pdf', [
-            'user' => $user,
-            'criteriaScores' => $criteriaScores,
-            'finalUKM' => array_slice($finalScores, 0, 3, true),
-        ]);
+    // Ambil semua alternatif termasuk Inovator Center
+    $allAlternatives = Alternative::all();
+    $finalScores = $this->calculateFinalScores($criteriaScores, $allAlternatives);
 
-        return $pdf->download('hasil_spk_' . $user->name . '.pdf');
+    $bonusUKMName = 'Inovator Center (DIIB)';
+    $bonusThreshold = 3.5;
+
+    // Cek apakah pengguna memenuhi syarat bonus
+    $showBonus = (
+        ($criteriaScores['kreativitas'] ?? 0) >= $bonusThreshold &&
+        ($criteriaScores['keaktifan'] ?? 0) >= $bonusThreshold &&
+        ($criteriaScores['teknologi'] ?? 0) >= $bonusThreshold &&
+        ($criteriaScores['inovatif'] ?? 0) >= $bonusThreshold
+    );
+
+    // Simpan skor bonus jika ada
+    $bonusScore = $finalScores[$bonusUKMName] ?? null;
+
+    // Hapus dari 3 besar jika bukan bagian utama
+    if (isset($finalScores[$bonusUKMName])) {
+        unset($finalScores[$bonusUKMName]);
     }
+
+    // Ambil 3 rekomendasi utama
+    $top3UKM = array_slice($finalScores, 0, 3, true);
+
+    // Generate PDF
+    $pdf = PDF::loadView('layouts.mahasiswa.SPK.pdf', [
+        'user' => $user,
+        'criteriaScores' => $criteriaScores,
+        'finalUKM' => $top3UKM,
+        'showBonus' => $showBonus,
+        'bonusUKM' => $bonusUKMName,
+        'bonusScore' => $showBonus ? $bonusScore : null,
+    ]);
+
+    return $pdf->download('hasil_spk_' . $user->name . '.pdf');
+}
+
 }
