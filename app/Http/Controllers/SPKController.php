@@ -21,7 +21,6 @@ class SPKController extends Controller
     {
         $user = auth()->user();
 
-        // ⛔ CEK JIKA SUDAH PERNAH TES
         if (Result::where('user_id', $user->id)->exists()) {
             return redirect()->route('spk.result')->with('error', 'Kamu sudah mengikuti tes rekomendasi UKM.');
         }
@@ -45,7 +44,6 @@ class SPKController extends Controller
 
         $user = auth()->user();
 
-        // ⛔ CEK JIKA SUDAH PERNAH TES
         if (Result::where('user_id', $user->id)->exists()) {
             return redirect()->route('spk.result')->with('error', 'Kamu sudah mengikuti tes rekomendasi UKM.');
         }
@@ -70,53 +68,72 @@ class SPKController extends Controller
     }
 
     public function result()
-    {
-        $user = auth()->user();
-        $answers = Answer::with('question')->where('user_id', $user->id)->get();
+{
+    $user = auth()->user();
+    $answers = Answer::with('question')->where('user_id', $user->id)->get();
 
-        // Hitung skor user berdasarkan jawaban
-        $userScores = $this->calculateUserScores($answers);
+    // Hitung skor rata-rata user per kriteria
+    $userScores = $this->calculateUserScores($answers);
 
-        // Ambil alternatif UKM, kecuali UKM Inovator Center
-        $alternatives = Alternative::where('name', '!=', 'Inovator Center (DIIB)')->get();
+    // Ambil semua alternatif termasuk Inovator Center
+    $alternatives = Alternative::all();
 
-        // Hitung skor akhir dengan SAW
-        $finalScores = $this->calculateFinalScores($userScores, $alternatives);
+    // Hitung skor SAW+KNN semua UKM
+    $finalScores = $this->calculateFinalScores($userScores, $alternatives);
 
-        // BONUS: Deteksi apakah layak tampilkan UKM Inovator Center
-        $bonusThreshold = 4.0;
-        $showBonus = ($userScores['kreativitas'] >= $bonusThreshold && $userScores['teknologi'] >= $bonusThreshold);
+    // Nama UKM untuk bonus
+    $bonusUKMName = 'Inovator Center (DIIB)';
+    $bonusScore = null;
 
-        // Pastikan tidak ada UKM Inovator Center dalam skor utama
-        unset($finalScores['Inovator Center (DIIB)']);
+    // Cek apakah syarat bonus terpenuhi (semua >= 3.5)
+    $bonusThreshold = 3.5;
+    $bonusCriteria = ['kreativitas', 'keaktifan', 'teknologi', 'inovatif'];
+    $showBonus = true;
 
-        // Ambil 3 UKM teratas dari hasil finalScores
-        $topUKMKeys = array_keys($finalScores);
-
-        // Simpan ke database
-        Result::updateOrCreate(
-            ['user_id' => $user->id],
-            [
-                'recommended_1' => $topUKMKeys[0] ?? null,
-                'recommended_2' => $topUKMKeys[1] ?? null,
-                'recommended_3' => $topUKMKeys[2] ?? null,
-                'show_innovator_center' => $showBonus ? 1 : 0,
-            ]
-        );
-
-        return view('layouts.mahasiswa.SPK.result', [
-            'criteriaScores' => $userScores,
-            'finalUKM' => array_slice($finalScores, 0, 3, true),
-            'showBonus' => $showBonus,
-            'bonusUKM' => 'Inovator Center (DIIB)',
-            'bonusScore' => 0.9,
-            'user' => $user,
-        ]);
+    foreach ($bonusCriteria as $criteria) {
+        if (($userScores[$criteria] ?? 0) < $bonusThreshold) {
+            $showBonus = false;
+            break;
+        }
     }
+
+    // Simpan skor bonus dan keluarkan dari daftar utama
+    if (isset($finalScores[$bonusUKMName])) {
+        $bonusScore = $finalScores[$bonusUKMName];
+        unset($finalScores[$bonusUKMName]); // keluarkan dari finalScores agar tidak masuk 3 besar
+    }
+
+    // Ambil 3 teratas UKM dari hasil final tanpa Inovator Center
+    arsort($finalScores); // urutkan dari skor tertinggi
+    $topUKM = array_slice($finalScores, 0, 3, true);
+    $topUKMKeys = array_keys($topUKM);
+
+    // Simpan hasil ke database
+    Result::updateOrCreate(
+        ['user_id' => $user->id],
+        [
+            'recommended_1' => $topUKMKeys[0] ?? null,
+            'recommended_2' => $topUKMKeys[1] ?? null,
+            'recommended_3' => $topUKMKeys[2] ?? null,
+            'show_innovator_center' => $showBonus ? 1 : 0,
+        ]
+    );
+
+    return view('layouts.mahasiswa.SPK.result', [
+        'criteriaScores' => $userScores,
+        'finalUKM' => $topUKM,
+        'showBonus' => $showBonus,
+        'bonusUKM' => $bonusUKMName,
+        'bonusScore' => $showBonus ? $bonusScore : null,
+        'user' => $user,
+    ]);
+}
+
+
 
     protected function calculateUserScores($answers)
     {
-        $criteria = ['kreativitas', 'fisik', 'musik', 'teknologi', 'religiusitas'];
+        $criteria = ['kreativitas', 'keaktifan','teknologi','inovatif','fisik & olahraga','komunikasi & public speaking', 'religiusitas','seni & musik'];
         $scores = array_fill_keys($criteria, 0);
         $counts = array_fill_keys($criteria, 0);
 
@@ -125,20 +142,20 @@ class SPKController extends Controller
             $val = $answer->value;
 
             $criteriaKey = strtolower($q->kriteria);
-            $isFavorable = $q->indikator === 'favorable'; // ← PERBAIKAN PENTING DI SINI
+            $isFavorable = $q->indikator === 'favorable';
 
             if (!in_array($criteriaKey, $criteria)) {
                 continue;
             }
 
-            // Skor berdasarkan jenis indikator
+            // Sesuaikan nilai sesuai indikator favorable/unfavorable
             $score = $isFavorable ? $val : (6 - $val);
 
             $scores[$criteriaKey] += $score;
             $counts[$criteriaKey]++;
         }
 
-        // Hitung rata-rata skor (1–5)
+        // Hitung rata-rata skor per kriteria
         foreach ($criteria as $c) {
             $scores[$c] = $counts[$c] > 0 ? round($scores[$c] / $counts[$c], 2) : 0;
         }
@@ -146,70 +163,73 @@ class SPKController extends Controller
         return $scores;
     }
 
-  protected function calculateFinalScores($userScores, $alternatives)
-{
-    $criteria = ['kreativitas', 'fisik', 'musik', 'teknologi', 'religiusitas'];
+    protected function calculateFinalScores($userScores, $alternatives)
+    {
+        $criteria = ['kreativitas', 'keaktifan','teknologi','inovatif','fisik & olahraga','komunikasi & public speaking', 'religiusitas','seni & musik'];
 
-    // Vektor user
-    $userVector = [];
-    foreach ($criteria as $c) {
-        $userVector[] = $userScores[$c];
-    }
-
-    // Hitung magnitude (panjang) vektor user
-    $userMagnitude = sqrt(array_reduce($userVector, fn($carry, $v) => $carry + ($v * $v), 0));
-
-    $results = [];
-
-    foreach ($alternatives as $alt) {
-        // Vektor alternatif
-        $altVector = [];
+        // Cari nilai maksimum tiap kriteria dari alternatif (untuk normalisasi)
+        $maxPerCriteria = [];
         foreach ($criteria as $c) {
-            $altVector[] = $alt->$c;
+            $values = $alternatives->pluck($c)->toArray();
+            $maxPerCriteria[$c] = !empty($values) ? max($values) : 1;
         }
 
-        // Hitung dot product
-        $dotProduct = 0;
-        foreach ($criteria as $i => $c) {
-            $dotProduct += $userScores[$c] * $alt->$c;
+        // Normalisasi vektor user berdasarkan max nilai alternatif tiap kriteria
+        $userVector = [];
+        foreach ($criteria as $c) {
+            $max = $maxPerCriteria[$c];
+            $userVector[] = $max > 0 ? ($userScores[$c] ?? 0) / $max : 0;
         }
 
-        // Hitung magnitude alternatif
-        $altMagnitude = sqrt(array_reduce($altVector, fn($carry, $v) => $carry + ($v * $v), 0));
+        $results = [];
 
-        // Cosine Similarity (hindari pembagian 0)
-        if ($userMagnitude == 0 || $altMagnitude == 0) {
-            $similarity = 0;
-        } else {
-            $similarity = $dotProduct / ($userMagnitude * $altMagnitude);
+        foreach ($alternatives as $alt) {
+            // Vektor alternatif normalisasi
+            $altVector = [];
+            foreach ($criteria as $c) {
+                $max = $maxPerCriteria[$c];
+                $altVector[] = $max > 0 ? $alt->$c / $max : 0;
+            }
+
+            // Hitung dot product, magnitude user dan alternatif
+            $dotProduct = 0;
+            $userMagnitude = 0;
+            $altMagnitude = 0;
+
+            foreach ($criteria as $i => $c) {
+                $dotProduct += $userVector[$i] * $altVector[$i];
+                $userMagnitude += $userVector[$i] * $userVector[$i];
+                $altMagnitude += $altVector[$i] * $altVector[$i];
+            }
+
+            $userMagnitude = sqrt($userMagnitude);
+            $altMagnitude = sqrt($altMagnitude);
+
+            // Hindari pembagian dengan nol
+            if ($userMagnitude == 0 || $altMagnitude == 0) {
+                $similarity = 0;
+            } else {
+                $similarity = $dotProduct / ($userMagnitude * $altMagnitude);
+            }
+
+            $results[$alt->name] = round($similarity, 4);
         }
 
-        // Simpan hasil dengan 4 angka di belakang koma
-        $results[$alt->name] = round($similarity, 4);
+        // Urutkan hasil dari yang tertinggi
+        arsort($results);
+
+        return $results;
     }
-
-    // Urutkan dari tertinggi ke terendah
-    arsort($results);
-
-    return $results;
-}
-
-
 
     public function exportPdf()
     {
         $user = auth()->user();
         $answers = Answer::with('question')->where('user_id', $user->id)->get();
 
-        // Skor per kriteria
         $criteriaScores = $this->calculateUserScores($answers);
-
-        // Alternatif dan perhitungan final, exclude Inovator Center
         $alternatives = Alternative::where('name', '!=', 'Inovator Center (DIIB)')->get();
-
         $finalScores = $this->calculateFinalScores($criteriaScores, $alternatives);
 
-        // Kirim variabel sesuai view
         $pdf = PDF::loadView('layouts.mahasiswa.SPK.pdf', [
             'user' => $user,
             'criteriaScores' => $criteriaScores,

@@ -56,7 +56,7 @@
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>
                         {{ $bonusUKM }}
-                        <span class="badge badge-success ml-2">⭐ Direkomendasikan karena skor tinggi pada Kreativitas & Teknologi</span>
+                        <span class="badge badge-success ml-2">⭐ Direkomendasikan karena skor tinggi pada Kreativitas,keaktifan,Teknologi,dan inovatif</span>
                     </span>
                     <span><strong>{{ number_format($bonusScore, 2) }}</strong></span>
                 </li>

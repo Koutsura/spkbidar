@@ -8,23 +8,19 @@ class Alternative extends Model
 {
     protected $table = 'alternatives';
 
-    protected $fillable = [
-        'name',
-        'kreativitas',
-        'fisik',
-        'musik',
-        'teknologi',
-        'religiusitas',
-    ];
+    protected $fillable = ['kreativitas', 'keaktifan','teknologi','inovatif','fisik & olahraga','komunikasi & public speaking', 'religiusitas','seni & musik'];
 
     public $timestamps = true;
 
     // Tambahan: casting nilai kriteria ke float
     protected $casts = [
         'kreativitas' => 'float',
-        'fisik' => 'float',
-        'musik' => 'float',
+        'keaktifan' => 'float',
         'teknologi' => 'float',
+        'inovatif' => 'float',
+        'fisik & olahraga' => 'float',
+        'komunikasi & public speaking' => 'float',
         'religiusitas' => 'float',
+        'seni & musik' => 'float',
     ];
 }
