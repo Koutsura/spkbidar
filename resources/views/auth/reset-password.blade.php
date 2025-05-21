@@ -75,7 +75,7 @@
           <div class="row w-100 justify-content-center">
             <!-- Left Image Section -->
             <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center image-section">
-              <img src="{{ asset('img/password.jpg') }}" alt="Registration Illustration" class="img-fluid w-75">
+              <img src="{{ asset('img/password.webp') }}" alt="Registration Illustration" class="img-fluid w-75">
             </div>
 
             <!-- Right Form Section -->

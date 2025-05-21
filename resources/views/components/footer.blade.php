@@ -50,19 +50,19 @@
         <!-- Media Sosial Logo -->
         <div class="text-center my-3">
     <a href="https://www.instagram.com/ubd_palembang/" class="mx-2">
-        <img src="{{ asset('img/instagarm.png') }}" alt="Instagram" width="30" height="30">
+        <img src="{{ asset('img/instagarm.webp') }}" alt="Instagram" width="30" height="30">
     </a>
     <a href="https://www.facebook.com/UBDPalembang/" class="mx-2">
-        <img src="{{ asset('img/facebook.png') }}" alt="Facebook" width="30" height="30">
+        <img src="{{ asset('img/facebook.webp') }}" alt="Facebook" width="30" height="30">
     </a>
     <a href="https://www.tiktok.com/@universitas_bina_darma" class="mx-2">
-        <img src="{{ asset('img/tiktok.png') }}" alt="TikTok" width="30" height="30">
+        <img src="{{ asset('img/tiktok.webp') }}" alt="TikTok" width="30" height="30">
     </a>
     <a href="https://api.whatsapp.com/send?phone=628117155582&text=Saya%20Ingin%20info%20Mahasiswa%20Baru%20Universitas%20Bina%20Darma" class="mx-2">
-        <img src="{{ asset('img/WhatsApp.png') }}" alt="WhatsApp" width="30" height="30">
+        <img src="{{ asset('img/WhatsApp.webp') }}" alt="WhatsApp" width="30" height="30">
     </a>
     <a href="https://www.youtube.com/user/yansoke76/videos" class="mx-2">
-        <img src="{{ asset('img/youtube.png') }}" alt="YouTube" width="30" height="30">
+        <img src="{{ asset('img/youtube.webp') }}" alt="YouTube" width="30" height="30">
     </a>
 </div>
 

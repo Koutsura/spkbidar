@@ -52,7 +52,7 @@
   <div class="row w-100 justify-content-center">
     <!-- Left Image Section -->
     <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center">
-  <img src="{{ asset('img/register.jpg') }}" alt="Registration Illustration" class="img-fluid w-75">
+  <img src="{{ asset('img/register.webp') }}" alt="Registration Illustration" class="img-fluid w-75">
 </div>
 
 

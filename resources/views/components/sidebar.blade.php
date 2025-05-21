@@ -4,14 +4,14 @@
         <div class="sidebar-brand">
         <div class="card-header text-center d-flex justify-content-center">
                     <div class="d-flex justify-content-center">
-                        <img src="{{ asset('img/logoubd.png') }}" alt="Logo" class="img-fluid" style="width: 150px;">
+                        <img src="{{ asset('img/logoubd.webp') }}" alt="Logo" class="img-fluid" style="width: 150px;">
                     </div>
                 </div>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
         <div class="card-header text-center d-flex justify-content-center">
                     <div class="d-flex justify-content-center">
-                        <img src="{{ asset('img/logo.png') }}" alt="Logo" class="img-fluid mt-2" style="width: 40px;">
+                        <img src="{{ asset('img/logo.webp') }}" alt="Logo" class="img-fluid mt-2" style="width: 40px;">
                     </div>
                 </div>
         </div>
