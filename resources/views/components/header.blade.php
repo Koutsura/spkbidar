@@ -21,7 +21,7 @@
                 <img alt="image"
                      src="{{ auth()->user()->setting && auth()->user()->setting->profile_photo
                             ? asset('storage/' . auth()->user()->setting->profile_photo)
-                            : asset('img/profile.png') }}"
+                            : asset('img/profile.webp') }}"
                      class="rounded-circle me-1"
                      style="width: 35px; height: 35px; object-fit: cover;">
                 <div class="d-sm-none d-lg-inline-block">

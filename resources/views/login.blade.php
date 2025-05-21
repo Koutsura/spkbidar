@@ -82,7 +82,7 @@
 
             <!-- Image section -->
             <div class="col-lg-6 text-center d-none d-lg-flex justify-content-center">
-                <img src="{{ asset('img/login.jpg') }}" alt="Login Illustration" class="img-fluid login-image">
+                <img src="{{ asset('img/login.webp') }}" alt="Login Illustration" class="img-fluid login-image">
             </div>
         </div>
     </div>

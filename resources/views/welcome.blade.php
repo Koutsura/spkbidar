@@ -17,8 +17,8 @@
   <div class="container text-center">
     <!-- Logo Area -->
     <div class="logo-header mb-4">
-      <img src="{{ asset('img/logoubd.png') }}" alt="Universitas Bina Darma Logo" class="img-fluid" />
-      <img src="{{ asset('img/mbkm.png') }}" alt="MBKM Logo" class="img-fluid" />
+      <img src="{{ asset('img/logoubd.webp') }}" alt="Universitas Bina Darma Logo" class="img-fluid" />
+      <img src="{{ asset('img/mbkm.webp') }}" alt="MBKM Logo" class="img-fluid" />
     </div>
 
     <!-- Hero Section -->
@@ -60,7 +60,7 @@
   <!-- Gambar kanan, Deskripsi kiri -->
   <div class="col-md-12 mb-4 d-flex flex-md-row-reverse align-items-center">
     <div class="border p-3 me-4" style="flex: 1 1 0; max-width: 400px;">
-      <img src="{{ asset('img/busunda.png') }}" alt="Prof. Dr. Sunda Ariana, M.Pd., M.M." class="img-fluid mb-3" style="max-height: 250px; object-fit: cover;">
+      <img src="{{ asset('img/busunda.webp') }}" alt="Prof. Dr. Sunda Ariana, M.Pd., M.M." class="img-fluid mb-3" style="max-height: 250px; object-fit: cover;">
     </div>
     <div class="ms-4" style="flex: 2 1 0; padding-right: 2rem;">
       <h3>Prof. Dr. Sunda Ariana, M.Pd., M.M.</h3>
@@ -71,7 +71,7 @@
   <!-- Gambar kiri, Deskripsi kanan -->
   <div class="col-md-12 mb-4 d-flex flex-md-row align-items-center">
     <div class="border p-3 ms-4" style="flex: 1 1 0; max-width: 400px;">
-      <img src="{{ asset('img/buyanti.png') }}" alt="Dr. Yanti Pasmawati, S.T., M.T." class="img-fluid mb-3" style="max-height: 250px; object-fit: cover;">
+      <img src="{{ asset('img/buyanti.webp') }}" alt="Dr. Yanti Pasmawati, S.T., M.T." class="img-fluid mb-3" style="max-height: 250px; object-fit: cover;">
     </div>
     <div class="ms-4" style="flex: 2 1 0; padding-left: 2rem;">
       <h3>Dr. Yanti Pasmawati, S.T., M.T.</h3>
@@ -82,7 +82,7 @@
   <!-- Gambar kanan, Deskripsi kiri -->
   <div class="col-md-12 mb-4 d-flex flex-md-row-reverse align-items-center">
     <div class="border p-3 me-4" style="flex: 1 1 0; max-width: 400px;">
-      <img src="{{ asset('img/pakedi.png') }}" alt="Prof. Dr. Edi Surya Negara, M.Kom." class="img-fluid mb-3" style="max-height: 250px; object-fit: cover;">
+      <img src="{{ asset('img/pakedi.webp') }}" alt="Prof. Dr. Edi Surya Negara, M.Kom." class="img-fluid mb-3" style="max-height: 250px; object-fit: cover;">
     </div>
     <div class="ms-4" style="flex: 2 1 0; padding-right: 2rem;">
       <h3>Prof. Dr. Edi Surya Negara, M.Kom.</h3>
@@ -94,7 +94,7 @@
   <!-- Gambar kiri, Deskripsi kanan -->
   <div class="col-md-12 mb-4 d-flex flex-md-row align-items-center">
     <div class="border p-3 ms-4" style="flex: 1 1 0; max-width: 400px;">
-      <img src="{{ asset('img/paknovri.png') }}" alt="Novri Hadinata, S.Kom., M.Kom." class="img-fluid mb-3" style="max-height: 250px; object-fit: cover;">
+      <img src="{{ asset('img/paknovri.webp') }}" alt="Novri Hadinata, S.Kom., M.Kom." class="img-fluid mb-3" style="max-height: 250px; object-fit: cover;">
     </div>
     <div class="ms-4" style="flex: 2 1 0; padding-left: 2rem;">
       <h3>Novri Hadinata, S.Kom., M.Kom.</h3>
@@ -110,13 +110,13 @@
   </div>
   <div class="kecil-container">
         <div id="kecil" class="kecil">
-          <img src="{{ asset('img/sumsel.png') }}" alt="Sumatera Selatan"/>
-          <img src="{{ asset('img/LLDIKTI 2.png') }}" alt="LLDIKTI 2"/>
-          <img src="{{ asset('img/sumselbabel.png') }}" alt="Bank Sumsel Babel"/>
-          <img src="{{ asset('img/Top1a.png') }}" alt="Top 1 PTS"/>
-          <img src="{{ asset('img/Top1b.png') }}" alt="Top 1 PTS"/>
-          <img src="{{ asset('img/Top1c.png') }}" alt="Top 1 PTS"/>
-          <img src="{{ asset('img/Top1PTS.png') }}" alt="Top 1 PTS"/>
+          <img src="{{ asset('img/sumsel.webp') }}" alt="Sumatera Selatan"/>
+          <img src="{{ asset('img/LLDIKTI 2.webp') }}" alt="LLDIKTI 2"/>
+          <img src="{{ asset('img/sumselbabel.webp') }}" alt="Bank Sumsel Babel"/>
+          <img src="{{ asset('img/Top1a.webp') }}" alt="Top 1 PTS"/>
+          <img src="{{ asset('img/Top1b.webp') }}" alt="Top 1 PTS"/>
+          <img src="{{ asset('img/Top1c.webp') }}" alt="Top 1 PTS"/>
+          <img src="{{ asset('img/Top1PTS.webp') }}" alt="Top 1 PTS"/>
         </div>
         </div>
 
