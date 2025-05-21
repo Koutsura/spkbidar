@@ -11,13 +11,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
-        $middleware->alias([
+        // ✅ Middleware global (aktif di semua request)
+        $middleware->append(\App\Http\Middleware\ContentSecurityPolicy::class);
+        $middleware->append(\Illuminate\Http\Middleware\HandleCors::class); // Gunakan middleware bawaan Laravel
 
+        // ✅ Middleware route alias
+        $middleware->alias([
             'superadmin' => \App\Http\Middleware\superadmin::class,
             'mahasiswa' => \App\Http\Middleware\mahasiswa::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
-    })->create();
+        // Tambahkan handler jika diperlukan
+    })
+    ->create();
