@@ -18,23 +18,34 @@ class SPKController extends Controller
     }
 
     public function showQuestion($index = 1)
-    {
-        $user = auth()->user();
+{
+    $user = auth()->user();
 
-        if (Result::where('user_id', $user->id)->exists()) {
-            return redirect()->route('spk.result')->with('error', 'Kamu sudah mengikuti tes rekomendasi UKM.');
-        }
-
-        $questions = Question::orderBy('id')->get();
-        $total = $questions->count();
-        $question = $questions[$index - 1] ?? null;
-
-        if (!$question) {
-            return redirect()->route('spk.result');
-        }
-
-        return view('layouts.mahasiswa.SPK.question', compact('question', 'index', 'total', 'user'));
+    if (Result::where('user_id', $user->id)->exists()) {
+        return redirect()->route('spk.result')->with('error', 'Kamu sudah mengikuti tes rekomendasi UKM.');
     }
+
+    $questions = Question::orderBy('id')->get();
+    $total = $questions->count();
+    $question = $questions[$index - 1] ?? null;
+
+    if (!$question) {
+        return redirect()->route('spk.result');
+    }
+
+    // Ambil ID semua soal
+    $answered = Answer::where('user_id', $user->id)->pluck('question_id')->toArray();
+
+    return view('layouts.mahasiswa.SPK.question', [
+        'question' => $question,
+        'index' => $index,
+        'total' => $total,
+        'user' => $user,
+        'questions' => $questions, // untuk daftar soal
+        'answered' => $answered,   // array ID soal yang sudah dijawab
+    ]);
+}
+
 
     public function storeAnswer(Request $request, $index)
     {
@@ -85,8 +96,8 @@ class SPKController extends Controller
     $bonusUKMName = 'Inovator Center (DIIB)';
     $bonusScore = null;
 
-    // Cek apakah syarat bonus terpenuhi (semua >= 3.5)
-    $bonusThreshold = 3.5;
+    // Cek apakah syarat bonus terpenuhi (semua >= 3.7)
+    $bonusThreshold = 3.7;
     $bonusCriteria = ['kreativitas', 'keaktifan', 'teknologi', 'inovatif'];
     $showBonus = true;
 
@@ -234,7 +245,7 @@ class SPKController extends Controller
     $finalScores = $this->calculateFinalScores($criteriaScores, $allAlternatives);
 
     $bonusUKMName = 'Inovator Center (DIIB)';
-    $bonusThreshold = 3.5;
+    $bonusThreshold = 3.7;
 
     // Cek apakah pengguna memenuhi syarat bonus
     $showBonus = (
