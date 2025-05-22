@@ -50,7 +50,7 @@
             </div>
             <div class="col-6 col-md-4 col-lg-3 mb-4">
                 <div class="card h-100">
-                    <img src="{{ asset('img/mabidar.jpeg') }}" class="card-img-top img-fluid" alt="Mahasiswa 5">
+                    <img src="{{ asset('img/mabidar.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 5">
                     <div class="card-body p-2">
                         <p class="img-caption">Kesatuan Mahasiswa Hindu Darma Indonesia</p>
                     </div>
