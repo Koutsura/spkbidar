@@ -30,7 +30,7 @@
             </a>
 
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><h6 class="dropdown-header">Selamat Datang, {{ substr(auth()->user()->name, 0, 10) }}</h6></li>
+                <li><h6 class="dropdown-header">{{ substr(auth()->user()->name, 0, 10) }}</h6></li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
                   <a href="{{ route('logout') }}" class="dropdown-item text-danger"
