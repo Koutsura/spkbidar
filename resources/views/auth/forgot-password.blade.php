@@ -55,7 +55,7 @@
                               class="{{ session('step') === 'code' ? '' : 'd-none' }}">
                             @csrf
                             <p class="mb-3">
-                                We've sent a 6-digit verification code to <strong>{{ session('email') }}</strong>
+                                Kami telah mengirimkan kode verifikasi 6 digit ke <strong>{{ session('email') }}</strong>
                             </p>
 
                             <input type="hidden" name="email" value="{{ session('email') }}">
@@ -84,7 +84,7 @@
                             <form method="POST" action="/resend-code" class="mt-3">
                                 @csrf
                                 <input type="hidden" name="email" value="{{ session('email') }}">
-                                <button type="submit" class="btn btn-outline-primary w-100">Resend Code</button>
+                                <button type="submit" class="btn btn-outline-primary w-100">Kirim kode baru</button>
                             </form>
                         @endif
                     </div>

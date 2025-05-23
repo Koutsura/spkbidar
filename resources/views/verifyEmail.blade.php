@@ -81,8 +81,8 @@
                         @endif
 
                         <p class="text-muted mb-4">
-                            Please check your email, we have sent a code to
-                            <strong>{{ session('pending_email') ?? 'your email' }}</strong>. Enter it below.
+                            Silakan periksa email Anda, kami telah mengirimkan kode ke
+                            <strong>{{ session('pending_email') ?? 'your email' }}</strong>. Masukkan di bawah.
                         </p>
 
                         <form action="{{ url('/verify-email') }}" method="POST">
@@ -107,7 +107,7 @@
                             @csrf
                             <input type="hidden" name="pending_email" value="{{ session('pending_email') }}">
                             <button type="submit" class="btn btn-link p-0 text-decoration-none" id="resend-btn">
-                                Didn't get a code? <strong>Send a new code</strong>
+                                Tidak mendapatkan kode? <strong>Kirim kode baru</strong>
                             </button>
                         </form>
                     </div>
