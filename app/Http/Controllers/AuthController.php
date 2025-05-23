@@ -49,7 +49,7 @@ class AuthController extends Controller
     // 2. Jika data pendaftaran sudah ada di cache (belum diverifikasi), arahkan langsung ke halaman OTP
     if (Cache::has('user_registration_' . $email)) {
         Session::put('pending_email', $email);
-        return redirect()->route('verify.email.form')
+        return view('verifyEmail')
                ->with('message', 'Kode verifikasi sudah dikirim. Silakan cek email Anda.');
     }
 
