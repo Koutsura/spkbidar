@@ -3,7 +3,7 @@
         <div class="row">
             <!-- Unit Kerja -->
             <div class="col-md-4 mb-3">
-                <h5>Unit Kerja</h5>
+                <h4>Unit Kerja</h4>
                 <ul class="list-unstyled">
                     <li><a href="https://perpustakaan.binadarma.ac.id/" class="text-white text-decoration-none">Perpustakaan</a></li>
                     <li><a href="https://rie.binadarma.ac.id/" class="text-white text-decoration-none">Riset dan Inovasi Expo</a></li>
@@ -16,7 +16,7 @@
 
             <!-- External Link -->
             <div class="col-md-4 mb-3">
-                <h5>External Link</h5>
+                <h4>External Link</h4>
                 <ul class="list-unstyled">
                     <li><a href="https://dikti.kemdikbud.go.id" class="text-white text-decoration-none">Dikti Kemdikbud</a></li>
                     <li><a href="https://pddikti.kemdikbud.go.id" class="text-white text-decoration-none">PDDIKTI</a></li>
@@ -26,7 +26,7 @@
 
             <!-- Kontak & Peta -->
             <div class="col-md-4 mb-3">
-                <h5>Informasi Selengkapnya</h5>
+                <h4>Informasi Selengkapnya</h4>
                 <p>
                     <a href="https://maps.google.com/?q=Universitas+Bina+Darma" class="text-white text-decoration-none">
                         Jl. Jenderal A. Yani No. 3 Palembang<br>
@@ -35,7 +35,7 @@
                     <a href="tel:0711515582" class="text-white text-decoration-none"><strong>Tel:</strong> 0711-515582</a><br>
                     <a href="mailto:universitas@binadarma.ac.id" class="text-white text-decoration-none"><strong>Email:</strong> universitas@binadarma.ac.id</a>
                 </p>
-                <h5>Peta Lokasi</h5>
+                <h4>Peta Lokasi</h4>
                 <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15933.027501520446!2d104.7605774!3d-2.9995246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e3b9df5385cf0a1%3A0x6d0080106b346bc3!2sBina%20Darma%20University!5e0!3m2!1sid!2sid!4v1715081234567!5m2!1sid!2sid"
                     width="100%"
@@ -43,6 +43,7 @@
                     style="border:0;"
                     allowfullscreen=""
                     loading="lazy">
+                    title="Peta lokasi Universitas Bina Darma">
                 </iframe>
             </div>
         </div>

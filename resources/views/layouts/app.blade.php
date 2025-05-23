@@ -7,6 +7,9 @@
   <meta name="author" content="Universitas Bina Darma, M. Denny Tri Lisandi" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <!-- Favicon -->
+  <link rel="icon" href="{{ asset('img/tab.webp') }}" type="img/webp" />
+
   <!-- Styles -->
   <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/style.css') }}" rel="stylesheet" />

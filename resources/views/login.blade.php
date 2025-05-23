@@ -5,9 +5,11 @@
   <meta name="description" content="Website UKM Bina Darma" />
   <meta name="keywords" content="UKM,Universitas Bina Darma,Unit Kegiatan Mahasiswa,website,organisasi" />
   <meta name="author" content="Universitas Bina Darma, M. Denny Tri Lisandi" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <title>Login</title>
+    <!-- Favicon -->
+  <link rel="icon" href="{{ asset('img/tab.webp') }}" type="img/webp" />
     <style>
         body {
             background-color: #f8f9fa;
