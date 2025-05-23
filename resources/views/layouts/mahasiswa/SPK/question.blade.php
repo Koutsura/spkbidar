@@ -125,87 +125,159 @@
                 @for ($i = 1; $i <= $total; $i++)
                     @php
                         $qId = $questions[$i - 1]->id;
-                        $isAnswered = in_array($qId, $answered); // pengecekan benar
+                        $isAnswered = in_array($qId, $answered);
                     @endphp
-                    <a href="{{ route('spk.form', ['index' => $i]) }}"
-                       class="question-button {{ $isAnswered ? 'answered' : '' }} {{ $i == $index ? 'current' : '' }}"
-                       title="Soal {{ $i }}">
+                    <button data-index="{{ $i }}"
+                            class="question-button {{ $isAnswered ? 'answered' : '' }} {{ $i == $index ? 'current' : '' }}"
+                            title="Soal {{ $i }}">
                         {{ $i }}
-                    </a>
+                    </button>
                 @endfor
             </div>
         </div>
 
-        <div class="container mt-4 pb-5">
-            <h2 class="mb-4">Soal {{ $index }} dari {{ $total }}</h2>
-
-            <form action="{{ route('spk.answer', ['index' => $index]) }}" method="POST">
-                @csrf
-
-                <div class="mb-4">
-                    <label class="form-label fw-bold" style="font-size: 1.25rem;">
-                        {{ $question->question }}
-                    </label>
-
-                    <div class="mt-3">
-                        @php $qId = $question->id; @endphp
-                        @for ($i = 5; $i >= 1; $i--)
-                            @php
-                                $label = [
-                                    5 => 'Sangat Setuju',
-                                    4 => 'Setuju',
-                                    3 => 'Netral',
-                                    2 => 'Tidak Setuju',
-                                    1 => 'Sangat Tidak Setuju',
-                                ][$i];
-
-                                // Ambil jawaban yang sudah disimpan untuk soal ini jika ada
-                                $answeredValue = \App\Models\Answer::where('user_id', $user->id)->where('question_id', $qId)->value('value');
-                            @endphp
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="value" id="option{{ $i }}" value="{{ $i }}"
-                                       {{ $answeredValue == $i ? 'checked' : '' }} required>
-                                <label class="form-check-label" for="option{{ $i }}">{{ $label }}</label>
-                            </div>
-                        @endfor
-                    </div>
-
-                    @error('value')
-                        <div class="text-danger mt-2">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="d-flex justify-content-between mt-5">
-                    @if ($index > 1)
-                        <a href="{{ route('spk.form', ['index' => $index - 1]) }}" class="btn btn-warning">← Kembali</a>
-                    @else
-                        <div></div>
-                    @endif
-
-                    <button type="submit" class="btn {{ $index == $total ? 'btn-success' : 'btn-primary' }}">
-                        {{ $index == $total ? 'Lihat Hasil' : 'Lanjut →' }}
-                    </button>
-                </div>
-            </form>
+        <div class="container mt-4 pb-5" id="questionContainer">
+            <!-- Konten soal akan diupdate via AJAX -->
+            @include('layouts.mahasiswa.SPK.question_partial')
         </div>
     </section>
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function () {
     const toggleNav = document.getElementById('toggleNav');
     const questionNavBox = document.getElementById('questionNavBox');
+    const questionContainer = document.getElementById('questionContainer');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    toggleNav.addEventListener('click', () => {
+    // Toggle navigasi soal
+    toggleNav?.addEventListener('click', () => {
         const isHidden = questionNavBox.classList.toggle('hidden');
         toggleNav.classList.toggle('active');
         toggleNav.setAttribute('aria-expanded', !isHidden);
     });
 
-    toggleNav.addEventListener('keydown', (e) => {
+    toggleNav?.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             toggleNav.click();
         }
     });
+
+    // Fungsi untuk memuat soal berdasarkan index
+    function loadQuestion(index) {
+        fetch(`/spk/form/${index}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'text/html'
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Gagal memuat soal.');
+            return response.text();
+        })
+        .then(html => {
+            questionContainer.innerHTML = html;
+            updateNavButtons(index);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setupFormHandlers(); // Rebind setelah isi HTML diubah
+        })
+        .catch(error => {
+            console.error('Error loading question:', error);
+            alert('Gagal memuat soal.');
+        });
+    }
+
+    // Fungsi untuk menandai tombol navigasi aktif
+    function updateNavButtons(currentIndex) {
+        const buttons = questionNavBox.querySelectorAll('.question-button');
+        buttons.forEach(button => {
+            const buttonIndex = parseInt(button.dataset.index);
+            button.classList.toggle('current', buttonIndex === currentIndex);
+        });
+    }
+
+    // Rebind semua event setelah soal termuat
+    function setupFormHandlers() {
+        const form = document.getElementById('questionForm');
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                submitAnswer(this);
+            });
+        }
+
+        const prevBtn = document.getElementById('prevBtn');
+        if (prevBtn) {
+            prevBtn.addEventListener('click', function () {
+                const currentIndex = parseInt(this.dataset.currentIndex);
+                if (currentIndex > 1) loadQuestion(currentIndex - 1);
+            });
+        }
+
+        // Event handler untuk tombol navigasi langsung (jika ada)
+        document.querySelectorAll('.question-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const targetIndex = parseInt(this.dataset.index);
+                loadQuestion(targetIndex);
+            });
+        });
+    }
+
+    // Submit jawaban
+    function submitAnswer(form) {
+        const formData = new FormData(form);
+        const url = form.action;
+        const currentIndex = parseInt(form.dataset.currentIndex);
+        const isLastQuestion = form.dataset.isLastQuestion === 'true';
+
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Tandai soal ini sebagai telah dijawab
+                const buttons = questionNavBox.querySelectorAll('.question-button');
+                buttons.forEach(button => {
+                    if (parseInt(button.dataset.index) === currentIndex) {
+                        button.classList.add('answered');
+                    }
+                });
+
+                if (isLastQuestion && data.redirect) {
+                    window.location.href = data.redirect;
+                } else {
+                    loadQuestion(currentIndex + 1);
+                }
+            } else {
+                showError(data.message || 'Jawaban gagal dikirim.');
+            }
+        })
+        .catch(() => {
+            showError('Terjadi kesalahan saat mengirim jawaban.');
+        });
+    }
+
+    // Tampilkan pesan error
+    function showError(message) {
+        const errorDiv = document.getElementById('errorMessage');
+        if (errorDiv) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        } else {
+            alert(message);
+        }
+    }
+
+    // Initial setup
+    setupFormHandlers();
+});
 </script>
+
 @endsection
