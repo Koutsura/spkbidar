@@ -20,7 +20,7 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h3>Nama: {{ $user->name }}</h3>
+                        <h5>Nama: {{ $user->name }}</h5>
                         <p>Email: {{ $user->email }}</p>
 
                         @php

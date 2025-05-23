@@ -38,18 +38,18 @@
   <div class="row text-center mt-5 feature-section">
     <div class="col-sm-4 mb-4">
       <i class="fas fa-paint-brush fa-3x mb-3 text-primary"></i>
-      <h3>Kreativitas</h3>
-      <p>Temukan UKM yang menyalurkan ide dan karya unikmu.</p>
-    </div>
-    <div class="col-sm-4 mb-4">
-      <i class="fas fa-laptop-code fa-3x mb-3 text-success"></i>
-      <h3>Teknologi</h3>
-      <p>Dukung bakatmu di bidang digital dan pemrograman.</p>
-    </div>
-    <div class="col-sm-4 mb-4">
-      <i class="fas fa-praying-hands fa-3x mb-3 text-warning"></i>
-      <h3>Religi</h3>
-      <p>Gabung dengan komunitas yang mendukung nilai spiritual.</p>
+      <h2 class="text-white">Kreativitas</h2>
+    <p>Biarkan imajinasimu mengalir tanpa batas dan wujudkan ide-ide orisinal yang menginspirasi dunia.</p>
+</div>
+<div class="col-sm-4 mb-4 text-center">
+  <i class="fas fa-laptop-code fa-3x mb-3 text-success"></i>
+  <h2 class="text-white">Teknologi</h2>
+  <p>Manfaatkan kecanggihan digital untuk membangun solusi yang memajukan masa depan dan membuka peluang baru.</p>
+</div>
+<div class="col-sm-4 mb-4 text-center">
+  <i class="fas fa-lightbulb fa-3x mb-3 text-warning"></i>
+  <h2 class="text-white">Inovatif</h2>
+      <p>Teruslah menggali ide segar dan tantang dirimu untuk menciptakan perubahan yang berdampak nyata.</p>
     </div>
   </div>
 </div>
