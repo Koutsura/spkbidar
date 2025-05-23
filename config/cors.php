@@ -4,15 +4,15 @@ return [
 
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['https://ukmbidar.decadev.tech/'],
 
-    'allowed_origins' => ['https://yourdomain.com'], // Ganti dengan domain frontend kamu
+    'allowed_origins' => ['https://ukmbidar.decadev.tech/'], 
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => ['https://ukmbidar.decadev.tech/'],
 
-    'allowed_headers' => ['*'],
+    'allowed_headers' => ['https://ukmbidar.decadev.tech/'],
 
-    'exposed_headers' => [],
+    'exposed_headers' => ['https://ukmbidar.decadev.tech/'],
 
     'max_age' => 3600,
 
