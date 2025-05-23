@@ -25,7 +25,6 @@
             font-size: 24px;
             border: 2px solid #ced4da;
             border-radius: 4px;
-            text-transform: uppercase;
         }
         .otp-input input:focus {
             border-color: #86b7fe;
