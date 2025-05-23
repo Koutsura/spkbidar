@@ -97,8 +97,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/spk', [SPKController::class, 'index'])->name('spk.index'); // Halaman intro SPK
 
     // Form soal per index (1 soal per halaman)
-    Route::get('/spk/form/{index?}', [SPKController::class, 'showQuestion'])->name('spk.form');
-    Route::post('/spk/answer/{index}', [SPKController::class, 'storeAnswer'])->name('spk.answer');
+    Route::get('/spk/form/{index}', [SPKController::class, 'showQuestion'])->name('spk.question');
+    Route::post('/spk/form/{index}', [SPKController::class, 'storeAnswer'])->name('spk.answer');
 
     // Hasil & export
     Route::get('/spk/result', [SPKController::class, 'result'])->name('spk.result');

@@ -17,65 +17,54 @@ class SPKController extends Controller
         return view('layouts.mahasiswa.SPK.index');
     }
 
-    public function showQuestion($index = 1)
-{
-    $user = auth()->user();
+   public function showQuestion($index = 1)
+    {
+        $user = auth()->user();
+        $questions = Question::orderBy('id')->get();
+        $total = $questions->count();
+        $index = max(1, min($index, $total));
 
-    if (Result::where('user_id', $user->id)->exists()) {
-        return redirect()->route('spk.result')->with('error', 'Kamu sudah mengikuti tes rekomendasi UKM.');
+        $question = $questions[$index - 1];
+        $answered = Answer::where('user_id', $user->id)->pluck('question_id')->toArray();
+
+        if (request()->ajax()) {
+            return view('layouts.mahasiswa.SPK.question_partial', [
+                'index' => $index,
+                'total' => $total,
+                'question' => $question,
+                'user' => $user
+            ]);
+        }
+
+        return view('layouts.mahasiswa.SPK.question', [
+            'index' => $index,
+            'total' => $total,
+            'question' => $question,
+            'questions' => $questions,
+            'answered' => $answered,
+            'user' => $user
+        ]);
     }
-
-    $questions = Question::orderBy('id')->get();
-    $total = $questions->count();
-    $question = $questions[$index - 1] ?? null;
-
-    if (!$question) {
-        return redirect()->route('spk.result');
-    }
-
-    // Ambil ID semua soal
-    $answered = Answer::where('user_id', $user->id)->pluck('question_id')->toArray();
-
-    return view('layouts.mahasiswa.SPK.question', [
-        'question' => $question,
-        'index' => $index,
-        'total' => $total,
-        'user' => $user,
-        'questions' => $questions, // untuk daftar soal
-        'answered' => $answered,   // array ID soal yang sudah dijawab
-    ]);
-}
-
 
     public function storeAnswer(Request $request, $index)
     {
         $request->validate([
-            'value' => 'required|integer|min:1|max:5',
+            'value' => 'required|in:1,2,3,4,5',
         ]);
 
         $user = auth()->user();
-
-        if (Result::where('user_id', $user->id)->exists()) {
-            return redirect()->route('spk.result')->with('error', 'Kamu sudah mengikuti tes rekomendasi UKM.');
-        }
-
-        $questions = Question::orderBy('id')->get();
-        $question = $questions[$index - 1] ?? null;
-
-        if (!$question) {
-            return redirect()->route('spk.result');
-        }
+        $question = Question::orderBy('id')->get()[$index - 1];
 
         Answer::updateOrCreate(
             ['user_id' => $user->id, 'question_id' => $question->id],
-            ['value' => $request->value]
+            ['value' => $request->input('value')]
         );
 
-        if ($index >= $questions->count()) {
-            return redirect()->route('spk.result');
-        }
-
-        return redirect()->route('spk.form', ['index' => $index + 1]);
+        $isLast = $index == Question::count();
+        return response()->json([
+            'success' => true,
+            'redirect' => $isLast ? route('spk.result') : null,
+        ]);
     }
 
     public function result()
