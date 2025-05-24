@@ -81,7 +81,7 @@ class AuthController extends Controller
         return back()->with('error', 'Gagal mengirim email. Silakan coba lagi.');
     }
 
-    return redirect()->route('verify.email.form')
+    return redirect()->route('verification.verify')
            ->with('message', 'Kode verifikasi telah dikirim ke email Anda.');
 }
 
