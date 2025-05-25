@@ -48,22 +48,33 @@
 
 
     {{-- Rekomendasi Bonus --}}
-    @if ($showBonus)
-    <div class="card mb-4">
-        <div class="card-header">Rekomendasi Bonus</div>
+   @if ($showBonus)
+<div class="container mb-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            Rekomendasi Bonus
+        </div>
         <div class="card-body">
             <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span>
-                        {{ $bonusUKM }}
-                        <span class="badge badge-success ml-2">⭐ Direkomendasikan karena skor tinggi pada Kreativitas,keaktifan,Teknologi,dan inovatif</span>
-                    </span>
-                    <span><strong>{{ number_format($bonusScore, 2) }}</strong></span>
+                <li class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-md-9 col-sm-12">
+                            <span class="d-block font-weight-bold">{{ $bonusUKM }}</span>
+                            <span class="badge badge-success mt-2 d-inline-block">
+                                ⭐ Direkomendasikan karena skor tinggi pada Kreativitas, Keaktifan, Teknologi, dan Inovatif
+                            </span>
+                        </div>
+                        <div class="col-md-3 col-sm-12 text-md-right text-left mt-3 mt-md-0">
+                            <strong>{{ number_format($bonusScore, 2) }}</strong>
+                        </div>
+                    </div>
                 </li>
             </ul>
         </div>
     </div>
-    @endif
+</div>
+@endif
+
 
     <div class="text-center my-4">
     <a href="{{ route('spk.export_pdf') }}" class="btn btn-danger btn-lg shadow-sm px-4 py-2">
