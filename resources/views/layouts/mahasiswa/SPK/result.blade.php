@@ -57,14 +57,18 @@
         <div class="card-body">
             <ul class="list-group">
                 <li class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-md-9 col-sm-12">
-                            <span class="d-block font-weight-bold">{{ $bonusUKM }}</span>
-                            <span class="badge badge-success mt-2 d-inline-block">
-                                ⭐ Direkomendasikan karena skor tinggi pada Kreativitas, Keaktifan, Teknologi, dan Inovatif
-                            </span>
+                    <div class="row align-items-start">
+                        <div class="col-12 col-md-9">
+                            <div class="mb-2">
+                                <span class="d-block fw-bold">{{ $bonusUKM }}</span>
+                            </div>
+                            <div>
+                                <span class="badge bg-success text-wrap" style="white-space: normal;">
+                                    ⭐ Direkomendasikan karena skor tinggi pada <strong>Kreativitas</strong>, <strong>Keaktifan</strong>, <strong>Teknologi</strong>, dan <strong>Inovatif</strong>
+                                </span>
+                            </div>
                         </div>
-                        <div class="col-md-3 col-sm-12 text-md-right text-left mt-3 mt-md-0">
+                        <div class="col-12 col-md-3 text-md-end text-start mt-3 mt-md-0">
                             <strong>{{ number_format($bonusScore, 2) }}</strong>
                         </div>
                     </div>
