@@ -18,7 +18,6 @@
                 <div class="text-center mb-4">
                     @if($setting && $setting->profile_photo)
                         <img src="{{ asset('storage/' . $setting->profile_photo) }}" class="rounded-circle" width="120" height="120" style="object-fit: cover;">
-                        @dump(asset('storage/' . $setting->profile_photo))
                     @else
                         <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=4e73df&color=fff&size=120" class="rounded-circle" width="120" height="120">
                     @endif
