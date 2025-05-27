@@ -103,7 +103,7 @@
                             <button type="submit" class="btn btn-primary w-100 mb-3">Continue</button>
                         </form>
 
-                        <form id="resend-form" action="{{ url('/resend-code') }}" method="POST" class="d-inline">
+                        <form id="resend-form" action="{{ route('resend_code_email') }}" method="POST" class="d-inline">
                             @csrf
                             <input type="hidden" name="pending_email" value="{{ session('pending_email') }}">
                             <button type="submit" class="btn btn-link p-0 text-decoration-none" id="resend-btn">
