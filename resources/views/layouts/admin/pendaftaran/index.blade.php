@@ -43,7 +43,6 @@
                     <td>
                         @if($data->upload_file)
     <a href="{{ asset('storage/' . $data->upload_file) }}" target="_blank" class="btn btn-info btn-sm" title="Lihat Berkas">
-        @dump (asset('storage/' . $data->upload_file))
         <i class="fas fa-file-pdf"></i> Lihat File
     </a>
 @else
