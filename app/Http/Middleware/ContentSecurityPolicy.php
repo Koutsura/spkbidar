@@ -13,16 +13,16 @@ class ContentSecurityPolicy
         $response = $next($request);
 
         $csp = "
-    default-src 'self' https: data:;
-    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maps.googleapis.com https://maps.gstatic.com;
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.bunny.net https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;
-    img-src 'self' data: https://maps.gstatic.com https://maps.googleapis.com https://maps.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://ui-avatars.com;
-    font-src 'self' https://fonts.gstatic.com https://fonts.bunny.net https://cdnjs.cloudflare.com;
-    connect-src 'self' https://maps.googleapis.com;
-    frame-src 'self' https://www.google.com https://maps.google.com https://www.google.com/maps;
-    frame-ancestors 'none';
-    base-uri 'self';
-    form-action 'self' https:;
+    default-src https: 'self' data:;
+            script-src https: 'unsafe-inline' 'unsafe-eval';
+            style-src https: 'unsafe-inline';
+            img-src https: data:;
+            font-src https:;
+            connect-src https:;
+            frame-src https:;
+            frame-ancestors 'none';
+            base-uri 'self';
+            form-action https:;
 ";
 
 
