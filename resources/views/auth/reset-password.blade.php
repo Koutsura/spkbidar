@@ -156,7 +156,7 @@
         const error = document.getElementById("passwordError");
 
         const hasUpperCase = /[A-Z]/.test(password);
-        const hasSpecialChar = /[\W_]/.test(password);
+        const hasSpecialChar = /[^a-zA-Z0-9]/.test(password);
         const isLongEnough = password.length >= 5;
 
         if (!hasUpperCase || !hasSpecialChar || !isLongEnough) {
