@@ -22,7 +22,7 @@ class ContentSecurityPolicy
             frame-src 'self' https://www.google.com https://maps.google.com https://www.google.com/maps;
             frame-ancestors 'none';
             base-uri 'self';
-            form-action '*';
+            form-action 'self';
         ";
 
         // Bersihkan spasi dan newline menjadi satu spasi
