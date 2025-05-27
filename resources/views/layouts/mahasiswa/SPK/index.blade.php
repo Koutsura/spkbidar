@@ -8,9 +8,10 @@
         </div>
 <div style="text-align:center; margin-top: 50px;">
     <h2>Ayo tes rekomendasi organisasi UKM terlebih dahulu</h2>
-    <a href="{{ route('spk.question') }}" style="margin-top: 20px; display: inline-block; padding: 10px 20px; background-color: #1D4ED8; color: white; border-radius: 5px; text-decoration: none;">
-        Mulai Tes
-    </a>
+    <a href="{{ route('spk.question', ['index' => 1]) }}" style="margin-top: 20px; display: inline-block; padding: 10px 20px; background-color: #1D4ED8; color: white; border-radius: 5px; text-decoration: none;">
+    Mulai Tes
+</a>
+
 </div>
 </section>
 </div>
