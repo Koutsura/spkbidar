@@ -11,8 +11,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // ✅ Middleware global (aktif di semua request)
-        $middleware->append(\App\Http\Middleware\ContentSecurityPolicy::class);
+
         $middleware->append(\Illuminate\Http\Middleware\HandleCors::class); // Gunakan middleware bawaan Laravel
 
         // ✅ Middleware route alias
