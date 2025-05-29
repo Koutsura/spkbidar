@@ -67,70 +67,6 @@ class SPKController extends Controller
         ]);
     }
 
-    public function result()
-{
-    $user = auth()->user();
-    $answers = Answer::with('question')->where('user_id', $user->id)->get();
-
-    // Hitung skor rata-rata user per kriteria
-    $userScores = $this->calculateUserScores($answers);
-
-    // Ambil semua alternatif termasuk Inovator Center
-    $alternatives = Alternative::all();
-
-    // Hitung skor SAW+KNN semua UKM
-    $finalScores = $this->calculateFinalScores($userScores, $alternatives);
-
-    // Nama UKM untuk bonus
-    $bonusUKMName = 'Inovator Center (DIIB)';
-    $bonusScore = null;
-
-    // Cek apakah syarat bonus terpenuhi (semua >= 3.7)
-    $bonusThreshold = 3.7;
-    $bonusCriteria = ['kreativitas', 'keaktifan', 'teknologi', 'inovatif'];
-    $showBonus = true;
-
-    foreach ($bonusCriteria as $criteria) {
-        if (($userScores[$criteria] ?? 0) < $bonusThreshold) {
-            $showBonus = false;
-            break;
-        }
-    }
-
-    // Simpan skor bonus dan keluarkan dari daftar utama
-    if (isset($finalScores[$bonusUKMName])) {
-        $bonusScore = $finalScores[$bonusUKMName];
-        unset($finalScores[$bonusUKMName]); // keluarkan dari finalScores agar tidak masuk 3 besar
-    }
-
-    // Ambil 3 teratas UKM dari hasil final tanpa Inovator Center
-    arsort($finalScores); // urutkan dari skor tertinggi
-    $topUKM = array_slice($finalScores, 0, 3, true);
-    $topUKMKeys = array_keys($topUKM);
-
-    // Simpan hasil ke database
-    Result::updateOrCreate(
-        ['user_id' => $user->id],
-        [
-            'recommended_1' => $topUKMKeys[0] ?? null,
-            'recommended_2' => $topUKMKeys[1] ?? null,
-            'recommended_3' => $topUKMKeys[2] ?? null,
-            'show_innovator_center' => $showBonus ? 1 : 0,
-        ]
-    );
-
-    return view('layouts.mahasiswa.SPK.result', [
-        'criteriaScores' => $userScores,
-        'finalUKM' => $topUKM,
-        'showBonus' => $showBonus,
-        'bonusUKM' => $bonusUKMName,
-        'bonusScore' => $showBonus ? $bonusScore : null,
-        'user' => $user,
-    ]);
-}
-
-
-
     protected function calculateUserScores($answers)
     {
         $criteria = ['kreativitas', 'keaktifan','teknologi','inovatif','fisik & olahraga','komunikasi & public speaking', 'religiusitas','seni & musik'];
@@ -163,109 +99,208 @@ class SPKController extends Controller
         return $scores;
     }
 
-    protected function calculateFinalScores($userScores, $alternatives)
-    {
-        $criteria = ['kreativitas', 'keaktifan','teknologi','inovatif','fisik & olahraga','komunikasi & public speaking', 'religiusitas','seni & musik'];
+protected function calculateSAWScores($userScores, $alternatives)
+{
+    $criteria = ['kreativitas', 'keaktifan', 'teknologi', 'inovatif', 'fisik & olahraga', 'komunikasi & public speaking', 'religiusitas', 'seni & musik'];
+    $weight = 1 / count($criteria);
 
-        // Cari nilai maksimum tiap kriteria dari alternatif (untuk normalisasi)
-        $maxPerCriteria = [];
-        foreach ($criteria as $c) {
-            $values = $alternatives->pluck($c)->toArray();
-            $maxPerCriteria[$c] = !empty($values) ? max($values) : 1;
+    $results = [];
+
+    foreach ($alternatives as $alt) {
+        $totalScore = 0;
+        foreach ($criteria as $criterion) {
+            $userValue = $userScores[$criterion] ?? 0;
+            $altValue = $alt->$criterion;
+            $criterionScore = $weight * $altValue * $userValue;
+            $totalScore += $criterionScore;
         }
-
-        // Normalisasi vektor user berdasarkan max nilai alternatif tiap kriteria
-        $userVector = [];
-        foreach ($criteria as $c) {
-            $max = $maxPerCriteria[$c];
-            $userVector[] = $max > 0 ? ($userScores[$c] ?? 0) / $max : 0;
-        }
-
-        $results = [];
-
-        foreach ($alternatives as $alt) {
-            // Vektor alternatif normalisasi
-            $altVector = [];
-            foreach ($criteria as $c) {
-                $max = $maxPerCriteria[$c];
-                $altVector[] = $max > 0 ? $alt->$c / $max : 0;
-            }
-
-            // Hitung dot product, magnitude user dan alternatif
-            $dotProduct = 0;
-            $userMagnitude = 0;
-            $altMagnitude = 0;
-
-            foreach ($criteria as $i => $c) {
-                $dotProduct += $userVector[$i] * $altVector[$i];
-                $userMagnitude += $userVector[$i] * $userVector[$i];
-                $altMagnitude += $altVector[$i] * $altVector[$i];
-            }
-
-            $userMagnitude = sqrt($userMagnitude);
-            $altMagnitude = sqrt($altMagnitude);
-
-            // Hindari pembagian dengan nol
-            if ($userMagnitude == 0 || $altMagnitude == 0) {
-                $similarity = 0;
-            } else {
-                $similarity = $dotProduct / ($userMagnitude * $altMagnitude);
-            }
-
-            $results[$alt->name] = round($similarity, 4);
-        }
-
-        // Urutkan hasil dari yang tertinggi
-        arsort($results);
-
-        return $results;
+        $results[$alt->name] = round($totalScore, 4);
     }
+
+    return $results;
+}
+
+// Hitung jarak Euclidean antar 2 data berdasarkan kriteria
+protected function euclideanDistance($data1, $data2, $criteria)
+{
+    $sumSquares = 0;
+    foreach ($criteria as $criterion) {
+        $diff = ($data1->$criterion ?? 0) - ($data2->$criterion ?? 0);
+        $sumSquares += $diff * $diff;
+    }
+    return sqrt($sumSquares);
+}
+
+// Prediksi 1 data testing dengan KNN
+protected function predictKNN($testData, $trainingData, $criteria, $k = 3)
+{
+    $distances = [];
+
+    foreach ($trainingData as $trainData) {
+        if ($trainData->name === $testData->name) continue; // skip jika sama
+
+        $distance = $this->euclideanDistance($testData, $trainData, $criteria);
+        $distances[$trainData->name] = $distance;
+    }
+
+    asort($distances); // urutkan jarak terdekat
+
+    // Ambil k terdekat
+    $nearestNeighbors = array_slice($distances, 0, $k, true);
+
+    // Voting mayoritas
+    $votes = [];
+    foreach ($nearestNeighbors as $neighborName => $dist) {
+        $votes[$neighborName] = ($votes[$neighborName] ?? 0) + 1;
+    }
+
+    arsort($votes);
+
+    return key($votes);
+}
+
+// Hitung prediksi KNN untuk banyak data testing
+protected function calculateKNN($testAlternatives, $trainingAlternatives, $criteria, $k = 3)
+{
+    $predictions = [];
+
+    foreach ($testAlternatives as $testAlt) {
+        $predictedClass = $this->predictKNN($testAlt, $trainingAlternatives, $criteria, $k);
+        $predictions[$testAlt->name] = $predictedClass;
+    }
+
+    return $predictions;
+}
+
+public function result()
+{
+    $user = auth()->user();
+    $answers = Answer::with('question')->where('user_id', $user->id)->get();
+
+    $userScores = $this->calculateUserScores($answers);
+    $alternatives = Alternative::all();
+
+    $finalScores = $this->calculateSAWScores($userScores, $alternatives);
+
+    $bonusUKMName = 'Inovator Center (DIIB)';
+    $bonusScore = null;
+
+    $bonusThreshold = 3.7;
+    $bonusCriteria = ['kreativitas', 'keaktifan', 'teknologi', 'inovatif'];
+    $showBonus = true;
+
+    foreach ($bonusCriteria as $criteria) {
+        if (($userScores[$criteria] ?? 0) < $bonusThreshold) {
+            $showBonus = false;
+            break;
+        }
+    }
+
+    if (isset($finalScores[$bonusUKMName])) {
+        $bonusScore = $finalScores[$bonusUKMName];
+        unset($finalScores[$bonusUKMName]);
+    }
+
+    arsort($finalScores);
+    $topUKM = array_slice($finalScores, 0, 3, true);
+    $topUKMKeys = array_keys($topUKM);
+
+    $criteria = ['kreativitas', 'keaktifan', 'teknologi', 'inovatif', 'fisik & olahraga', 'komunikasi & public speaking', 'religiusitas', 'seni & musik'];
+
+    $testAlternatives = Alternative::whereIn('name', $topUKMKeys)->get();
+    $trainingAlternatives = $alternatives;
+
+    $knnPredictions = $this->calculateKNN($testAlternatives, $trainingAlternatives, $criteria, 3);
+
+    Result::updateOrCreate(
+        ['user_id' => $user->id],
+        [
+            'recommended_1' => $topUKMKeys[0] ?? null,
+            'recommended_2' => $topUKMKeys[1] ?? null,
+            'recommended_3' => $topUKMKeys[2] ?? null,
+            'show_innovator_center' => $showBonus ? 1 : 0,
+        ]
+    );
+
+    return view('layouts.mahasiswa.SPK.result', [
+        'criteriaScores' => $userScores,
+        'finalUKM' => $topUKM,
+        'showBonus' => $showBonus,
+        'bonusUKM' => $bonusUKMName,
+        'bonusScore' => $showBonus ? $bonusScore : null,
+        'user' => $user,
+        'knnPredictions' => $knnPredictions,
+    ]);
+}
+
 
     public function exportPdf()
 {
     $user = auth()->user();
     $answers = Answer::with('question')->where('user_id', $user->id)->get();
 
-    // Hitung skor kriteria pengguna
+    if ($answers->isEmpty()) {
+        return redirect()->back()->with('error', 'Data jawaban tidak ditemukan.');
+    }
+
+    // Hitung skor pengguna per kriteria
     $criteriaScores = $this->calculateUserScores($answers);
 
-    // Ambil semua alternatif termasuk Inovator Center
-    $allAlternatives = Alternative::all();
-    $finalScores = $this->calculateFinalScores($criteriaScores, $allAlternatives);
+    // Ambil semua data alternatif (UKM)
+    $alternatives = Alternative::all();
 
+    // Hitung skor SAW
+    $finalScores = $this->calculateSAWScores($criteriaScores, $alternatives);
+
+    // Nama UKM bonus
     $bonusUKMName = 'Inovator Center (DIIB)';
     $bonusThreshold = 3.7;
 
     // Cek apakah pengguna memenuhi syarat bonus
-    $showBonus = (
-        ($criteriaScores['kreativitas'] ?? 0) >= $bonusThreshold &&
-        ($criteriaScores['keaktifan'] ?? 0) >= $bonusThreshold &&
-        ($criteriaScores['teknologi'] ?? 0) >= $bonusThreshold &&
-        ($criteriaScores['inovatif'] ?? 0) >= $bonusThreshold
-    );
+    $bonusCriteria = ['kreativitas', 'keaktifan', 'teknologi', 'inovatif'];
+    $showBonus = true;
 
-    // Simpan skor bonus jika ada
-    $bonusScore = $finalScores[$bonusUKMName] ?? null;
-
-    // Hapus dari 3 besar jika bukan bagian utama
-    if (isset($finalScores[$bonusUKMName])) {
-        unset($finalScores[$bonusUKMName]);
+    foreach ($bonusCriteria as $criterion) {
+        if (($criteriaScores[$criterion] ?? 0) < $bonusThreshold) {
+            $showBonus = false;
+            break;
+        }
     }
 
-    // Ambil 3 rekomendasi utama
-    $top3UKM = array_slice($finalScores, 0, 3, true);
+    // Ambil skor bonus sebelum dihapus dari finalScores
+    $bonusScore = $finalScores[$bonusUKMName] ?? null;
 
-    // Generate PDF
+    // Hapus dari skor utama agar tidak masuk top 3
+    unset($finalScores[$bonusUKMName]);
+
+    // Urutkan skor akhir
+    arsort($finalScores);
+
+    // Ambil 3 besar UKM berdasarkan skor SAW
+    $topUKM = array_slice($finalScores, 0, 3, true);
+    $topUKMKeys = array_keys($topUKM);
+
+    // Jalankan KNN berdasarkan data 3 UKM teratas
+    $criteria = ['kreativitas', 'keaktifan', 'teknologi', 'inovatif', 'fisik & olahraga', 'komunikasi & public speaking', 'religiusitas', 'seni & musik'];
+    $testAlternatives = Alternative::whereIn('name', $topUKMKeys)->get();
+    $trainingAlternatives = $alternatives;
+
+    $knnPredictions = $this->calculateKNN($testAlternatives, $trainingAlternatives, $criteria, 3);
+
+    // Generate file PDF
     $pdf = PDF::loadView('layouts.mahasiswa.SPK.pdf', [
         'user' => $user,
         'criteriaScores' => $criteriaScores,
-        'finalUKM' => $top3UKM,
+        'finalUKM' => $topUKM,
         'showBonus' => $showBonus,
         'bonusUKM' => $bonusUKMName,
         'bonusScore' => $showBonus ? $bonusScore : null,
+        'knnPredictions' => $knnPredictions,
     ]);
 
     return $pdf->download('hasil_spk_' . $user->name . '.pdf');
 }
+
+
 
 }
