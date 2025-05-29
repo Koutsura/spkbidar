@@ -85,7 +85,7 @@
                             <strong>{{ session('pending_email') ?? 'your email' }}</strong>. Masukkan di bawah.
                         </p>
 
-                        <form action="{{ url('/verify-email') }}" method="POST">
+                        <form action="{{ route('verification.send') }}" method="POST">
                             @csrf
                             <div class="otp-input mb-3 d-flex justify-content-center" id="otp-container">
                                 @for ($i = 0; $i < 6; $i++)
