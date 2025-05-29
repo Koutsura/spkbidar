@@ -26,48 +26,48 @@
         </thead>
         <tbody>
             @foreach ($criteriaScores as $criteria => $score)
-            <tr>
-                <td>{{ ucfirst($criteria) }}</td>
-                <td>{{ number_format($score, 2) }}</td>
-            </tr>
+                <tr>
+                    <td>{{ ucfirst($criteria) }}</td>
+                    <td>{{ number_format($score, 2) }}</td>
+                </tr>
             @endforeach
         </tbody>
     </table>
 
-    <h3>Rekomendasi UKM Terbaik</h3>
+    <h3>Rekomendasi 3 UKM Terbaik</h3>
     <table>
         <thead>
             <tr>
                 <th>UKM</th>
-                <th>Skor</th>
+                <th>Skor SAW</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($finalUKM as $ukm => $score)
-            <tr>
-                <td>{{ $ukm }}</td>
-                <td>{{ number_format($score, 2) }}</td>
-            </tr>
+                <tr>
+                    <td>{{ $ukm }}</td>
+                    <td>{{ number_format($score, 4) }}</td>
+                </tr>
             @endforeach
         </tbody>
     </table>
 
     @if ($showBonus && $bonusUKM && $bonusScore)
-    <h3>Rekomendasi Bonus</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Bonus</th>
-                <th>Skor</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ $bonusUKM }}</td>
-                <td>{{ number_format($bonusScore, 2) }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <h3>Rekomendasi Bonus UKM</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama Bonus UKM</th>
+                    <th>Skor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ $bonusUKM }}</td>
+                    <td>{{ number_format($bonusScore, 4) }}</td>
+                </tr>
+            </tbody>
+        </table>
     @endif
 
 </body>
