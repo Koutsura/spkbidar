@@ -24,10 +24,8 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 
     // Email verification
-    Route::get('/verify-email/{token}', [AuthController::class, 'verifyEmail'])
-         ->name('verification.verify');
-    Route::post('/verify-email', [AuthController::class, 'verifyEmail'])
-         ->name('verification.send');
+    Route::get('/verify-email', [AuthController::class, 'verifyEmail'])->name('verification.verify'); // tampilkan form OTP
+    Route::post('/verify-email', [AuthController::class, 'verifyEmail'])->name('verification.send'); // proses verifikasi OTP
     Route::post('/resend_code_email', [AuthController::class, 'resendCode'])->name('resend_code_email');
 
     Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotPasswordForm'])->name('forgot-password');
