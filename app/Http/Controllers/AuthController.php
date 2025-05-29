@@ -31,28 +31,57 @@ class AuthController extends Controller
         return view('register');
     }
 
+    public function showVerifyEmailForm()
+{
+    return view('verifyEmail');
+}
+
+
    public function register(Request $request)
 {
     $request->validate([
         'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255',
+        'email' => 'required|string|email|max:255|email',
         'password' => 'required|string|min:5',
     ]);
 
     $email = $request->email;
 
-    // 1. Cek jika email sudah terdaftar di database
+    // 1. Cek jika email sudah terdaftar di database (sudah verifikasi)
     if (User::where('email', $email)->exists()) {
         return back()->with('error', 'Email sudah terdaftar. Silakan login.');
     }
 
-    // 2. Jika data pendaftaran sudah ada di cache (belum diverifikasi), arahkan langsung ke halaman OTP
+    // 2. Cek apakah email sudah ada di cache (belum verifikasi)
     if (Cache::has('user_registration_' . $email)) {
+        // Ambil data yang tersimpan
+        $cachedUser = Cache::get('user_registration_' . $email);
+
+        // Generate kode baru dan perbarui
+        $newCode = strtoupper(Str::random(6));
+        $cachedUser['verification_token'] = $newCode;
+
+        // Simpan kembali ke cache (reset waktu simpan)
+        Cache::put('user_registration_' . $email, $cachedUser, now()->addMinutes(30));
+
+        // Kirim ulang email OTP
+        try {
+            Mail::send([], [], function ($message) use ($email, $newCode) {
+                $message->from('dennykun76@gmail.com', config('app.name'));
+                $message->to($email);
+                $message->subject('Kode Verifikasi Baru');
+                $message->text('Kode verifikasi baru Anda adalah: ' . $newCode);
+            });
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal mengirim ulang kode. Silakan coba lagi.');
+        }
+
         Session::put('pending_email', $email);
-        return view('verifyEmail')->with('message', 'Kode verifikasi sudah dikirim. Silakan cek email Anda.');
+
+        return redirect()->route('verification.form')->with('message', 'Kode verifikasi baru telah dikirim ke email Anda.');
     }
 
-    // 3. Email belum digunakan → buat OTP dan simpan di cache
+    // 3. Jika email belum pernah didaftarkan sama sekali
     $verification_code = strtoupper(Str::random(6));
 
     $user_data = [
@@ -66,12 +95,13 @@ class AuthController extends Controller
     Cache::put('user_registration_' . $email, $user_data, now()->addMinutes(30));
     Session::put('pending_email', $email);
 
-    // 4. Kirim email
+    // Kirim email OTP baru
     try {
-        Mail::raw('Kode verifikasi Anda adalah: ' . $verification_code, function ($message) use ($email) {
+        Mail::send([], [], function ($message) use ($email, $verification_code) {
             $message->from('dennykun76@gmail.com', config('app.name'));
             $message->to($email);
             $message->subject('Email Verification');
+            $message->text('Kode verifikasi Anda adalah: ' . $verification_code);
         });
     } catch (\Exception $e) {
         Cache::forget('user_registration_' . $email);
@@ -79,43 +109,38 @@ class AuthController extends Controller
         return back()->with('error', 'Gagal mengirim email. Silakan coba lagi.');
     }
 
-    return redirect()->route('verification.send') // route yang menampilkan form verifikasi OTP
-           ->with('message', 'Kode verifikasi telah dikirim ke email Anda.');
+    return redirect()->route('verification.form')->with('message', 'Kode verifikasi telah dikirim ke email Anda.');
 }
 
 
-public function verifyEmail(Request $request)
+
+
+
+    public function verifyEmail(Request $request)
 {
     $request->validate([
         'code' => 'required|array|size:6',
     ]);
 
-    // Gabungkan array code menjadi string
     $verificationCode = implode('', $request->code);
 
-    // Ambil email dari session
     $email = Session::get('pending_email');
+
     if (!$email) {
         return redirect('/register')->with('error', 'Session expired. Silakan daftar ulang.');
     }
 
-    // Ambil data dari cache
     $user_data = Cache::get('user_registration_' . $email);
+
     if (!$user_data || $user_data['verification_token'] !== $verificationCode) {
         return view('verifyEmail')->with('error', 'Kode verifikasi salah atau sudah kadaluarsa.');
     }
 
-    // Simpan user ke database
-    $user = User::create([
-        'name' => $user_data['name'],
-        'email' => $user_data['email'],
-        'password' => $user_data['password'],
-        'role' => $user_data['role'],
-        'email_verified_at' => now(),
-        'verification_token' => null,
-    ]);
+    $user = User::create($user_data);
+    $user->email_verified_at = now();
+    $user->verification_token = null;
+    $user->save();
 
-    // Bersihkan cache & session
     Cache::forget('user_registration_' . $email);
     Session::forget('pending_email');
 
