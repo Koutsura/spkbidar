@@ -243,63 +243,63 @@ public function result()
         return redirect()->back()->with('error', 'Data jawaban tidak ditemukan.');
     }
 
-    // Hitung skor pengguna per kriteria
-    $criteriaScores = $this->calculateUserScores($answers);
-
-    // Ambil semua data alternatif (UKM)
+    $userScores = $this->calculateUserScores($answers);
     $alternatives = Alternative::all();
+    $finalScores = $this->calculateSAWScores($userScores, $alternatives);
 
-    // Hitung skor SAW
-    $finalScores = $this->calculateSAWScores($criteriaScores, $alternatives);
-
-    // Nama UKM bonus
     $bonusUKMName = 'Inovator Center (DIIB)';
-    $bonusThreshold = 3.7;
+    $bonusScore = null;
 
-    // Cek apakah pengguna memenuhi syarat bonus
+    $bonusThreshold = 3.7;
     $bonusCriteria = ['kreativitas', 'keaktifan', 'teknologi', 'inovatif'];
     $showBonus = true;
 
-    foreach ($bonusCriteria as $criterion) {
-        if (($criteriaScores[$criterion] ?? 0) < $bonusThreshold) {
+    foreach ($bonusCriteria as $criteria) {
+        if (($userScores[$criteria] ?? 0) < $bonusThreshold) {
             $showBonus = false;
             break;
         }
     }
 
-    // Ambil skor bonus sebelum dihapus dari finalScores
-    $bonusScore = $finalScores[$bonusUKMName] ?? null;
+    if (isset($finalScores[$bonusUKMName])) {
+        $bonusScore = $finalScores[$bonusUKMName];
+        unset($finalScores[$bonusUKMName]);
+    }
 
-    // Hapus dari skor utama agar tidak masuk top 3
-    unset($finalScores[$bonusUKMName]);
-
-    // Urutkan skor akhir
     arsort($finalScores);
-
-    // Ambil 3 besar UKM berdasarkan skor SAW
     $topUKM = array_slice($finalScores, 0, 3, true);
     $topUKMKeys = array_keys($topUKM);
 
-    // Jalankan KNN berdasarkan data 3 UKM teratas
     $criteria = ['kreativitas', 'keaktifan', 'teknologi', 'inovatif', 'fisik & olahraga', 'komunikasi & public speaking', 'religiusitas', 'seni & musik'];
+
     $testAlternatives = Alternative::whereIn('name', $topUKMKeys)->get();
     $trainingAlternatives = $alternatives;
 
-    $knnPredictions = $this->calculateKNN($testAlternatives, $trainingAlternatives, $criteria, 3);
+    $knnPredictionsRaw = $this->calculateKNN($testAlternatives, $trainingAlternatives, $criteria, 3);
 
-    // Generate file PDF
+    // Buat array sederhana agar di view gampang diakses (karena sekarang knnPredictionsRaw itu ['UKM' => 'PredictedClass', ...])
+    $knnPredictions = [];
+    foreach ($knnPredictionsRaw as $ukmName => $predictedClass) {
+        $knnPredictions[] = [
+            'ukm_name' => $ukmName,
+            'predicted_class' => $predictedClass,
+        ];
+    }
+
     $pdf = PDF::loadView('layouts.mahasiswa.SPK.pdf', [
-        'user' => $user,
-        'criteriaScores' => $criteriaScores,
+        'criteriaScores' => $userScores,
         'finalUKM' => $topUKM,
         'showBonus' => $showBonus,
         'bonusUKM' => $bonusUKMName,
         'bonusScore' => $showBonus ? $bonusScore : null,
+        'user' => $user,
         'knnPredictions' => $knnPredictions,
     ]);
 
     return $pdf->download('hasil_spk_' . $user->name . '.pdf');
 }
+
+
 
 
 
