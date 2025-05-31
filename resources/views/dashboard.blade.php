@@ -136,6 +136,14 @@
                     </div>
                 </div>
             </div>
+             <div class="col-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <img src="{{ asset('img/choir.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 10">
+                    <div class="card-body p-2">
+                        <p class="img-caption">Paduan Suara Mahasiswa Universitas Bina Darma(@bidarians_choir)</p>
+                    </div>
+                </div>
+            </div>
         </div>
         @endif
 
