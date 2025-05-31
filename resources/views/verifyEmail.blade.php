@@ -169,22 +169,30 @@
             });
         });
 
-        // Improved paste handling
-        otpContainer.addEventListener('paste', (e) => {
-            e.preventDefault();
-            const pasteData = (e.clipboardData || window.clipboardData).getData('text');
-            const cleanPaste = pasteData.replace(/[^a-zA-Z0-9]/g, '').substring(0, 6);// Remove non-digits and limit to 6 chars
+        // Improved paste handling: pasang event paste pada setiap input
+inputs.forEach((input, index) => {
+    input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+        const cleanPaste = pasteData.replace(/[^a-zA-Z0-9]/g, '').substring(0, inputs.length); // max 6 char
 
-            if (cleanPaste.length === 6) {
-                // Fill all inputs with the pasted data
-                inputs.forEach((input, index) => {
-                    input.value = cleanPaste[index];
-                });
+        // Isi input satu per satu
+        for (let i = 0; i < cleanPaste.length && i < inputs.length; i++) {
+            inputs[i].value = cleanPaste[i];
+        }
 
-                // Focus on the last input
-                inputs[inputs.length - 1].focus();
-            }
-        });
+        // Fokus ke input pertama yang masih kosong
+        const firstEmpty = Array.from(inputs).find(input => input.value === '');
+        if (firstEmpty) firstEmpty.focus();
+
+        // Otomatis submit jika semua terisi
+        const allFilled = Array.from(inputs).every(i => i.value.length === 1);
+        if (allFilled) {
+            input.form.submit();
+        }
+    });
+});
+
 
         // Allow selecting all inputs with Ctrl+A
         otpContainer.addEventListener('keydown', (e) => {

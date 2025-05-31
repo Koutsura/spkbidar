@@ -213,14 +213,17 @@ public function result()
     $knnPredictions = $this->calculateKNN($testAlternatives, $trainingAlternatives, $criteria, 3);
 
     Result::updateOrCreate(
-        ['user_id' => $user->id],
-        [
-            'recommended_1' => $topUKMKeys[0] ?? null,
-            'recommended_2' => $topUKMKeys[1] ?? null,
-            'recommended_3' => $topUKMKeys[2] ?? null,
-            'show_innovator_center' => $showBonus ? 1 : 0,
-        ]
-    );
+            ['user_id' => $user->id],
+            [
+                'recommended_1' => $topUKMKeys[0] ?? null,
+                'recommended_2' => $topUKMKeys[1] ?? null,
+                'recommended_3' => $topUKMKeys[2] ?? null,
+                'pendekatan_1' => $knnPredictions[$topUKMKeys[0]] ?? '-',
+                'pendekatan_2' => $knnPredictions[$topUKMKeys[1]] ?? '-',
+                'pendekatan_3' => $knnPredictions[$topUKMKeys[2]] ?? '-',
+                'show_innovator_center' => $showBonus ? 1 : 0,
+            ]
+        );
 
     return view('layouts.mahasiswa.SPK.result', [
         'criteriaScores' => $userScores,
