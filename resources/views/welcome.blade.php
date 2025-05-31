@@ -152,7 +152,7 @@
     <p>14. UKM Pramuka.</p>
     <p>15. UKM Bina Darma Radio (B‑Radio).</p>
     <p>16. UKM EDS South Sumatera English Community (SSEC).</p>
-    <p>17. UKM Pencak Silat.</p>
+    <p>17. UKM Taekwondo.</p>
     <p>18. UKM Basket Club.</p>
     <p>19. UKM Data Science.</p>
     <p>20. UKM Multimedia.</p>

@@ -78,7 +78,7 @@
         'UKM Bina Darma Radio (B-Radio)',
         'UKM EDS South Sumatera English Community (SSEC)',
         'Inovator Center (DIIB)',
-        'UKM Pencak Silat',
+        'UKM Taekwondo',
         'UKM Basket Club',
         'UKM BTV',
         'UKM Data Science',
