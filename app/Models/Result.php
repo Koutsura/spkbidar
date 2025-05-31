@@ -17,6 +17,9 @@ class Result extends Model
         'recommended_1',
         'recommended_2',
         'recommended_3',
+        'pendekatan_1',
+        'pendekatan_2',
+        'pendekatan_3',
         'show_innovator_center',
     ];
 
