@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pendaftaran;
 use App\Models\Setting;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 
 class PendaftaranAdminController extends Controller
@@ -20,33 +21,40 @@ class PendaftaranAdminController extends Controller
     /**
      * Perbarui status pendaftaran: diterima atau ditolak.
      */
-    public function updateStatus($id, $status)
-    {
-        if (!in_array($status, ['diterima', 'ditolak'])) {
-            return redirect()->back()->with('error', 'Status tidak valid.');
-        }
+  public function updateStatus($id, $status)
+{
+    if (!in_array($status, ['diterima', 'ditolak'])) {
+        return redirect()->back()->with('error', 'Status tidak valid.');
+    }
 
-        $pendaftaran = Pendaftaran::findOrFail($id);
-        $pendaftaran->status = $status;
-        $pendaftaran->save();
+    $pendaftaran = Pendaftaran::findOrFail($id);
+    $pendaftaran->status = $status;
+    $pendaftaran->save();
 
-        // Ambil data setting berdasarkan user_id
-        $setting = Setting::where('user_id', $pendaftaran->user_id)->first();
+    // Update setting berdasarkan status
+    $setting = Setting::where('user_id', $pendaftaran->user_id)->first();
 
-        if ($setting) {
-            if ($status === 'diterima') {
-                $setting->organization_1 = $pendaftaran->organization_1;
-                $setting->organization_2 = $pendaftaran->organization_2;
-                $setting->organization_3 = $pendaftaran->organization_3;
-            } elseif ($status === 'ditolak') {
-                $setting->organization_1 = null;
-                $setting->organization_2 = null;
-                $setting->organization_3 = null;
-            }
-
+    if ($setting) {
+        if ($status === 'diterima') {
+            // Update organisasi sesuai pendaftaran yang diterima
+            $setting->organization_1 = $pendaftaran->organization_1;
+            $setting->organization_2 = $pendaftaran->organization_2;
+            $setting->organization_3 = $pendaftaran->organization_3;
             $setting->save();
         }
-
-        return redirect()->back()->with('success', 'Status pendaftaran berhasil diperbarui.');
+        // Jika ditolak, jangan ubah organization di setting agar tetap seperti sebelumnya
     }
+
+    // Kirim notifikasi ke user
+    Notification::create([
+        'user_id' => $pendaftaran->user_id,
+        'type' => 'status_pendaftaran',
+        'message' => "Pendaftaran UKM Anda telah $status oleh admin.",
+        'is_read' => false,
+    ]);
+
+    return redirect()->back()->with('success', 'Status pendaftaran berhasil diperbarui dan notifikasi dikirim.');
+}
+
+
 }
