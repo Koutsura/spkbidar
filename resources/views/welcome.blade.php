@@ -9,8 +9,8 @@
   <title>Organisasi Unit Kegiatan Mahasiswa Universitas Bina Darma</title>
 
   <link rel="icon" href="{{ asset('img/tab.webp') }}" type="image/webp" />
-  <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
-  <link href="{{ asset('css/hawal.css') }}" rel="stylesheet" />
+  <link href="{{ asset('css/bootstrap.min.css') }}?v={{ time() }}" rel="stylesheet" />
+<link href="{{ asset('css/hawal.css') }}?v={{ time() }}" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
@@ -216,7 +216,7 @@
 
 @include('components.footer')
 
-<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}?v={{ time() }}"></script>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const observer = new IntersectionObserver((entries) => {
