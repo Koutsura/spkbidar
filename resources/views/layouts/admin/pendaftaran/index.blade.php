@@ -35,6 +35,7 @@
                     <td>{{ $data->user->name }}</td>
                     <td>{{ $data->setting->nim }}</td>
                     <td>{{ $data->setting->jurusan }}</td>
+                    <td>{{ $data->setting->tahun_angkatan }}</td>
                     <td>{{ $data->organization_1 }}</td>
                     <td>{{ $data->organization_2 }}</td>
                     <td>{{ $data->organization_3 }}</td>

@@ -10,7 +10,7 @@ class Setting extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'profile_photo', 'nim', 'phone_number', 'jurusan',
+        'user_id', 'profile_photo', 'nim', 'phone_number', 'jurusan','tahun_angkatan',
         'organization_1', 'organization_2', 'organization_3'
     ];
 

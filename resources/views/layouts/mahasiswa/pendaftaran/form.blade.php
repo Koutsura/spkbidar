@@ -54,6 +54,10 @@
                 <label class="form-label">Jurusan</label>
                 <input type="text" readonly class="form-control" value="{{ $setting->jurusan }}">
             </div>
+            <div class="mb-3">
+                <label class="form-label">Tahun Angkatan</label>
+                <input type="text" readonly class="form-control" value="{{ $setting->tahun_angkatan }}">
+            </div>
 
             <div class="mb-3">
                 <label class="form-label">Nomor Telepon</label>
@@ -66,23 +70,15 @@
         'UKM LDK ALQORIB',
         'UKM Persekutuan Mahasiswa Kristen & Katolik (PMKK)',
         'UKM Kesatuan Mahasiswa Hindu Darma Indonesia (KMHDI)',
-        'UKM Panjat Tebing',
         'UKM Mahasiswa Pencinta Alam (MABIDAR)',
         'UKM Bujang Gadis Kampus (BGK)',
         'UKM Panduan Suara Mahasiswa (BDSC)',
         'UKM Binadarma Debat Union (BDCU)',
         'UKM Bina Darma Programmer (BDPRO)',
-        'UKM Futsal',
-        'UKM Seni',
+        'UKM Olahraga',
         'UKM Pramuka',
         'UKM Bina Darma Radio (B-Radio)',
         'UKM EDS South Sumatera English Community (SSEC)',
-        'Inovator Center (DIIB)',
-        'UKM Taekwondo',
-        'UKM Basket Club',
-        'UKM BTV',
-        'UKM Data Science',
-        'UKM Multimedia',
     ];
 @endphp
 
