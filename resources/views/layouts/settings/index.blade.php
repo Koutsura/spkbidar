@@ -75,6 +75,18 @@
             </option>
         @endforeach
     </select>
+    <div class="mb-3">
+    <label for="tahun_angkatan" class="form-label">Tahun Angkatan</label>
+    <select class="form-control" name="tahun_angkatan" id="tahun_angkatan">
+        <option value="">-- Pilih Tahun Angkatan --</option>
+        @for($year = 2023; $year <= 2030; $year++)
+            <option value="{{ $year }}" {{ old('tahun_angkatan', $setting->tahun_angkatan ?? '') == $year ? 'selected' : '' }}>
+                {{ $year }}
+            </option>
+        @endfor
+    </select>
+</div>
+
 </div>
 
 

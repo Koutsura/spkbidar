@@ -132,20 +132,23 @@ protected function euclideanDistance($data1, $data2, $criteria)
 }
 
 // Prediksi 1 data testing dengan KNN
-protected function predictKNN($testData, $trainingData, $criteria, $k = 3)
+protected function predictKNN($testData, $trainingData, $criteria, $k = 3, $excludedNames = [])
 {
     $distances = [];
 
     foreach ($trainingData as $trainData) {
-        if ($trainData->name === $testData->name) continue; // skip jika sama
+        if (
+            $trainData->name === $testData->name ||
+            in_array($trainData->name, $excludedNames)
+        ) continue; // Skip jika sama atau masuk hasil SAW
 
         $distance = $this->euclideanDistance($testData, $trainData, $criteria);
         $distances[$trainData->name] = $distance;
     }
 
-    asort($distances); // urutkan jarak terdekat
+    asort($distances); // Urutkan jarak terdekat
 
-    // Ambil k terdekat
+    // Ambil k tetangga terdekat
     $nearestNeighbors = array_slice($distances, 0, $k, true);
 
     // Voting mayoritas
@@ -156,21 +159,23 @@ protected function predictKNN($testData, $trainingData, $criteria, $k = 3)
 
     arsort($votes);
 
-    return key($votes);
+    return key($votes); // Return UKM dengan vote terbanyak
 }
 
+
 // Hitung prediksi KNN untuk banyak data testing
-protected function calculateKNN($testAlternatives, $trainingAlternatives, $criteria, $k = 3)
+protected function calculateKNN($testAlternatives, $trainingAlternatives, $criteria, $k = 3, $excludedNames = [])
 {
     $predictions = [];
 
     foreach ($testAlternatives as $testAlt) {
-        $predictedClass = $this->predictKNN($testAlt, $trainingAlternatives, $criteria, $k);
+        $predictedClass = $this->predictKNN($testAlt, $trainingAlternatives, $criteria, $k, $excludedNames);
         $predictions[$testAlt->name] = $predictedClass;
     }
 
     return $predictions;
 }
+
 
 public function result()
 {
@@ -181,26 +186,6 @@ public function result()
     $alternatives = Alternative::all();
 
     $finalScores = $this->calculateSAWScores($userScores, $alternatives);
-
-    $bonusUKMName = 'Inovator Center (DIIB)';
-    $bonusScore = null;
-
-    $bonusThreshold = 3.7;
-    $bonusCriteria = ['kreativitas', 'keaktifan', 'teknologi', 'inovatif'];
-    $showBonus = true;
-
-    foreach ($bonusCriteria as $criteria) {
-        if (($userScores[$criteria] ?? 0) < $bonusThreshold) {
-            $showBonus = false;
-            break;
-        }
-    }
-
-    if (isset($finalScores[$bonusUKMName])) {
-        $bonusScore = $finalScores[$bonusUKMName];
-        unset($finalScores[$bonusUKMName]);
-    }
-
     arsort($finalScores);
     $topUKM = array_slice($finalScores, 0, 3, true);
     $topUKMKeys = array_keys($topUKM);
@@ -213,28 +198,25 @@ public function result()
     $knnPredictions = $this->calculateKNN($testAlternatives, $trainingAlternatives, $criteria, 3);
 
     Result::updateOrCreate(
-            ['user_id' => $user->id],
-            [
-                'recommended_1' => $topUKMKeys[0] ?? null,
-                'recommended_2' => $topUKMKeys[1] ?? null,
-                'recommended_3' => $topUKMKeys[2] ?? null,
-                'pendekatan_1' => $knnPredictions[$topUKMKeys[0]] ?? '-',
-                'pendekatan_2' => $knnPredictions[$topUKMKeys[1]] ?? '-',
-                'pendekatan_3' => $knnPredictions[$topUKMKeys[2]] ?? '-',
-                'show_innovator_center' => $showBonus ? 1 : 0,
-            ]
-        );
+        ['user_id' => $user->id],
+        [
+            'recommended_1' => $topUKMKeys[0] ?? null,
+            'recommended_2' => $topUKMKeys[1] ?? null,
+            'recommended_3' => $topUKMKeys[2] ?? null,
+            'pendekatan_1' => $knnPredictions[$topUKMKeys[0]] ?? '-',
+            'pendekatan_2' => $knnPredictions[$topUKMKeys[1]] ?? '-',
+            'pendekatan_3' => $knnPredictions[$topUKMKeys[2]] ?? '-',
+        ]
+    );
 
     return view('layouts.mahasiswa.SPK.result', [
         'criteriaScores' => $userScores,
         'finalUKM' => $topUKM,
-        'showBonus' => $showBonus,
-        'bonusUKM' => $bonusUKMName,
-        'bonusScore' => $showBonus ? $bonusScore : null,
         'user' => $user,
         'knnPredictions' => $knnPredictions,
     ]);
 }
+
 
 
     public function exportPdf()
@@ -250,25 +232,6 @@ public function result()
     $alternatives = Alternative::all();
     $finalScores = $this->calculateSAWScores($userScores, $alternatives);
 
-    $bonusUKMName = 'Inovator Center (DIIB)';
-    $bonusScore = null;
-
-    $bonusThreshold = 3.7;
-    $bonusCriteria = ['kreativitas', 'keaktifan', 'teknologi', 'inovatif'];
-    $showBonus = true;
-
-    foreach ($bonusCriteria as $criteria) {
-        if (($userScores[$criteria] ?? 0) < $bonusThreshold) {
-            $showBonus = false;
-            break;
-        }
-    }
-
-    if (isset($finalScores[$bonusUKMName])) {
-        $bonusScore = $finalScores[$bonusUKMName];
-        unset($finalScores[$bonusUKMName]);
-    }
-
     arsort($finalScores);
     $topUKM = array_slice($finalScores, 0, 3, true);
     $topUKMKeys = array_keys($topUKM);
@@ -280,7 +243,6 @@ public function result()
 
     $knnPredictionsRaw = $this->calculateKNN($testAlternatives, $trainingAlternatives, $criteria, 3);
 
-    // Buat array sederhana agar di view gampang diakses (karena sekarang knnPredictionsRaw itu ['UKM' => 'PredictedClass', ...])
     $knnPredictions = [];
     foreach ($knnPredictionsRaw as $ukmName => $predictedClass) {
         $knnPredictions[] = [
@@ -292,15 +254,13 @@ public function result()
     $pdf = PDF::loadView('layouts.mahasiswa.SPK.pdf', [
         'criteriaScores' => $userScores,
         'finalUKM' => $topUKM,
-        'showBonus' => $showBonus,
-        'bonusUKM' => $bonusUKMName,
-        'bonusScore' => $showBonus ? $bonusScore : null,
         'user' => $user,
         'knnPredictions' => $knnPredictions,
     ]);
 
     return $pdf->download('hasil_spk_' . $user->name . '.pdf');
 }
+
 
 
 

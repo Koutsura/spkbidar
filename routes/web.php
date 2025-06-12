@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\SettingController;
@@ -13,9 +14,7 @@ use App\Http\Controllers\SPKController;
 
 // Public routes
 Route::middleware('guest')->group(function () {
-    Route::get('/', function () {
-        return view('welcome');
-    });
+    Route::get('/', [HomeController::class, 'index']);
 
     // Authentication routes
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

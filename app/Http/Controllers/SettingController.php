@@ -25,6 +25,7 @@ class SettingController extends Controller
             'nim' => 'required|string|max:50',
             'phone_number' => 'required|string|max:20',
             'jurusan' => 'required|string|max:100',
+            'tahun_angkatan' => 'required|string|max:100',
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -48,6 +49,7 @@ class SettingController extends Controller
                 'nim' => $request->nim,
                 'phone_number' => $request->phone_number,
                 'jurusan' => $request->jurusan,
+                'tahun_angkatan' => $request->tahun_angkatan,
                 'profile_photo' => $path,
             ]);
         } else {
@@ -56,6 +58,7 @@ class SettingController extends Controller
                 'nim' => $request->nim,
                 'phone_number' => $request->phone_number,
                 'jurusan' => $request->jurusan,
+                'tahun_angkatan' => $request->tahun_angkatan,
                 'profile_photo' => $path,
             ]);
         }

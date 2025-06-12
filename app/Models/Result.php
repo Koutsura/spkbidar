@@ -20,7 +20,6 @@ class Result extends Model
         'pendekatan_1',
         'pendekatan_2',
         'pendekatan_3',
-        'show_innovator_center',
     ];
 
     // Relasi ke User (asumsi kamu punya model User)

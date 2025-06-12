@@ -47,11 +47,6 @@
         </tbody>
     </table>
 
-    @if ($showBonus)
-        <h3>Bonus UKM: {{ $bonusUKM }}</h3>
-        <p>Skor Bonus: {{ $bonusScore }}</p>
-    @endif
-
     <h3>Prediksi KNN</h3>
     <table>
         <thead>
