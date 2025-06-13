@@ -61,6 +61,14 @@
     <!-- Right Form Section -->
     <div class="col-lg-5 col-md-6 form-section">
       <a href="/" class="btn btn-outline-secondary mb-3">&larr; Kembali</a>
+      {{-- ALERT JIKA EMAIL SUDAH TERDAFTAR --}}
+@if(session('error'))
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <strong>Gagal Daftar!</strong> {{ session('error') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+@endif
+
       <h2 class="text-primary">Daftar Akun</h2>
       <p>Isi formulir berikut untuk membuat akun baru.</p>
 
