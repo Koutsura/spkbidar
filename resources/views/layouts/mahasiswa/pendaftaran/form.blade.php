@@ -19,23 +19,6 @@
             <h1>Formulir Pendaftaran Organisasi</h1>
         </div>
 
-        @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-@if(session('error'))
-    <div class="alert alert-danger">{{ session('error') }}</div>
-@endif
-
-        @if($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
         <form action="{{ route('mahasiswa.pendaftaran.submit') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
@@ -54,6 +37,7 @@
                 <label class="form-label">Jurusan</label>
                 <input type="text" readonly class="form-control" value="{{ $setting->jurusan }}">
             </div>
+
             <div class="mb-3">
                 <label class="form-label">Tahun Angkatan</label>
                 <input type="text" readonly class="form-control" value="{{ $setting->tahun_angkatan }}">
@@ -64,82 +48,114 @@
                 <input type="text" readonly class="form-control" value="{{ $setting->phone_number }}">
             </div>
 
-           @php
-    $ukms = [
-        'UKM Bina Darma Cyber Army (BDCA)',
-        'UKM LDK ALQORIB',
-        'UKM Persekutuan Mahasiswa Kristen & Katolik (PMKK)',
-        'UKM Kesatuan Mahasiswa Hindu Darma Indonesia (KMHDI)',
-        'UKM Mahasiswa Pencinta Alam (MABIDAR)',
-        'UKM Bujang Gadis Kampus (BGK)',
-        'UKM Panduan Suara Mahasiswa (BDSC)',
-        'UKM Binadarma Debat Union (BDCU)',
-        'UKM Bina Darma Programmer (BDPRO)',
-        'UKM Olahraga',
-        'UKM Pramuka',
-        'UKM Bina Darma Radio (B-Radio)',
-        'UKM EDS South Sumatera English Community (SSEC)',
-    ];
-@endphp
+            @php
+                $ukms = [
+                    'UKM Bina Darma Cyber Army (BDCA)',
+                    'UKM LDK ALQORIB',
+                    'UKM Persekutuan Mahasiswa Kristen & Katolik (PMKK)',
+                    'UKM Kesatuan Mahasiswa Hindu Darma Indonesia (KMHDI)',
+                    'UKM Mahasiswa Pencinta Alam (MABIDAR)',
+                    'UKM Bujang Gadis Kampus (BGK)',
+                    'UKM Panduan Suara Mahasiswa (BDSC)',
+                    'UKM Binadarma Debat Union (BDCU)',
+                    'UKM Bina Darma Programmer (BDPRO)',
+                    'UKM Olahraga',
+                    'UKM Pramuka',
+                    'UKM Bina Darma Radio (B-Radio)',
+                    'UKM EDS South Sumatera English Community (SSEC)',
+                ];
+            @endphp
 
-{{-- Organisasi --}}
-<div class="mb-3">
-    <label class="form-label">Organisasi 1</label>
-    <select name="organization_1" class="form-select" required>
-        <option value="">-- Pilih Organisasi 1 --</option>
-        @foreach($ukms as $ukm)
-            <option value="{{ $ukm }}" {{ old('organization_1', $setting->organization_1) == $ukm ? 'selected' : '' }}>{{ $ukm }}</option>
-        @endforeach
-    </select>
+            {{-- Organisasi --}}
+            <div class="mb-3">
+                <label class="form-label">Organisasi 1</label>
+                <select name="organization_1" class="form-select" required>
+                    <option value="">-- Pilih Organisasi 1 --</option>
+                    @foreach($ukms as $ukm)
+                        <option value="{{ $ukm }}" {{ old('organization_1', $setting->organization_1) == $ukm ? 'selected' : '' }}>{{ $ukm }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Organisasi 2</label>
+                <select name="organization_2" class="form-select">
+                    <option value="">-- Pilih Organisasi 2 (opsional) --</option>
+                    @foreach($ukms as $ukm)
+                        <option value="{{ $ukm }}" {{ old('organization_2', $setting->organization_2) == $ukm ? 'selected' : '' }}>{{ $ukm }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Organisasi 3</label>
+                <select name="organization_3" class="form-select">
+                    <option value="">-- Pilih Organisasi 3 (opsional) --</option>
+                    @foreach($ukms as $ukm)
+                        <option value="{{ $ukm }}" {{ old('organization_3', $setting->organization_3) == $ukm ? 'selected' : '' }}>{{ $ukm }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- Alamat --}}
+            <div class="mb-3">
+                <label class="form-label">Alamat</label>
+                <textarea name="alamat" class="form-control" rows="2" required>{{ old('alamat', $pendaftaran->alamat ?? '') }}</textarea>
+            </div>
+
+            {{-- Deskripsi --}}
+            <div class="mb-3">
+                <label class="form-label">Deskripsi Diri</label>
+                <textarea name="deskripsi" class="form-control" rows="3" required>{{ old('deskripsi', $pendaftaran->deskripsi ?? '') }}</textarea>
+            </div>
+
+            {{-- Upload File --}}
+            <div class="mb-3">
+                <label class="form-label">Upload Berkas (PDF, JPG, PNG)</label>
+                <input type="file" name="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
+                @if(isset($pendaftaran) && $pendaftaran->file)
+                    <small class="text-muted">File sebelumnya: {{ basename($pendaftaran->file) }}</small>
+                @endif
+            </div>
+
+            <div class="text-end mt-4 mb-5">
+    <button type="submit" class="btn btn-primary">Kirim Pendaftaran</button>
 </div>
 
-<div class="mb-3">
-    <label class="form-label">Organisasi 2</label>
-    <select name="organization_2" class="form-select">
-        <option value="">-- Pilih Organisasi 2 (opsional) --</option>
-        @foreach($ukms as $ukm)
-            <option value="{{ $ukm }}" {{ old('organization_2', $setting->organization_2) == $ukm ? 'selected' : '' }}>{{ $ukm }}</option>
-        @endforeach
-    </select>
-</div>
-
-<div class="mb-3">
-    <label class="form-label">Organisasi 3</label>
-    <select name="organization_3" class="form-select">
-        <option value="">-- Pilih Organisasi 3 (opsional) --</option>
-        @foreach($ukms as $ukm)
-            <option value="{{ $ukm }}" {{ old('organization_3', $setting->organization_3) == $ukm ? 'selected' : '' }}>{{ $ukm }}</option>
-        @endforeach
-    </select>
-</div>
-
-
-           {{-- Alamat --}}
-<div class="mb-3">
-    <label class="form-label">Alamat</label>
-    <textarea name="alamat" class="form-control" rows="2" required>{{ old('alamat', $pendaftaran->alamat ?? '') }}</textarea>
-</div>
-
-{{-- Deskripsi --}}
-<div class="mb-3">
-    <label class="form-label">Deskripsi Diri</label>
-    <textarea name="deskripsi" class="form-control" rows="3" required>{{ old('deskripsi', $pendaftaran->deskripsi ?? '') }}</textarea>
-</div>
-
-{{-- Upload File --}}
-<div class="mb-3">
-    <label class="form-label">Upload Berkas (PDF, JPG, PNG)</label>
-    <input type="file" name="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
-
-    @if(isset($pendaftaran) && $pendaftaran->file)
-        <small class="text-muted">File sebelumnya: {{ basename($pendaftaran->file) }}</small>
-    @endif
-</div>
-
-
-            <button type="submit" class="btn btn-primary">Kirim Pendaftaran</button>
         </form>
-    </div>
-</section>
+    </section>
 </div>
 @endsection
+
+@push('scripts')
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            confirmButtonColor: '#3085d6'
+        });
+    @endif
+
+    @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            confirmButtonColor: '#d33'
+        });
+    @endif
+
+    @if($errors->any())
+        Swal.fire({
+            icon: 'error',
+            title: 'Validasi Gagal!',
+            html: `{!! implode('<br>', $errors->all()) !!}`,
+            confirmButtonColor: '#d33'
+        });
+    @endif
+</script>
+@endpush

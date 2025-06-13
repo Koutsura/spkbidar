@@ -54,6 +54,7 @@ class MahasiswaController extends Controller
                                    ->where('status', 'pending')
                                    ->first();
 
+    try {
     if ($pendaftaran) {
         // Hapus file lama jika ada
         if ($pendaftaran->upload_file && Storage::disk('public')->exists($pendaftaran->upload_file)) {
@@ -67,12 +68,11 @@ class MahasiswaController extends Controller
             'alamat' => $request->alamat,
             'deskripsi' => $request->deskripsi,
             'upload_file' => $path,
-            'status' => 'pending', // update status jadi pending saat daftar ulang
+            'status' => 'pending',
         ]);
 
         return redirect()->back()->with('success', 'Pendaftaran berhasil diperbarui.');
     } else {
-        // Buat data baru
         Pendaftaran::create([
             'user_id' => $user->id,
             'setting_id' => $setting->id,
@@ -87,6 +87,10 @@ class MahasiswaController extends Controller
 
         return redirect()->back()->with('success', 'Pendaftaran berhasil dikirim.');
     }
+} catch (\Exception $e) {
+    return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+}
+
 }
 
 }
