@@ -51,6 +51,13 @@
                 <a href="/" class="btn btn-outline-secondary mb-3">
         &larr; Kembali
     </a>
+    {{-- ALERT ERROR LOGIN --}}
+          @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong>Gagal Masuk!</strong> {{ $errors->first() }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          @endif
                     <h2 class="text-primary">Silakan Login terlebih dahulu</h2>
                     <p>Masukkan Email dan Kata Sandi mu untuk masuk ke akun.</p>
                     <form method="POST" action="{{ route('login') }}">
