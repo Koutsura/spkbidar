@@ -9,30 +9,59 @@
   <title>Organisasi Unit Kegiatan Mahasiswa Universitas Bina Darma</title>
 
   <link rel="icon" href="{{ asset('img/tab.webp') }}" type="image/webp" />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="{{ asset('css/bootstrap.min.css') }}?v={{ time() }}" rel="stylesheet" />
 <link href="{{ asset('css/hawal.css') }}?v={{ time() }}" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 <body>
-<div class="container text-center">
+   <header class="position-fixed top-0 w-100 z-3 shadow-sm" style="background-color: rgba(255, 255, 255, 0.5); backdrop-filter: blur(15px); transition: background-color 0.3s;">
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+      <img src="{{ asset('img/logoubd.webp') }}" alt="Universitas Bina Darma Logo" class="img-fluid" style="max-height: 45px;" />
 
-  <div class="logo-header mb-4 scroll-animate">
-  <img src="{{ asset('img/logoubd.webp') }}" alt="Universitas Bina Darma Logo" class="img-fluid" />
-  <img src="{{ asset('img/mbkm.webp') }}" alt="MBKM Logo" class="img-fluid" />
-</div>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-<div class="hero-section text-center px-3 py-5 scroll-animate">
+      <div class="collapse navbar-collapse" id="navbarHeader">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+          <li class="nav-item">
+            <a class="nav-link" href="#daftar-ukm">Informasi UKM</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#statistik-ukm">Jumlah Pengguna</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Masuk</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/login">Login</a></li>
+              <li><a class="dropdown-item" href="/register">Register</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+
+<div class="hero-section text-center px-3 py-5 scroll-animate section-box">
   <h1>
-  Selamat Datang di<br>
-  Website Organisasi UKM<br>
-  Universitas Bina Darma
-</h1>
+    Selamat Datang di<br>
+    Website Organisasi UKM<br>
+    Universitas Bina Darma
+  </h1>
   <p>
     Platform Tes Rekomendasi dan Pendaftaran UKM Universitas Bina Darma.
   </p>
 </div>
-<div class="mt-5 scroll-animate">
+<div class="container text-center">
+
+
+
+<div class="mt-5 scroll-animate section-box" id="daftar-ukm">
   <h2 class="fw-bold mb-4" style="font-size: 2rem;">Daftar Organisasi Unit Kegiatan Mahasiswa (UKM) di Universitas Bina Darma</h2>
   <ul class="list-group list-group-flush text-start mx-auto" style="max-width: 700px; font-size: 1.2rem;">
     <li class="list-group-item">1. UKM Bina Darma Cyber Army (BDCA)</li>
@@ -51,7 +80,7 @@
   </ul>
 </div>
 
-<div class="mt-5 scroll-animate">
+<div class="mt-5 scroll-animate section-box">
   <h2 class="fw-bold mb-4 text-center" style="font-size: 2rem;">Ayo Tingkatkan Skill-mu dan Raih Prestasi!</h2>
   <p class="text-center mb-4" style="font-size: 1.2rem; color: #555;">
     Seperti mereka yang sudah membuktikan bahwa aktif di UKM bisa membawamu hingga ke podium juara.
@@ -94,7 +123,7 @@
 </div>
 
 
-<div class="container mt-5 scroll-animate">
+<div class="container mt-5 scroll-animate section-box" id="statistik-ukm">
   <h2 class="text-center mb-4">Statistik UKM per Tahun Angkatan</h2>
 
   @if (!empty($years))
@@ -186,7 +215,7 @@
 
 </div>
 <!-- Section: Ketua Bidang Kemahasiswaan -->
-<div class="container my-5 scroll-animate">
+<div class="container my-5 scroll-animate ketua-section">
   <div class="row align-items-center">
     <!-- Gambar -->
     <div class="col-md-4 text-center mb-4 mb-md-0">

@@ -261,9 +261,4 @@ public function result()
     return $pdf->download('hasil_spk_' . $user->name . '.pdf');
 }
 
-
-
-
-
-
 }
