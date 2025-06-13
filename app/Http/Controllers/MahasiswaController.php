@@ -33,7 +33,7 @@ class MahasiswaController extends Controller
         'organization_3' => 'nullable|string|max:100',
         'alamat' => 'required|string|max:255',
         'deskripsi' => 'required|string|max:500',
-        'file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:20480',
     ]);
 
     $user = Auth::user();

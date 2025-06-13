@@ -26,7 +26,7 @@ class SettingController extends Controller
             'phone_number' => 'required|string|max:20',
             'jurusan' => 'required|string|max:100',
             'tahun_angkatan' => 'required|string|max:100',
-            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:20480',
         ]);
 
         $setting = Setting::where('user_id', auth()->id())->first();
