@@ -61,7 +61,7 @@
 
 
 
-<div class="mt-5 scroll-animate section-box" id="daftar-ukm">
+<div class="mt-5 scroll-animate" id="daftar-ukm">
   <h2 class="fw-bold mb-4" style="font-size: 2rem;">Daftar Organisasi Unit Kegiatan Mahasiswa (UKM) di Universitas Bina Darma</h2>
   <ul class="list-group list-group-flush text-start mx-auto" style="max-width: 700px; font-size: 1.2rem;">
     <li class="list-group-item">1. UKM Bina Darma Cyber Army (BDCA)</li>
@@ -80,7 +80,7 @@
   </ul>
 </div>
 
-<div class="mt-5 scroll-animate section-box">
+<div class="mt-5 scroll-animate ">
   <h2 class="fw-bold mb-4 text-center" style="font-size: 2rem;">Ayo Tingkatkan Skill-mu dan Raih Prestasi!</h2>
   <p class="text-center mb-4" style="font-size: 1.2rem; color: #555;">
     Seperti mereka yang sudah membuktikan bahwa aktif di UKM bisa membawamu hingga ke podium juara.
@@ -123,7 +123,7 @@
 </div>
 
 
-<div class="container mt-5 scroll-animate section-box" id="statistik-ukm">
+<div class="container mt-5 scroll-animate " id="statistik-ukm">
   <h2 class="text-center mb-4">Statistik UKM per Tahun Angkatan</h2>
 
   @if (!empty($years))
@@ -215,7 +215,7 @@
 
 </div>
 <!-- Section: Ketua Bidang Kemahasiswaan -->
-<div class="container my-5 scroll-animate ketua-section">
+<div class="container my-5 scroll-animate">
   <div class="row align-items-center">
     <!-- Gambar -->
     <div class="col-md-4 text-center mb-4 mb-md-0">
