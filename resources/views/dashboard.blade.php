@@ -74,14 +74,6 @@
             </div>
             <div class="col-6 col-md-4 col-lg-3 mb-4">
                 <div class="card h-100">
-                    <img src="{{ asset('img/seni.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 8">
-                    <div class="card-body p-2">
-                        <p class="img-caption">Seni(@ukmseni_binadarma)</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
                     <img src="{{ asset('img/pramuka.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 9">
                     <div class="card-body p-2">
                         <p class="img-caption">Pramuka(@pramuka_ubd)</p>
@@ -98,41 +90,9 @@
             </div>
             <div class="col-6 col-md-4 col-lg-3 mb-4">
                 <div class="card h-100">
-                    <img src="{{ asset('img/BTV.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 10">
-                    <div class="card-body p-2">
-                        <p class="img-caption">Binadarma TV(@binadarmatv)</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
                     <img src="{{ asset('img/basket.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 10">
                     <div class="card-body p-2">
                         <p class="img-caption">Basket Club(@bidarbasketclub)</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="{{ asset('img/data_science.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 10">
-                    <div class="card-body p-2">
-                        <p class="img-caption">Data Science(@datascience.ubd)</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="{{ asset('img/multimedia.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 10">
-                    <div class="card-body p-2">
-                        <p class="img-caption">Multimedia(@multimedia.ubd)</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="{{ asset('img/taekwondo.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 10">
-                    <div class="card-body p-2">
-                        <p class="img-caption">Taekwondo(@taekwondo_binadarma)</p>
                     </div>
                 </div>
             </div>
