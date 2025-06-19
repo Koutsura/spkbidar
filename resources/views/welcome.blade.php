@@ -48,18 +48,18 @@
 
 
 <div class="hero-section text-center px-3 py-5 scroll-animate section-box">
-  <h1>
-    Selamat Datang di<br>
-    Website Organisasi UKM<br>
-    Universitas Bina Darma
-  </h1>
-  <p>
-    Platform Tes Rekomendasi dan Pendaftaran UKM Universitas Bina Darma.
-  </p>
+  <div class="container text-start">
+    <h1>
+      Selamat Datang di<br>
+      Website Organisasi UKM<br>
+      Universitas Bina Darma
+    </h1>
+    <p class="ps-2">
+      Platform Tes Rekomendasi dan Pendaftaran UKM Universitas Bina Darma.
+    </p>
+  </div>
 </div>
 <div class="container text-center">
-
-
 
 <div class="mt-5 scroll-animate" id="daftar-ukm">
   <h2 class="fw-bold mb-4" style="font-size: 2rem;">Daftar Organisasi Unit Kegiatan Mahasiswa (UKM) di Universitas Bina Darma</h2>
@@ -214,34 +214,61 @@
 </div>
 
 </div>
-<!-- Section: Ketua Bidang Kemahasiswaan -->
+
+<!-- Section: Informasi Program -->
 <div class="container my-5 scroll-animate">
-  <div class="row align-items-center">
-    <!-- Gambar -->
-    <div class="col-md-4 text-center mb-4 mb-md-0">
-      <img src="{{ asset('img/paknovri.webp') }}" alt="Novri Hadinata, S.Kom., M.Kom."
-           class="img-fluid rounded shadow" style="max-height: 300px; object-fit: cover;">
+  <div class="p-4 p-md-5 rounded shadow">
+    <h3 class="fw-bold mb-4 text-dark">Apa saja isi programnya?</h3>
+
+    <div class="mb-4">
+      <h5 class="fw-semibold text-dark">✅ Fitur yang tersedia:</h5>
+      <ul class="list-unstyled ms-3">
+        <li class="mb-2">• <strong>Fitur Tes Rekomendasi Organisasi UKM</strong> – untuk mengetahui UKM yang paling sesuai dengan minat dan potensi kamu.</li>
+        <li class="mb-2">• <strong>Fitur Pendaftaran UKM</strong> – langsung daftar ke organisasi UKM pilihanmu setelah melakukan Tes Rekomendasi.</li>
+      </ul>
     </div>
 
-    <!-- Deskripsi -->
-    <div class="col-md-8 d-flex align-items-center">
-      <div class="w-100">
-        <!-- Nama dan jabatan -->
-        <div class="mb-4 border-bottom pb-2">
-          <h3 class="fw-bold mb-1">Novri Hadinata, S.Kom., M.Kom.</h3>
-          <h5 class="text-muted mb-0">(Ketua Bidang Kemahasiswaan Universitas Bina Darma)</h5>
-        </div>
+    <div>
+      <h5 class="fw-semibold text-dark">🚀 Fitur yang akan datang:</h5>
+      <ul class="list-unstyled ms-3">
+        <li>• <strong>Fitur Pelatihan Pembekalan Belajar Bersetifikat</strong> – pelatihan online untuk mempersiapkan mahasiswa pembekalan agar ada persiapan belajar.</li>
+      </ul>
+    </div>
+  </div>
+</div>
 
-        <!-- Box ajakan -->
-        <div class="bg-light p-4 rounded shadow-sm">
-          <h4 class="fw-bold mb-3">Bingung mau masuk UKM mana?</h4>
-          <p class="mb-3">Ayo Tes Rekomendasi UKM sekarang juga dan temukan organisasi yang paling sesuai dengan minat dan potensimu!</p>
-          <a href="/login" class="btn btn-primary px-4 py-2">Get Started</a>
+
+<!-- Section: Ketua Bidang Kemahasiswaan -->
+<div class="scroll-animate" style="background-color: #007bff; color: white;">
+  <div class="container py-5">
+    <div class="row align-items-center">
+      <!-- Gambar Ketua -->
+      <div class="col-md-4 text-center mb-4 mb-md-0">
+        <img src="{{ asset('img/paknovri.webp') }}" alt="Novri Hadinata, S.Kom., M.Kom."
+             class="img-fluid rounded shadow" style="max-height: 300px; object-fit: cover;">
+      </div>
+
+      <!-- Konten Deskripsi -->
+      <div class="col-md-8 d-flex align-items-center">
+        <div class="w-100">
+          <!-- Nama dan Jabatan -->
+          <div class="mb-4 border-bottom border-white pb-2">
+            <h3 class="fw-bold mb-1 text-white">Novri Hadinata, S.Kom., M.Kom.</h3>
+            <h5 class="mb-0" style="color: #f8f9fa;">Ketua Bidang Kemahasiswaan Universitas Bina Darma</h5>
+          </div>
+
+          <!-- Ajakan & CTA -->
+          <div class="bg-white text-dark p-4 rounded shadow-sm">
+            <h4 class="fw-bold mb-3">Bingung mau masuk UKM mana?</h4>
+            <p class="mb-3">Ikuti Tes Rekomendasi UKM sekarang juga dan temukan organisasi yang paling sesuai dengan minat dan potensimu!</p>
+            <a href="/login" class="btn btn-primary px-4 py-2">Daftarkan Sekarang</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 
 @include('components.footer')
 
