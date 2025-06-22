@@ -113,17 +113,41 @@
         <div class="section-header">
             <h1>Dashboard</h1>
         </div>
-<h2 class="mb-4 text-center">Selamat datang admin</h2>
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-        <div class="card">
-            <img src="{{ asset('img/UKM.webp') }}" class="card-img-top img-fluid" alt="Admin">
-            <div class="card-body p-2">
-                <p class="img-caption">Pembina Organisasi Mahasiswa (ORMAWA) Universitas Bina Darma</p>
+
+        <h2 class="mb-4 text-center">Status Pendaftaran Mahasiswa</h2>
+
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-warning">Pending</h5>
+                        <h3>{{ $count_pending }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-success">Diterima</h5>
+                        <h3>{{ $count_diterima }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-danger">Ditolak</h5>
+                        <h3>{{ $count_ditolak }}</h3>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
+
+
             @endif
     </section>
 </div>

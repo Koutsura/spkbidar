@@ -12,13 +12,28 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
+use App\Models\Pendaftaran;
 
 
 class AuthController extends Controller
 {
     public function index()
     {
-        return view('dashboard');
+        $user = auth()->user();
+
+    // Query umum: hitung berdasarkan status dan user_id
+    $count_pending = Pendaftaran::where('user_id', $user->id)->where('status', 'pending')->count();
+    $count_diterima = Pendaftaran::where('user_id', $user->id)->where('status', 'diterima')->count();
+    $count_ditolak  = Pendaftaran::where('user_id', $user->id)->where('status', 'ditolak')->count();
+
+    // Jika superadmin, override dengan data semua user
+    if ($user->role === 'superadmin') {
+        $count_pending = Pendaftaran::where('status', 'pending')->count();
+        $count_diterima = Pendaftaran::where('status', 'diterima')->count();
+        $count_ditolak  = Pendaftaran::where('status', 'ditolak')->count();
+    }
+
+    return view('dashboard', compact('count_pending', 'count_diterima', 'count_ditolak'));
     }
 
     public function showLoginForm()
