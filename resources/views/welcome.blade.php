@@ -221,7 +221,7 @@
     <h3 class="fw-bold mb-4 text-dark">Apa saja isi programnya?</h3>
 
     <div class="mb-4">
-      <h5 class="fw-semibold text-dark">✅ Fitur yang tersedia:</h5>
+      <h5 class="fw-semibold text-dark">Fitur yang tersedia:</h5>
       <ul class="list-unstyled ms-3">
         <li class="mb-2">• <strong>Fitur Tes Rekomendasi Organisasi UKM</strong> – untuk mengetahui UKM yang paling sesuai dengan minat dan potensi kamu.</li>
         <li class="mb-2">• <strong>Fitur Pendaftaran UKM</strong> – langsung daftar ke organisasi UKM pilihanmu setelah melakukan Tes Rekomendasi.</li>
@@ -229,7 +229,7 @@
     </div>
 
     <div>
-      <h5 class="fw-semibold text-dark">🚀 Fitur yang akan datang:</h5>
+      <h5 class="fw-semibold text-dark">Fitur yang akan datang:</h5>
       <ul class="list-unstyled ms-3">
         <li>• <strong>Fitur Pelatihan Pembekalan Belajar Bersetifikat</strong> – pelatihan online untuk mempersiapkan mahasiswa pembekalan agar ada persiapan belajar.</li>
       </ul>
