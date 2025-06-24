@@ -6,6 +6,7 @@ use App\Models\Pendaftaran;
 use App\Models\Setting;
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PendaftaranAdminController extends Controller
 {
@@ -14,6 +15,15 @@ class PendaftaranAdminController extends Controller
      */
     public function index()
     {
+        $allowedRoles = [
+            'alqarib', 'BDCA', 'BDCU', 'BDPRO', 'BDSC', 'BGK',
+            'BRadio', 'KMHDI', 'MABIDAR', 'Olahraga', 'PMKK',
+            'Pramuka', 'SSEC'
+        ];
+
+        if (!in_array(Auth::user()->role, $allowedRoles)) {
+            abort(403, 'Unauthorized');
+        }
         $pendaftarans = Pendaftaran::with(['user', 'setting'])->where('status', 'pending')->get();
         return view('layouts.admin.pendaftaran.index', compact('pendaftarans'));
     }

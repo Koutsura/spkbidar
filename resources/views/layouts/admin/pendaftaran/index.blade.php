@@ -19,6 +19,7 @@
                     <th>Nama</th>
                     <th>NIM</th>
                     <th>Jurusan</th>
+                    <th>Tahun Angkatan</th>
                     <th>Organisasi 1</th>
                     <th>Organisasi 2</th>
                     <th>Organisasi 3</th>

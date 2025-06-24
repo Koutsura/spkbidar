@@ -146,9 +146,78 @@
         </div>
     </section>
 </div>
-
-
             @endif
+@php
+    $ukmRoles = [
+        'alqarib'   => 'UKM LDK ALQORIB',
+        'BDCA'      => 'UKM Bina Darma Cyber Army (BDCA)',
+        'BDCU'      => 'UKM Binadarma Debat Union (BDCU)',
+        'BDPRO'     => 'UKM Bina Darma Programmer (BDPRO)',
+        'BDSC'      => 'UKM Panduan Suara Mahasiswa (BDSC)',
+        'BGK'       => 'UKM Bujang Gadis Kampus (BGK)',
+        'BRadio'    => 'UKM Bina Darma Radio (B-Radio)',
+        'KMHDI'     => 'UKM Kesatuan Mahasiswa Hindu Dharma Indonesia (KMHDI)',
+        'MABIDAR'   => 'UKM Mahasiswa Pencinta Alam (MABIDAR)',
+        'Olahraga'  => 'UKM Olahraga',
+        'PMKK'      => 'UKM Persekutuan Mahasiswa Kristen & Katolik (PMKK)',
+        'Pramuka'   => 'UKM Pramuka',
+        'SSEC'      => 'UKM EDS South Sumatera English Community (SSEC)',
+    ];
+
+    $userRole = auth()->user()->role;
+    $namaUKM = $ukmRoles[$userRole] ?? $userRole;
+@endphp
+
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Dashboard</h1>
+        </div>
+
+        <h2 class="mb-4 text-center">Status Pendaftaran Mahasiswa</h2>
+
+        @if (in_array($userRole, array_keys($ukmRoles)) && isset($jumlahDiterimaUKM))
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Rekap Mahasiswa Diterima di {{ $namaUKM }}</h5>
+                        </div>
+                        <div class="card-body text-center">
+                            <h1 class="display-4 text-success">{{ $jumlahDiterimaUKM }}</h1>
+                            <p class="mb-0">
+                                Mahasiswa yang memilih <strong>{{ $namaUKM }}</strong> sebagai salah satu pilihan organisasi dan telah <strong>DITERIMA</strong>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Nama</th>
+                <th>NIM</th>
+                <th>Jurusan</th>
+                <th>Tahun Angkatan</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($pendaftarans as $data)
+                <tr>
+                    <td>{{ $data->user->name ?? '-' }}</td>
+                    <td>{{ $data->nim ?? '-' }}</td>
+                    <td>{{ $data->jurusan ?? '-' }}</td>
+                    <td>{{ $data->tahun_angkatan ?? '-' }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+        @endif
+    </section>
+</div>
     </section>
 </div>
 @endsection

@@ -60,17 +60,23 @@
 
 
 
-            @if (auth()->user()->role == 'pendaftaran' || auth()->user()->role == 'superadmin')
-            <li class="menu-header">Pages</li>
-            <li class="{{ Request::is('pendaftaran') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('admin.pendaftaran.index') }}"><i class="fas fa-university"></i> <span>Pendaftaran</span></a>
-            </li>
-             @endif
-             @if (auth()->user()->role == 'pelatihan' || auth()->user()->role == 'superadmin')
+          @php
+    $roles_ukm = ['alqarib', 'BDCA', 'BDCU', 'BDPRO', 'BDSC', 'BGK', 'BRadio', 'KMHDI', 'MABIDAR', 'Olahraga', 'PMKK', 'Pramuka', 'SSEC'];
+@endphp
+
+@if (auth()->user()->role == 'pendaftaran' || in_array(auth()->user()->role, $roles_ukm))
+    <li class="menu-header">Pages</li>
+    <li class="{{ Request::is('pendaftaran') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('admin.pendaftaran.index') }}"><i class="fas fa-university"></i> <span>Pendaftaran</span></a>
+    </li>
+@endif
+
+@if (auth()->user()->role == 'pelatihan' || in_array(auth()->user()->role, $roles_ukm))
     <li class="{{ Request::is('pelatihan') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.pelatihan.index') }}"><i class="fas fa-university"></i> <span>Pelatihan</span></a>
     </li>
 @endif
+
 
 
             @if (auth()->user()->role == 'pendaftaran' || auth()->user()->role == 'mahasiswa')

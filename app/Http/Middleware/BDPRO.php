@@ -6,7 +6,8 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
-class mahasiswa
+
+class BDPRO
 {
     /**
      * Handle an incoming request.
@@ -15,7 +16,7 @@ class mahasiswa
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::user()->role== 'mahasiswa') {
+        if (Auth::user()->role== 'BDPRO') {
             return $next($request);
         }
         abort(403);
