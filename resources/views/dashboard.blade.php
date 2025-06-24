@@ -13,7 +13,6 @@
         <div class="section-header">
             <h1>Dashboard</h1>
         </div>
-
         <h2 class="mb-4">Selamat datang mahasiswa</h2>
         <div class="row">
             <div class="col-6 col-md-4 col-lg-3 mb-4">
@@ -167,7 +166,7 @@
     $userRole = auth()->user()->role;
     $namaUKM = $ukmRoles[$userRole] ?? $userRole;
 @endphp
-
+@if (in_array($userRole, array_keys($ukmRoles)))
 <div class="main-content">
     <section class="section">
         <div class="section-header">
@@ -193,6 +192,13 @@
                 </div>
             </div>
              <div class="table-responsive">
+                <form method="GET" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="Cari nama mahasiswa..." value="{{ request('search') }}">
+        <button class="btn btn-primary" type="submit">Cari</button>
+    </div>
+</form>
+
     <table class="table table-bordered table-hover">
         <thead class="table-light">
             <tr>
@@ -214,10 +220,8 @@
         </tbody>
     </table>
 </div>
-
+@endif
         @endif
-    </section>
-</div>
     </section>
 </div>
 @endsection

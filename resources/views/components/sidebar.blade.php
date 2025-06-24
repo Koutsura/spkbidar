@@ -26,28 +26,40 @@
                 <a class="nav-link" href="{{ url('hakakses') }}"><i class="fas fa-user"></i> <span>Edit Role</span></a>
             </li>
             @endif
-            @if (auth()->user()->role == 'rekomendasi' || auth()->user()->role == 'mahasiswa')
-    <li class="menu-header">Tes Rekomendasi UKM</li>
-
-    @php
-        $sudahTes = \App\Models\Result::where('user_id', auth()->id())->exists();
-        $link = $sudahTes ? route('spk.result') : route('spk.index');
-    @endphp
-
-    <li class="{{ Request::is('rekomendasi') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ $link }}">
-            <i class="fas fa-newspaper"></i>
-            <span>{{ $sudahTes ? 'Lihat Hasil Rekomendasi' : 'Rekomendasi UKM' }}</span>
-        </a>
-    </li>
-@endif
-
               @if (auth()->user()->role == 'rekomendasi' || auth()->user()->role == 'mahasiswa')
             <li class="menu-header">Edit Profile</li>
             <li class="{{ Request::is('profile') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('settings.index') }}"><i class="fas fa-user"></i> <span>Edit Profile</span></a>
             </li>
             @endif
+@if (auth()->user()->role == 'rekomendasi' || auth()->user()->role == 'mahasiswa')
+    <li class="menu-header">Tes Rekomendasi UKM</li>
+    @php
+        $user = auth()->user();
+        $setting = $user->setting;
+
+        $profileLengkap = $setting && $setting->nim && $setting->phone_number && $setting->jurusan && $setting->tahun_angkatan;
+
+        $sudahTes = \App\Models\Result::where('user_id', $user->id)->exists();
+        $link = $sudahTes ? route('spk.result') : route('spk.index');
+    @endphp
+
+    <li class="{{ Request::is('rekomendasi') ? 'active' : '' }}">
+        @if ($profileLengkap)
+            <a class="nav-link" href="{{ $link }}">
+                <i class="fas fa-newspaper"></i>
+                <span>{{ $sudahTes ? 'Lihat Hasil Rekomendasi' : 'Rekomendasi UKM' }}</span>
+            </a>
+        @else
+            <a class="nav-link text-muted" href="#" onclick="alert('Silakan lengkapi profil Anda terlebih dahulu di menu Edit Profile.')">
+                <i class="fas fa-lock"></i>
+                <span>Rekomendasi UKM (Terkunci)</span>
+            </a>
+        @endif
+    </li>
+@endif
+
+
            @if (auth()->user()->role === 'rekomendasi' || auth()->user()->role === 'superadmin')
            <li class="menu-header">Edit Profile Mahasiswa</li>
     <li class="{{ request()->routeIs('setting_admin.index') ? 'active' : '' }}">

@@ -18,7 +18,7 @@ use App\Models\Setting;
 
 class AuthController extends Controller
 {
-    public function index()
+    public function index(Request $request)
 {
     $user = Auth::user();
     $role = $user->role;
@@ -33,7 +33,7 @@ class AuthController extends Controller
         $count_ditolak  = Pendaftaran::where('status', 'ditolak')->count();
     }
 
-    // Mapping dari role ke nama organisasi di database
+    // Daftar role UKM dan nama UKM lengkap
     $ukmMapping = [
         'BDCA' => 'UKM Bina Darma Cyber Army (BDCA)',
         'alqarib' => 'UKM LDK ALQORIB',
@@ -52,42 +52,34 @@ class AuthController extends Controller
 
     $jumlahDiterimaUKM = null;
     $namaUKM = null;
+    $pendaftarans = collect();
 
     if (array_key_exists($role, $ukmMapping)) {
         $namaUKM = $ukmMapping[$role];
-
         $acceptedUserIds = Pendaftaran::where('status', 'diterima')->pluck('user_id');
 
-        $jumlahDiterimaUKM = Setting::whereIn('user_id', $acceptedUserIds)
-            ->where(function ($query) use ($namaUKM) {
-                $query->where('organization_1', $namaUKM)
-                      ->orWhere('organization_2', $namaUKM)
-                      ->orWhere('organization_3', $namaUKM);
-            })
-            ->count();
-    }
-    $pendaftarans = [];
+        $query = Setting::whereIn('user_id', $acceptedUserIds)
+    ->where(function ($q) use ($namaUKM) {
+        $q->where('organization_1', $namaUKM)
+            ->orWhere('organization_2', $namaUKM)
+            ->orWhere('organization_3', $namaUKM);
+    })
+    ->with('user');
 
-if (array_key_exists($role, $ukmMapping)) {
-    $namaUKM = $ukmMapping[$role];
+// Hitung jumlah total mahasiswa diterima di UKM ini (tanpa search)
+$jumlahDiterimaUKM = $query->count();
 
-    // Ambil user_id dari mahasiswa yang status pendaftarannya diterima
-    $acceptedUserIds = Pendaftaran::where('status', 'diterima')->pluck('user_id');
-
-    // Ambil mahasiswa dari tabel setting yang memilih UKM sesuai role
-    $pendaftarans = Setting::whereIn('user_id', $acceptedUserIds)
-        ->where(function ($query) use ($namaUKM) {
-            $query->where('organization_1', $namaUKM)
-                  ->orWhere('organization_2', $namaUKM)
-                  ->orWhere('organization_3', $namaUKM);
-        })
-        ->with('user')
-        ->get();
-
-    // Hitung jumlahnya
-    $jumlahDiterimaUKM = $pendaftarans->count();
+// Filter pencarian nama mahasiswa
+$search = $request->get('search');
+if ($search) {
+    $query->whereHas('user', function ($q) use ($search) {
+        $q->where('name', 'like', '%' . $search . '%');
+    });
 }
 
+// Ambil data mahasiswa diterima (pakai filter search jika ada)
+$pendaftarans = $query->get();
+    }
 
     return view('dashboard', compact(
         'count_pending',

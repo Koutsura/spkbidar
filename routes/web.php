@@ -70,10 +70,6 @@ Route::get('/mahasiswa/pelatihan', [PelatihanMahasiswaController::class, 'index'
     ->name('mahasiswa.pelatihan.index')->middleware('mahasiswa');
 
 
-
-
-
-
 Route::middleware(['auth'])->group(function () {
     Route::get('/mahasiswa/pendaftaran', [MahasiswaController::class, 'showForm'])
         ->name('mahasiswa.pendaftaran.form');
