@@ -69,9 +69,6 @@ Route::post('/setting-admin/{user}/update', [AdminSettingController::class, 'upd
 Route::get('/mahasiswa/pelatihan', [PelatihanMahasiswaController::class, 'index'])
     ->name('mahasiswa.pelatihan.index')->middleware('mahasiswa');
 
-// Admin Pelatihan
-Route::get('/admin/pelatihan', [PelatihanAdminController::class, 'index'])
-    ->name('admin.pelatihan.index')->middleware('superadmin');
 
 
 
@@ -86,9 +83,18 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/pendaftaran', [PendaftaranAdminController::class, 'index'])->name('admin.pendaftaran.index');
-    Route::put('/admin/pendaftaran/{id}/status/{status}', [PendaftaranAdminController::class, 'updateStatus'])->name('admin.pendaftaran.updateStatus');
+    Route::get('/admin/pendaftaran', [PendaftaranAdminController::class, 'index'])
+        ->name('admin.pendaftaran.index');
+
+    Route::put('/admin/pendaftaran/{id}/status/{status}', [PendaftaranAdminController::class, 'updateStatus'])
+        ->name('admin.pendaftaran.updateStatus');
+
+    Route::get('/admin/pelatihan', [PelatihanAdminController::class, 'index'])
+        ->name('admin.pelatihan.index');
 });
+
+
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/spk', [SPKController::class, 'index'])->name('spk.index'); // Halaman intro SPK

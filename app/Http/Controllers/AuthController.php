@@ -13,28 +13,92 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
 use App\Models\Pendaftaran;
+use App\Models\Setting;
 
 
 class AuthController extends Controller
 {
     public function index()
-    {
-        $user = auth()->user();
+{
+    $user = Auth::user();
+    $role = $user->role;
 
-    // Query umum: hitung berdasarkan status dan user_id
     $count_pending = Pendaftaran::where('user_id', $user->id)->where('status', 'pending')->count();
     $count_diterima = Pendaftaran::where('user_id', $user->id)->where('status', 'diterima')->count();
     $count_ditolak  = Pendaftaran::where('user_id', $user->id)->where('status', 'ditolak')->count();
 
-    // Jika superadmin, override dengan data semua user
-    if ($user->role === 'superadmin') {
+    if ($role === 'superadmin') {
         $count_pending = Pendaftaran::where('status', 'pending')->count();
         $count_diterima = Pendaftaran::where('status', 'diterima')->count();
         $count_ditolak  = Pendaftaran::where('status', 'ditolak')->count();
     }
 
-    return view('dashboard', compact('count_pending', 'count_diterima', 'count_ditolak'));
+    // Mapping dari role ke nama organisasi di database
+    $ukmMapping = [
+        'BDCA' => 'UKM Bina Darma Cyber Army (BDCA)',
+        'alqarib' => 'UKM LDK ALQORIB',
+        'PMKK' => 'UKM Persekutuan Mahasiswa Kristen & Katolik (PMKK)',
+        'KMHDI' => 'UKM Kesatuan Mahasiswa Hindu Dharma Indonesia (KMHDI)',
+        'MABIDAR' => 'UKM Mahasiswa Pencinta Alam (MABIDAR)',
+        'BGK' => 'UKM Bujang Gadis Kampus (BGK)',
+        'BDSC' => 'UKM Panduan Suara Mahasiswa (BDSC)',
+        'BDCU' => 'UKM Binadarma Debat Union (BDCU)',
+        'BDPRO' => 'UKM Bina Darma Programmer (BDPRO)',
+        'Olahraga' => 'UKM Olahraga',
+        'Pramuka' => 'UKM Pramuka',
+        'BRadio' => 'UKM Bina Darma Radio (B-Radio)',
+        'SSEC' => 'UKM EDS South Sumatera English Community (SSEC)',
+    ];
+
+    $jumlahDiterimaUKM = null;
+    $namaUKM = null;
+
+    if (array_key_exists($role, $ukmMapping)) {
+        $namaUKM = $ukmMapping[$role];
+
+        $acceptedUserIds = Pendaftaran::where('status', 'diterima')->pluck('user_id');
+
+        $jumlahDiterimaUKM = Setting::whereIn('user_id', $acceptedUserIds)
+            ->where(function ($query) use ($namaUKM) {
+                $query->where('organization_1', $namaUKM)
+                      ->orWhere('organization_2', $namaUKM)
+                      ->orWhere('organization_3', $namaUKM);
+            })
+            ->count();
     }
+    $pendaftarans = [];
+
+if (array_key_exists($role, $ukmMapping)) {
+    $namaUKM = $ukmMapping[$role];
+
+    // Ambil user_id dari mahasiswa yang status pendaftarannya diterima
+    $acceptedUserIds = Pendaftaran::where('status', 'diterima')->pluck('user_id');
+
+    // Ambil mahasiswa dari tabel setting yang memilih UKM sesuai role
+    $pendaftarans = Setting::whereIn('user_id', $acceptedUserIds)
+        ->where(function ($query) use ($namaUKM) {
+            $query->where('organization_1', $namaUKM)
+                  ->orWhere('organization_2', $namaUKM)
+                  ->orWhere('organization_3', $namaUKM);
+        })
+        ->with('user')
+        ->get();
+
+    // Hitung jumlahnya
+    $jumlahDiterimaUKM = $pendaftarans->count();
+}
+
+
+    return view('dashboard', compact(
+        'count_pending',
+        'count_diterima',
+        'count_ditolak',
+        'jumlahDiterimaUKM',
+        'pendaftarans',
+        'namaUKM'
+    ));
+}
+
 
     public function showLoginForm()
     {
