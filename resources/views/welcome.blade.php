@@ -55,7 +55,7 @@
       Universitas Bina Darma
     </h1>
     <p class="ps-2">
-      Platform Tes Rekomendasi dan Pendaftaran UKM Universitas Bina Darma.
+      Platform Sistem Pendukung Keputusan Tes Rekomendasi Organisasi UKM dan Pendaftaran UKM Universitas Bina Darma.
     </p>
   </div>
 </div>
@@ -148,64 +148,64 @@
     </div>
 
     <script>
-      const years = {!! json_encode($years) !!};
-      const dataTes = {!! json_encode($userChartData) !!};
-      const dataDaftar = {!! json_encode($pendaftarChartData) !!};
+  const years = {!! json_encode($years) !!};
+  const dataTes = {!! json_encode($userChartData) !!};
+  const dataDaftar = {!! json_encode($pendaftarChartData) !!};
 
-      new Chart(document.getElementById('chartTes').getContext('2d'), {
-        type: 'bar',
-        data: {
-          labels: years,
-          datasets: [{
-            label: 'Jumlah Tes',
-            data: dataTes,
-            backgroundColor: 'rgba(54, 162, 235, 0.7)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-          }]
+  new Chart(document.getElementById('chartTes').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: years,
+      datasets: [{
+        label: 'Jumlah Tes',
+        data: dataTes,
+        backgroundColor: '#0078B9',
+        borderColor: '#0078B9',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { stepSize: 1 },
+          title: { display: true, text: 'Jumlah' }
         },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: { stepSize: 1 },
-              title: { display: true, text: 'Jumlah' }
-            },
-            x: {
-              title: { display: true, text: 'Tahun Angkatan' }
-            }
-          }
+        x: {
+          title: { display: true, text: 'Tahun Angkatan' }
         }
-      });
+      }
+    }
+  });
 
-      new Chart(document.getElementById('chartPendaftaran').getContext('2d'), {
-        type: 'bar',
-        data: {
-          labels: years,
-          datasets: [{
-            label: 'Jumlah Pendaftar',
-            data: dataDaftar,
-            backgroundColor: 'rgba(255, 99, 132, 0.7)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-          }]
+  new Chart(document.getElementById('chartPendaftaran').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: years,
+      datasets: [{
+        label: 'Jumlah Pendaftar',
+        data: dataDaftar,
+        backgroundColor: '#F9332B',
+        borderColor: '#F9332B',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { stepSize: 1 },
+          title: { display: true, text: 'Jumlah' }
         },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: { stepSize: 1 },
-              title: { display: true, text: 'Jumlah' }
-            },
-            x: {
-              title: { display: true, text: 'Tahun Angkatan' }
-            }
-          }
+        x: {
+          title: { display: true, text: 'Tahun Angkatan' }
         }
-      });
-    </script>
+      }
+    }
+  });
+</script>
   @else
     <div class="alert alert-info text-center">
       Belum ada data user.
