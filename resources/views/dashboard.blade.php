@@ -14,96 +14,107 @@
             <h1>Dashboard</h1>
         </div>
         <h2 class="mb-4">Selamat datang mahasiswa</h2>
-        <div class="row">
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="{{ asset('img/bdca.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 1">
-                    <div class="card-body p-2">
-                        <p class="img-caption">Bina Darma Cyber Army(@bidarcyberarmy)</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="{{ asset('img/qarib.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 2">
-                    <div class="card-body p-2">
-                        <p class="img-caption">LDK ALQORIB(@ldkalqoribbidar)</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="{{ asset('img/PMKK.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 3">
-                    <div class="card-body p-2">
-                        <p class="img-caption">Persekutuan Mahasiswa Kristen & Katolik(@pmkkubd)</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="{{ asset('img/kmhdi.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 4">
-                    <div class="card-body p-2">
-                        <p class="img-caption">Kesatuan Mahasiswa Hindu Darma Indonesia(@kmhdipalembang)</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="{{ asset('img/mabidar.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 5">
-                    <div class="card-body p-2">
-                        <p class="img-caption">Mahasiswa Pencinta Alam(@mabidar.palembang)</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="{{ asset('img/BGK.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 6">
-                    <div class="card-body p-2">
-                        <p class="img-caption">Bujang Gadis Kampus(@bgk_bidar)</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="{{ asset('img/futsal.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 7">
-                    <div class="card-body p-2">
-                        <p class="img-caption">Futsal(@futsalbinadarma)</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="{{ asset('img/pramuka.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 9">
-                    <div class="card-body p-2">
-                        <p class="img-caption">Pramuka(@pramuka_ubd)</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="{{ asset('img/EDS.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 10">
-                    <div class="card-body p-2">
-                        <p class="img-caption">EDS South Sumatera English Community(@eds_bidar)</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="{{ asset('img/basket.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 10">
-                    <div class="card-body p-2">
-                        <p class="img-caption">Basket Club(@bidarbasketclub)</p>
-                    </div>
-                </div>
-            </div>
-             <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="{{ asset('img/choir.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 10">
-                    <div class="card-body p-2">
-                        <p class="img-caption">Paduan Suara Mahasiswa Universitas Bina Darma(@bidarians_choir)</p>
-                    </div>
-                </div>
+<div class="row">
+    <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="card h-100">
+            <img src="{{ asset('img/bdca.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 1">
+            <div class="card-body p-2">
+                <p class="img-caption">Bina Darma Cyber Army(@bidarcyberarmy)</p>
+                <p class="text-muted small">UKM yang berfokus pada keamanan siber dan pelatihan ethical hacking.</p>
             </div>
         </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="card h-100">
+            <img src="{{ asset('img/qarib.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 2">
+            <div class="card-body p-2">
+                <p class="img-caption">LDK ALQORIB(@ldkalqoribbidar)</p>
+                <p class="text-muted small">Lembaga dakwah kampus Islam yang membina rohani, akhlak, dan ukhuwah Islamiyah.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="card h-100">
+            <img src="{{ asset('img/PMKK.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 3">
+            <div class="card-body p-2">
+                <p class="img-caption">Persekutuan Mahasiswa Kristen & Katolik(@pmkkubd)</p>
+                <p class="text-muted small">Wadah pengembangan iman dan kebersamaan bagi mahasiswa Kristen dan Katolik.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="card h-100">
+            <img src="{{ asset('img/kmhdi.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 4">
+            <div class="card-body p-2">
+                <p class="img-caption">Kesatuan Mahasiswa Hindu Darma Indonesia(@kmhdipalembang)</p>
+                <p class="text-muted small">UKM keagamaan Hindu yang berfokus pada pembinaan spiritual dan budaya Hindu.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="card h-100">
+            <img src="{{ asset('img/mabidar.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 5">
+            <div class="card-body p-2">
+                <p class="img-caption">Mahasiswa Pencinta Alam(@mabidar.palembang)</p>
+                <p class="text-muted small">UKM bagi pecinta alam, menjelajahi dan menjaga kelestarian lingkungan hidup.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="card h-100">
+            <img src="{{ asset('img/BGK.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 6">
+            <div class="card-body p-2">
+                <p class="img-caption">Bujang Gadis Kampus(@bgk_bidar)</p>
+                <p class="text-muted small">UKM pengembangan kepribadian, etika, dan representasi duta kampus.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="card h-100">
+            <img src="{{ asset('img/futsal.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 7">
+            <div class="card-body p-2">
+                <p class="img-caption">Futsal(@futsalbinadarma)</p>
+                <p class="text-muted small">UKM olahraga yang fokus pada pengembangan kemampuan dan kompetisi futsal.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="card h-100">
+            <img src="{{ asset('img/pramuka.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 9">
+            <div class="card-body p-2">
+                <p class="img-caption">Pramuka(@pramuka_ubd)</p>
+                <p class="text-muted small">UKM kepramukaan yang melatih kemandirian, kepemimpinan, dan semangat kebangsaan.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="card h-100">
+            <img src="{{ asset('img/EDS.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 10">
+            <div class="card-body p-2">
+                <p class="img-caption">EDS South Sumatera English Community(@eds_bidar)</p>
+                <p class="text-muted small">UKM bahasa Inggris yang fokus pada debat, public speaking, dan kompetisi English.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="card h-100">
+            <img src="{{ asset('img/basket.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 10">
+            <div class="card-body p-2">
+                <p class="img-caption">Basket Club(@bidarbasketclub)</p>
+                <p class="text-muted small">UKM olahraga basket yang aktif berlatih dan mengikuti turnamen antar kampus.</p>
+            </div>
+        </div>
+    </div>
+     <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="card h-100">
+            <img src="{{ asset('img/choir.webp') }}" class="card-img-top img-fluid" alt="Mahasiswa 10">
+            <div class="card-body p-2">
+                <p class="img-caption">Paduan Suara Mahasiswa Universitas Bina Darma(@bidarians_choir)</p>
+                <p class="text-muted small">UKM seni suara yang menyalurkan bakat bernyanyi dan tampil di berbagai acara kampus.</p>
+            </div>
+        </div>
+    </div>
+</div>
         @endif
 
         @if (auth()->user()->role == 'superadmin')

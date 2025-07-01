@@ -51,7 +51,7 @@
             {{-- Hasil Prediksi KNN --}}
             @if(isset($knnPredictions) && count($knnPredictions) > 0)
             <div class="card mb-4">
-                <div class="card-header">Hasil Prediksi pendekatan dari 3 Rekomendasi Teratas</div>
+                <div class="card-header">Rekomendasi Bonus</div>
                 <div class="card-body">
                     <ul class="list-group">
                         @foreach($knnPredictions as $ukmTest => $predictedClass)
@@ -62,7 +62,7 @@
                         @endforeach
                     </ul>
                     <small class="text-muted d-block mt-2">
-                        * Hasil rekomendasi prediksi ini digunakan kalau mahasiswa mau fokus 1 UKM aja, jika mau ambil UKM prediksi ini mahasiswa harus mengikuti salah satu UKM dari 3 teratas rekomendasi UKM diatas.
+                        * Hasil rekomendasi prediksi ini digunakan kalau mahasiswa mau fokus 1 bidang UKM aja, jika mau ambil UKM prediksi ini mahasiswa harus mengikuti salah satu UKM dari 3 teratas rekomendasi UKM diatas.
                     </small>
                 </div>
             </div>
