@@ -129,13 +129,14 @@
             <div class="mb-3">
                 <label class="form-label">Upload Berkas (PDF, JPG, PNG)</label>
                 <input type="file" name="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
+                <small class="text-muted">Maksimal ukuran file : 20MB</small><br>
                 @if(isset($pendaftaran) && $pendaftaran->file)
                     <small class="text-muted">File sebelumnya: {{ basename($pendaftaran->file) }}</small>
                 @endif
             </div>
 
             <div class="text-end mt-4 mb-5">
-    <button type="submit" class="btn btn-primary">Kirim Pendaftaran</button>
+    <button type="submit" class="btn btn-primary" id="btn-submit" value="1">Kirim Pendaftaran</button>
 </div>
 
         </form>
@@ -178,11 +179,12 @@
         const org1 = document.getElementById('organization_1');
         const org2 = document.getElementById('organization_2');
         const org3 = document.getElementById('organization_3');
+        const btnSubmit = document.getElementById('btn-submit');
 
         // Aktifkan organization 2 jika organization 1 terisi
         if (org1 && org1.value !== "") {
             org2.disabled = false;
-            org3.disable = true;
+            org3.disabled = true;
         }
 
         // Aktifkan organization 3 jika organization 2 terisi
@@ -191,12 +193,14 @@
             org3.disabled = false;
         }
         // Jika semuanya terisi → kunci semua
-        if (org1.value && org2.value && org3.value) {
+        if (org1.value && org2.value && org3.value && btnSubmit.value) {
             org1.disabled = true;
             org2.disabled = true;
             org3.disabled = true;
+            btnSubmit.disabled = true;
             return;
         }
+
 
         // Tambahkan event listener untuk organisasi 2
         org2?.addEventListener('change', function () {
@@ -207,6 +211,8 @@
                 org3.disabled = true;
             }
         });
+
+
 
     });
 </script>
