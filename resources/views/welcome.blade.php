@@ -55,7 +55,7 @@
       Universitas Bina Darma
     </h1>
     <p class="ps-2">
-      Platform Sistem Pendukung Keputusan Tes Rekomendasi Organisasi UKM dan Pendaftaran UKM Universitas Bina Darma.
+      Platform Sistem Pendukung Keputusan Tes Rekomendasi Organisasi UKM dan Pendaftaran UKM Universitas Bina Darma
     </p>
   </div>
 </div>
